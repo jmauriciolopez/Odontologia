@@ -1,0 +1,22 @@
+{
+  "name": "odontologia-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SaaS Gestión Clínica Odontológica Vertical",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:api": "npm run dev -w apps/api",
+    "dev:web": "npm run dev -w apps/web",
+    "dev:mobile": "npm run dev -w apps/mobile",
+    "build": "npm run build --workspaces",
+    "lint": "npm run lint --workspaces",
+    "test": "npm run test --workspaces"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "rimraf": "^5.0.5"
+  }
+}
