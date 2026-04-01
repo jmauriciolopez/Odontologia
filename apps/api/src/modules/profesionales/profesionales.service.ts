@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Profesional } from './entities/profesional.entity.ts';
-import { CreateProfesionalDto } from './dto/create-profesional.dto.ts';
-import { UpdateProfesionalDto } from './dto/update-profesional.dto.ts';
+import { Profesional } from './entities/profesional.entity';
+import { CreateProfesionalDto } from './dto/create-profesional.dto';
+import { UpdateProfesionalDto } from './dto/update-profesional.dto';
 
 @Injectable()
 export class ProfesionalesService {

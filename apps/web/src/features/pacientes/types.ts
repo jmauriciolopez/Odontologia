@@ -34,3 +34,18 @@ export interface EvolucionClinica {
   descripcion: string;
   fechaRegistro: string;
 }
+
+export interface CreatePacienteDto {
+  nombre: string;
+  apellido: string;
+  documento?: string;
+  fechaNacimiento?: string;
+  genero?: string;
+  telefono?: string;
+  email?: string;
+  direccion?: string;
+  obraSocial?: string;
+  nroAfiliado?: string;
+}
+
+export type UpdatePacienteDto = Partial<CreatePacienteDto>;

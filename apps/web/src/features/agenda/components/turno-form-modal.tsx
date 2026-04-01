@@ -105,7 +105,7 @@ export const TurnoFormModal: React.FC<TurnoFormModalProps> = ({ onClose, onSubmi
             <textarea {...register('motivo')} className="input" rows={2} style={{ resize: 'none' }} />
           </div>
 
-          <button type="submit" className="btn-primary" disabled={loading || (disponibilidad && !disponibilidad.disponible)} style={{ marginTop: '0.5rem' }}>
+          <button type="submit" className="btn-primary" disabled={loading || disponibilidad?.disponible === false} style={{ marginTop: '0.5rem' }}>
             {loading ? 'Confirmando...' : 'Agendar Turno'}
           </button>
         </form>

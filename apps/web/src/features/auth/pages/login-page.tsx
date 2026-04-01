@@ -67,6 +67,30 @@ export const LoginPage: React.FC = () => {
             {loading ? 'Cargando...' : 'Iniciar Sesión'}
           </button>
         </form>
+
+        {window.location.hostname === 'localhost' && (
+          <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--border)' }}>
+            <button
+              type="button"
+              onClick={() => {
+                setEmail('admin@odontologia.com');
+                setPassword('Admin123!');
+              }}
+              style={{
+                width: '100%',
+                backgroundColor: 'white',
+                border: '1px solid var(--border)',
+                color: 'var(--text-muted)',
+                fontSize: '0.75rem',
+                padding: '0.5rem',
+                borderRadius: 'var(--radius)',
+                cursor: 'pointer'
+              }}
+            >
+              🚀 Cargar Credenciales Demo (Admin)
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

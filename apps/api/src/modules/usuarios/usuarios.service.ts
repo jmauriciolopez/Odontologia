@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Usuario } from './entities/usuario.entity.ts';
-import { CreateUsuarioDto } from './dto/create-usuario.dto.ts';
+import { Usuario } from './entities/usuario.entity';
+import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
@@ -10,7 +10,7 @@ export class UsuariosService {
   constructor(
     @InjectRepository(Usuario)
     private readonly usuariosRepository: Repository<Usuario>,
-  ) {}
+  ) { }
 
   async create(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
     const { email, password, ...rest } = createUsuarioDto;
@@ -30,7 +30,7 @@ export class UsuariosService {
     return await this.usuariosRepository.save(usuario);
   }
 
-  async findByEmail(email: string): Promise<Usuario | undefined> {
+  async findByEmail(email: string): Promise<Usuario | null> {
     return await this.usuariosRepository
       .createQueryBuilder('usuario')
       .addSelect('usuario.password_hash')

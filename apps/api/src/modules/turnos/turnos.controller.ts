@@ -1,12 +1,12 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
-import { TurnosService } from './turnos.service.ts';
-import { CreateTurnoDto } from './dto/create-turnos.dto.ts';
-import { UpdateTurnoDto } from './dto/update-turnos.dto.ts';
-import { TurnoFiltrosDto } from './dto/turnos-filtros.dto.ts';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.ts';
-import { RolesGuard } from '../../common/guards/roles.guard.ts';
-import { Roles } from '../../common/decorators/roles.decorator.ts';
-import { Role } from '../../common/constants/roles.constants.ts';
+import { TurnosService } from './turnos.service';
+import { CreateTurnoDto } from './dto/create-turnos.dto';
+import { UpdateTurnoDto } from './dto/update-turnos.dto';
+import { TurnoFiltrosDto } from './dto/turnos-filtros.dto';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { RolesGuard } from '../../common/guards/roles.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { Role } from '../../common/constants/roles.constants';
 
 @Controller('turnos')
 @UseGuards(JwtAuthGuard, RolesGuard)

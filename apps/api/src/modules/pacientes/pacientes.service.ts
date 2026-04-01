@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Paciente } from './entities/paciente.entity.ts';
-import { CreatePacienteDto } from './dto/create-paciente.dto.ts';
-import { UpdatePacienteDto } from './dto/update-paciente.dto.ts';
-import { PacienteFiltrosDto } from './dto/paciente-filtros.dto.ts';
+import { Paciente } from './entities/paciente.entity';
+import { CreatePacienteDto } from './dto/create-paciente.dto';
+import { UpdatePacienteDto } from './dto/update-paciente.dto';
+import { PacienteFiltrosDto } from './dto/paciente-filtros.dto';
 
 @Injectable()
 export class PacientesService {

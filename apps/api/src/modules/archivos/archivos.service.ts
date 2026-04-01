@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { DocumentoAdjunto } from './entities/documento-adjunto.entity.ts';
-import { Radiografia } from './entities/radiografia.entity.ts';
-import { LocalStorageService } from './storage/local-storage.service.ts';
-import { StorageFile } from './storage/storage.interface.ts';
+import { DocumentoAdjunto } from './entities/documento-adjunto.entity';
+import { Radiografia } from './entities/radiografia.entity';
+import { LocalStorageService } from './storage/local-storage.service';
+import { StorageFile } from './storage/storage.interface';
 
 @Injectable()
 export class ArchivosService {

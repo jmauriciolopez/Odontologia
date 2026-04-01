@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Consultorio } from './entities/consultorio.entity.ts';
-import { CreateConsultorioDto } from './dto/create-consultorio.dto.ts';
-import { UpdateConsultorioDto } from './dto/update-consultorio.dto.ts';
+import { Consultorio } from './entities/consultorio.entity';
+import { CreateConsultorioDto } from './dto/create-consultorio.dto';
+import { UpdateConsultorioDto } from './dto/update-consultorio.dto';
 
 @Injectable()
 export class ConsultoriosService {

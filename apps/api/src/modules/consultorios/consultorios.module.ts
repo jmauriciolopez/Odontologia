@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Consultorio } from './entities/consultorio.entity.ts';
-import { ConsultoriosService } from './consultorios.service.ts';
-import { ConsultoriosController } from './consultorios.controller.ts';
+import { Consultorio } from './entities/consultorio.entity';
+import { ConsultoriosService } from './consultorios.service';
+import { ConsultoriosController } from './consultorios.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Consultorio])],

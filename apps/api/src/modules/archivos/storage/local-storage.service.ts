@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IStorageService, StorageFile } from './storage.interface.ts';
+import { IStorageService, StorageFile } from './storage.interface';
 import * as fs from 'fs';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';

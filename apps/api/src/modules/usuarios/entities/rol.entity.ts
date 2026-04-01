@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { UsuarioRol } from './usuario-rol.entity.ts';
+import { UsuarioRol } from './usuario-rol.entity';
 
 @Entity('roles')
 export class Rol {

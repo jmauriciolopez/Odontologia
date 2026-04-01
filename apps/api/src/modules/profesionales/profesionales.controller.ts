@@ -1,11 +1,11 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
-import { ProfesionalesService } from './profesionales.service.ts';
-import { CreateProfesionalDto } from './dto/create-profesional.dto.ts';
-import { UpdateProfesionalDto } from './dto/update-profesional.dto.ts';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.ts';
-import { RolesGuard } from '../../common/guards/roles.guard.ts';
-import { Roles } from '../../common/decorators/roles.decorator.ts';
-import { Role } from '../../common/constants/roles.constants.ts';
+import { ProfesionalesService } from './profesionales.service';
+import { CreateProfesionalDto } from './dto/create-profesional.dto';
+import { UpdateProfesionalDto } from './dto/update-profesional.dto';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { RolesGuard } from '../../common/guards/roles.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { Role } from '../../common/constants/roles.constants';
 
 @Controller('profesionales')
 @UseGuards(JwtAuthGuard, RolesGuard)

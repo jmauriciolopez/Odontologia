@@ -11,12 +11,12 @@ import {
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ArchivosService } from './archivos.service.ts';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.ts';
-import { RolesGuard } from '../../common/guards/roles.guard.ts';
-import { Roles } from '../../common/decorators/roles.decorator.ts';
-import { Role } from '../../common/constants/roles.constants.ts';
-import { CurrentUser } from '../../common/decorators/current-user.decorator.ts';
+import { ArchivosService } from './archivos.service';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { RolesGuard } from '../../common/guards/roles.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { Role } from '../../common/constants/roles.constants';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
 
 @Controller('archivos')
 @UseGuards(JwtAuthGuard, RolesGuard)

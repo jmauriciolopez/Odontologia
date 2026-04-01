@@ -1,6 +1,6 @@
 import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
-import { BaseEntity } from '../../../common/entities/base.entity.ts';
-import { Usuario } from '../../usuarios/entities/usuario.entity.ts';
+import { BaseEntity } from '../../../common/entities/base.entity';
+import { Usuario } from '../../usuarios/entities/usuario.entity';
 
 @Entity('profesionales')
 export class Profesional extends BaseEntity {

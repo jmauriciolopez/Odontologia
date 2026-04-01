@@ -1,10 +1,10 @@
 import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
-import { UsuariosService } from './usuarios.service.ts';
-import { CreateUsuarioDto } from './dto/create-usuario.dto.ts';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.ts';
-import { RolesGuard } from '../../common/guards/roles.guard.ts';
-import { Roles } from '../../common/decorators/roles.decorator.ts';
-import { Role } from '../../common/constants/roles.constants.ts';
+import { UsuariosService } from './usuarios.service';
+import { CreateUsuarioDto } from './dto/create-usuario.dto';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { RolesGuard } from '../../common/guards/roles.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { Role } from '../../common/constants/roles.constants';
 
 @Controller('usuarios')
 @UseGuards(JwtAuthGuard, RolesGuard)

@@ -1,0 +1,18 @@
+{
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "entryFile": "main",
+  "projects": {
+    "api": {
+      "type": "application",
+      "root": "apps/api",
+      "entryFile": "main",
+      "sourceRoot": "src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/api/tsconfig.json",
+        "assets": ["**/*.md", "**/*.pdf", "**/*.png"],
+        "watchAssets": true
+      }
+    }
+  }
+}

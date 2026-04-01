@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Turno } from './entities/turno.entity.ts';
-import { TurnosService } from './turnos.service.ts';
-import { TurnosController } from './turnos.controller.ts';
+import { Turno } from './entities/turno.entity';
+import { TurnosService } from './turnos.service';
+import { TurnosController } from './turnos.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Turno])],

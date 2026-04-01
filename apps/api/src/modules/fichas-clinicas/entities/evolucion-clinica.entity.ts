@@ -1,6 +1,6 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { BaseEntity } from '../../../common/entities/base.entity.ts';
-import { FichaClinica } from './ficha-clinica.entity.ts';
+import { BaseEntity } from '../../../common/entities/base.entity';
+import { FichaClinica } from './ficha-clinica.entity';
 
 @Entity('evoluciones_clinicas')
 export class EvolucionClinica extends BaseEntity {

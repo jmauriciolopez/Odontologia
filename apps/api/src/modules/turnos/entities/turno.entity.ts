@@ -1,8 +1,8 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { BaseEntity } from '../../../common/entities/base.entity.ts';
-import { Paciente } from '../../pacientes/entities/paciente.entity.ts';
-import { Profesional } from '../../profesionales/entities/profesional.entity.ts';
-import { Consultorio } from '../../consultorios/entities/consultorio.entity.ts';
+import { BaseEntity } from '../../../common/entities/base.entity';
+import { Paciente } from '../../pacientes/entities/paciente.entity';
+import { Profesional } from '../../profesionales/entities/profesional.entity';
+import { Consultorio } from '../../consultorios/entities/consultorio.entity';
 
 @Entity('turnos')
 export class Turno extends BaseEntity {

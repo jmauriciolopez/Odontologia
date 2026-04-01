@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { FichaClinica } from './entities/ficha-clinica.entity.ts';
-import { Antecedente } from './entities/antecedente.entity.ts';
-import { EvolucionClinica } from './entities/evolucion-clinica.entity.ts';
-import { CreateFichaClinicaDto } from './dto/create-ficha-clinica.dto.ts';
-import { CreateAntecedenteDto } from './dto/create-antecedente.dto.ts';
-import { CreateEvolucionClinicaDto } from './dto/create-evolucion-clinica.dto.ts';
+import { FichaClinica } from './entities/ficha-clinica.entity';
+import { Antecedente } from './entities/antecedente.entity';
+import { EvolucionClinica } from './entities/evolucion-clinica.entity';
+import { CreateFichaClinicaDto } from './dto/create-ficha-clinica.dto';
+import { CreateAntecedenteDto } from './dto/create-antecedente.dto';
+import { CreateEvolucionClinicaDto } from './dto/create-evolucion-clinica.dto';
 
 @Injectable()
 export class FichasClinicasService {

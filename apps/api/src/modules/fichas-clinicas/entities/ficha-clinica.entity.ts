@@ -1,8 +1,8 @@
 import { Entity, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
-import { BaseEntity } from '../../../common/entities/base.entity.ts';
-import { Paciente } from '../../pacientes/entities/paciente.entity.ts';
-import { Antecedente } from './antecedente.entity.ts';
-import { EvolucionClinica } from './evolucion-clinica.entity.ts';
+import { BaseEntity } from '../../../common/entities/base.entity';
+import { Paciente } from '../../pacientes/entities/paciente.entity';
+import { Antecedente } from './antecedente.entity';
+import { EvolucionClinica } from './evolucion-clinica.entity';
 
 @Entity('fichas_clinicas')
 export class FichaClinica extends BaseEntity {
