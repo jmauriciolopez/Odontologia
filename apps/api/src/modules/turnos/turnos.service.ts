@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Turno } from './entities/turno.entity.ts';
-import { CreateTurnoDto } from './dto/create-turnos.dto.ts';
-import { UpdateTurnoDto } from './dto/update-turnos.dto.ts';
-import { TurnoFiltrosDto } from './dto/turnos-filtros.dto.ts';
+import { Turno } from './entities/turno.entity';
+import { CreateTurnoDto } from './dto/create-turnos.dto';
+import { UpdateTurnoDto } from './dto/update-turnos.dto';
+import { TurnoFiltrosDto } from './dto/turnos-filtros.dto';
 
 @Injectable()
 export class TurnosService {
@@ -13,17 +13,56 @@ export class TurnosService {
     private readonly turnosRepository: Repository<Turno>,
   ) {}
 
+  private async checkConflict(
+    inicio: Date,
+    fin: Date,
+    profesionalId: string,
+    consultorioId: string,
+    excludeTurnoId?: string,
+  ): Promise<void> {
+    const query = this.turnosRepository.createQueryBuilder('turno')
+      .where('turno.estado NOT IN (:...estadosIgnorar)', { estadosIgnorar: ['cancelado'] })
+      .andWhere(
+        '((turno.fecha_inicio < :fin AND turno.fecha_fin > :inicio))',
+        { inicio, fin }
+      )
+      .andWhere(
+        '(turno.profesional_id = :profesionalId OR turno.consultorio_id = :consultorioId)',
+        { profesionalId, consultorioId }
+      );
+
+    if (excludeTurnoId) {
+      query.andWhere('turno.id != :excludeTurnoId', { excludeTurnoId });
+    }
+
+    const conflicto = await query.getOne();
+
+    if (conflicto) {
+      if (conflicto.profesionalId === profesionalId) {
+        throw new BadRequestException('El profesional ya tiene un turno asignado en ese horario');
+      }
+      if (conflicto.consultorioId === consultorioId) {
+        throw new BadRequestException('El consultorio ya está ocupado en ese horario');
+      }
+    }
+  }
+
   async create(createTurnoDto: CreateTurnoDto): Promise<Turno> {
-    const { fechaInicio, fechaFin } = createTurnoDto;
+    const { fechaInicio, fechaFin, profesionalId, consultorioId } = createTurnoDto;
     
-    if (new Date(fechaFin) <= new Date(fechaInicio)) {
+    const inicio = new Date(fechaInicio);
+    const fin = new Date(fechaFin);
+
+    if (fin <= inicio) {
       throw new BadRequestException('La fecha de fin debe ser posterior a la de inicio');
     }
 
+    await this.checkConflict(inicio, fin, profesionalId, consultorioId);
+
     const turno = this.turnosRepository.create({
       ...createTurnoDto,
-      fechaInicio: new Date(fechaInicio),
-      fechaFin: new Date(fechaFin),
+      fechaInicio: inicio,
+      fechaFin: fin,
     });
 
     return await this.turnosRepository.save(turno);
@@ -69,12 +108,18 @@ export class TurnosService {
   async update(id: string, updateTurnoDto: UpdateTurnoDto): Promise<Turno> {
     const turno = await this.findOne(id);
     
-    if (updateTurnoDto.fechaInicio || updateTurnoDto.fechaFin) {
-      const inicio = updateTurnoDto.fechaInicio ? new Date(updateTurnoDto.fechaInicio) : turno.fechaInicio;
-      const fin = updateTurnoDto.fechaFin ? new Date(updateTurnoDto.fechaFin) : turno.fechaFin;
-      if (fin <= inicio) {
-        throw new BadRequestException('La fecha de fin debe ser posterior a la de inicio');
-      }
+    const inicio = updateTurnoDto.fechaInicio ? new Date(updateTurnoDto.fechaInicio) : turno.fechaInicio;
+    const fin = updateTurnoDto.fechaFin ? new Date(updateTurnoDto.fechaFin) : turno.fechaFin;
+    const profesionalId = updateTurnoDto.profesionalId || turno.profesionalId;
+    const consultorioId = updateTurnoDto.consultorioId || turno.consultorioId;
+
+    if (fin <= inicio) {
+      throw new BadRequestException('La fecha de fin debe ser posterior a la de inicio');
+    }
+
+    // Solo verificamos conflictos si cambian horarios o recursos
+    if (updateTurnoDto.fechaInicio || updateTurnoDto.fechaFin || updateTurnoDto.profesionalId || updateTurnoDto.consultorioId) {
+      await this.checkConflict(inicio, fin, profesionalId, consultorioId, id);
     }
 
     this.turnosRepository.merge(turno, updateTurnoDto);
