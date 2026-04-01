@@ -5,6 +5,7 @@ import { AuthModule } from './modules/auth/auth.module.ts';
 import { UsuariosModule } from './modules/usuarios/usuarios.module.ts';
 import { PacientesModule } from './modules/pacientes/pacientes.module.ts';
 import { FichasClinicasModule } from './modules/fichas-clinicas/fichas-clinicas.module.ts';
+import { ArchivosModule } from './modules/archivos/archivos.module.ts';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { FichasClinicasModule } from './modules/fichas-clinicas/fichas-clinicas.
     UsuariosModule,
     PacientesModule,
     FichasClinicasModule,
+    ArchivosModule,
   ],
   controllers: [],
   providers: [],
