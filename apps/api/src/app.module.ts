@@ -12,6 +12,7 @@ import { TurnosModule } from './modules/turnos/turnos.module';
 import { OdontogramaModule } from './modules/odontograma/odontograma.module';
 import { PlanesTratamientoModule } from './modules/planes-tratamiento/planes-tratamiento.module';
 import { PresupuestosModule } from './modules/presupuestos/presupuestos.module';
+import { RemindersModule } from './modules/reminders/reminders.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { PresupuestosModule } from './modules/presupuestos/presupuestos.module';
     OdontogramaModule,
     PlanesTratamientoModule,
     PresupuestosModule,
+    RemindersModule,
   ],
   controllers: [],
   providers: [],
