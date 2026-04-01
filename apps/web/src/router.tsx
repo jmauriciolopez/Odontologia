@@ -5,6 +5,7 @@ import { LoginPage } from './features/auth/pages/login-page';
 import { DashboardPage } from './features/dashboard/pages/dashboard-page';
 import { PacientesPage } from './features/pacientes/pages/pacientes-page';
 import { PacienteDetallePage } from './features/pacientes/pages/paciente-detalle-page';
+import { AgendaPage } from './features/agenda/pages/agenda-page';
 import { useAuth } from './context/auth-context';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
