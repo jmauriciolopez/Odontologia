@@ -47,7 +47,7 @@ export class DashboardService {
         .select('SUM(p.total)', 'total')
         .getRawOne(),
       this.pagoRepository.createQueryBuilder('pago')
-        .where('pago.fecha >= :start AND pago.fecha <= :end', { start: firstDayOfMonth, end: lastDayOfMonth })
+        .where('pago.fechaPago >= :start AND pago.fechaPago <= :end', { start: firstDayOfMonth, end: lastDayOfMonth })
         .select('SUM(pago.monto)', 'total')
         .getRawOne(),
       this.turnoRepository.find({

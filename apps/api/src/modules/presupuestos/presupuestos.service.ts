@@ -26,6 +26,7 @@ export class PresupuestosService {
       total += subtotal;
       return this.itemRepository.create({
         ...item,
+        descuento: Number(item.descuento || 0),
         subtotal
       });
     });
@@ -43,6 +44,13 @@ export class PresupuestosService {
     await this.itemRepository.save(itemEntities);
 
     return await this.findOne(savedPresupuesto.id);
+  }
+
+  async findAll(): Promise<Presupuesto[]> {
+    return await this.presupuestoRepository.find({
+      relations: ['paciente', 'items'],
+      order: { createdAt: 'DESC' }
+    });
   }
 
   async findByPaciente(pacienteId: string): Promise<Presupuesto[]> {
@@ -88,5 +96,23 @@ export class PresupuestosService {
     await this.presupuestoRepository.save(presupuesto);
 
     return savedPago;
+  }
+
+  async iniciarTratamiento(id: string): Promise<Presupuesto> {
+    const presupuesto = await this.findOne(id);
+    
+    if (presupuesto.estado !== 'pendiente') {
+      throw new BadRequestException('Solo se pueden iniciar tratamientos de presupuestos pendientes');
+    }
+
+    presupuesto.estado = 'iniciado';
+    return await this.presupuestoRepository.save(presupuesto);
+  }
+
+  async findPagosByPresupuesto(presupuestoId: string): Promise<Pago[]> {
+    return await this.pagoRepository.find({
+      where: { presupuestoId },
+      order: { fechaPago: 'DESC' }
+    });
   }
 }

@@ -320,7 +320,10 @@ export const PacienteDetallePage: React.FC = () => {
             )}
 
             {activeTab === 'finanzas' && (
-              <FinanzasTabContent pacienteId={id!} />
+              <FinanzasTabContent 
+                pacienteId={id!} 
+                pacienteNombre={`${paciente.nombre} ${paciente.apellido}`}
+              />
             )}
           </motion.div>
         </AnimatePresence>

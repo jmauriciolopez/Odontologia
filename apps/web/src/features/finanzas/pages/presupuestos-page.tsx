@@ -41,9 +41,9 @@ export const PresupuestosPage: React.FC = () => {
   };
 
   // Mock aggregates based on the actual list for the UI demo
-  const totalFacturado = presupuestos.reduce((acc, p) => acc + p.total, 0);
-  const totalPagado = presupuestos.reduce((acc, p) => acc + (p.estado === 'pagado' ? p.total : 0), 0);
-  const saldoPendiente = totalFacturado - totalPagado;
+  const totalFacturado = presupuestos.reduce((acc, p) => acc + Number(p.total), 0);
+  const totalPagadoAmount = presupuestos.reduce((acc, p) => acc + Number(p.totalPagado || 0), 0);
+  const saldoPendiente = totalFacturado - totalPagadoAmount;
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -123,7 +123,7 @@ export const PresupuestosPage: React.FC = () => {
           <div className="space-y-1">
             <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Cobros Realizados</p>
             <h3 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-              {formatCurrency(totalPagado || 790000)}
+              {formatCurrency(totalPagadoAmount || 790000)}
             </h3>
           </div>
         </PremiumCard>

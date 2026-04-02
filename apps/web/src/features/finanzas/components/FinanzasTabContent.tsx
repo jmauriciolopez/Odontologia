@@ -16,9 +16,10 @@ import { Presupuesto } from '../types';
 
 interface FinanzasTabContentProps {
   pacienteId: string;
+  pacienteNombre?: string;
 }
 
-export const FinanzasTabContent: React.FC<FinanzasTabContentProps> = ({ pacienteId }) => {
+export const FinanzasTabContent: React.FC<FinanzasTabContentProps> = ({ pacienteId, pacienteNombre }) => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedPresupuesto, setSelectedPresupuesto] = useState<Presupuesto | null>(null);
   const [showPagoModal, setShowPagoModal] = useState(false);
@@ -126,6 +127,7 @@ export const FinanzasTabContent: React.FC<FinanzasTabContentProps> = ({ paciente
             onSubmit={handleCreate}
             loading={createPresupuesto.isPending}
             initialPacienteId={pacienteId}
+            initialPacienteNombre={pacienteNombre}
           />
         )}
 

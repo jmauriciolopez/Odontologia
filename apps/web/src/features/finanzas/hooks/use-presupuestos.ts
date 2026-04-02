@@ -44,5 +44,13 @@ export const useFinanzasMutations = () => {
     },
   });
 
-  return { createPresupuesto, registerPago };
+  const iniciarTratamiento = useMutation({
+    mutationFn: (id: string) => finanzasApi.iniciarTratamiento(id),
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: ['presupuestos'] });
+      queryClient.invalidateQueries({ queryKey: ['presupuesto', id] });
+    },
+  });
+
+  return { createPresupuesto, registerPago, iniciarTratamiento };
 };

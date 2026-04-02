@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, OneToMany, Generated } from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity';
 import { Paciente } from '../../pacientes/entities/paciente.entity';
 import { PlanTratamiento } from '../../planes-tratamiento/entities/plan-tratamiento.entity';
@@ -7,6 +7,10 @@ import { Pago } from './pago.entity';
 
 @Entity('presupuestos')
 export class Presupuesto extends BaseEntity {
+  @Column()
+  @Generated('increment')
+  folio: number;
+
   @Column({ name: 'paciente_id' })
   pacienteId: string;
 

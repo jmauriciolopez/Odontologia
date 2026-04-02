@@ -24,5 +24,9 @@ export const finanzasApi = {
 
   getPagosByPresupuesto: async (id: string): Promise<Pago[]> => {
     return httpClient.get(`presupuestos/${id}/pagos`);
+  },
+
+  iniciarTratamiento: async (id: string): Promise<Presupuesto> => {
+    return httpClient.patch(`presupuestos/${id}/iniciar`);
   }
 };

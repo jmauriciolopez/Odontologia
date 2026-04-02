@@ -93,7 +93,7 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
                       <div className="flex flex-col">
                         <span className="font-bold text-slate-900 dark:text-white">#{p.id.slice(0, 8).toUpperCase()}</span>
                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">
-                          {new Date(p.fechaEmision).toLocaleDateString([], { day: '2-digit', month: 'short', year: 'numeric' })}
+                          {new Date(p.fechaPresupuesto).toLocaleDateString([], { day: '2-digit', month: 'short', year: 'numeric' })}
                         </span>
                       </div>
                     </div>

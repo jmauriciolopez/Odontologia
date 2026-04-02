@@ -8,18 +8,20 @@ interface PresupuestoFormProps {
   onSubmit: (data: any) => void;
   loading: boolean;
   initialPacienteId?: string;
+  initialPacienteNombre?: string;
 }
 
 export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({ 
   onClose, 
   onSubmit, 
   loading,
-  initialPacienteId = '' 
+  initialPacienteId = '',
+  initialPacienteNombre = ''
 }) => {
-  const [items, setItems] = useState([{ descripcion: '', precio: 0 }]);
+  const [items, setItems] = useState([{ descripcion: '', precioUnitario: 0, cantidad: 1 }]);
   const [pacienteId, setPacienteId] = useState(initialPacienteId);
 
-  const addItem = () => setItems([...items, { descripcion: '', precio: 0 }]);
+  const addItem = () => setItems([...items, { descripcion: '', precioUnitario: 0, cantidad: 1 }]);
   const removeItem = (index: number) => setItems(items.filter((_, i) => i !== index));
   
   const updateItem = (index: number, field: string, value: any) => {
@@ -28,15 +30,17 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
     setItems(newItems);
   };
 
-  const total = items.reduce((acc, item) => acc + (Number(item.precio) || 0), 0);
+  const total = items.reduce((acc, item) => acc + ((Number(item.precioUnitario) || 0) * (Number(item.cantidad) || 1)), 0);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({
       pacienteId,
-      items,
-      total,
-      fechaEmision: new Date().toISOString(),
+      items: items.map(item => ({
+        ...item,
+        precioUnitario: Number(item.precioUnitario),
+        cantidad: Number(item.cantidad)
+      }))
     });
   };
 
@@ -75,16 +79,22 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
               <div className="space-y-2">
                 <label className="text-[11px] font-black uppercase tracking-wider text-slate-400 ml-1 flex items-center gap-2">
                   <User size={12} />
-                  Paciente ID
+                  Paciente
                 </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="ID del paciente..."
-                  className={inputClasses}
-                  value={pacienteId}
-                  onChange={(e) => setPacienteId(e.target.value)}
-                />
+                {initialPacienteNombre ? (
+                  <div className={cn(inputClasses, "bg-blue-50 dark:bg-blue-500/10 border-blue-100 dark:border-blue-500/20 text-blue-700 dark:text-blue-400 font-bold")}>
+                    {initialPacienteNombre}
+                  </div>
+                ) : (
+                  <input
+                    type="text"
+                    required
+                    placeholder="ID del paciente..."
+                    className={inputClasses}
+                    value={pacienteId}
+                    onChange={(e) => setPacienteId(e.target.value)}
+                  />
+                )}
               </div>
               <div className="space-y-2">
                 <label className="text-[11px] font-black uppercase tracking-wider text-slate-400 ml-1 flex items-center gap-2">
@@ -131,14 +141,25 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
                         onChange={(e) => updateItem(index, 'descripcion', e.target.value)}
                         required
                       />
+                      <div className="relative w-20">
+                        <input
+                          type="number"
+                          min="1"
+                          className={cn(inputClasses, "text-center px-1")}
+                          placeholder="Cant"
+                          value={item.cantidad}
+                          onChange={(e) => updateItem(index, 'cantidad', e.target.value)}
+                          required
+                        />
+                      </div>
                       <div className="relative w-32">
                         <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
                         <input
                           type="number"
                           className={cn(inputClasses, "pl-8 text-right")}
                           placeholder="0"
-                          value={item.precio}
-                          onChange={(e) => updateItem(index, 'precio', e.target.value)}
+                          value={item.precioUnitario}
+                          onChange={(e) => updateItem(index, 'precioUnitario', e.target.value)}
                           required
                         />
                       </div>

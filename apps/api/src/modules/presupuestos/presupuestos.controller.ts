@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, UseGuards, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, ParseUUIDPipe, Patch } from '@nestjs/common';
 import { PresupuestosService } from './presupuestos.service';
 import { CreatePresupuestoDto, RegisterPagoDto } from './dto/presupuesto.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
@@ -17,19 +17,39 @@ export class PresupuestosController {
     return this.presupuestosService.create(dto);
   }
 
+  @Get()
+  @Roles(Role.ADMIN, Role.RECEPCIONISTA)
+  findAll() {
+    return this.presupuestosService.findAll();
+  }
+
   @Get('paciente/:id')
+  @Roles(Role.ADMIN, Role.RECEPCIONISTA)
   findByPaciente(@Param('id', ParseUUIDPipe) id: string) {
     return this.presupuestosService.findByPaciente(id);
   }
 
   @Get(':id')
+  @Roles(Role.ADMIN, Role.RECEPCIONISTA)
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.presupuestosService.findOne(id);
   }
 
-  @Post('pagos')
+  @Post('pago')
   @Roles(Role.ADMIN, Role.RECEPCIONISTA)
   registerPago(@Body() dto: RegisterPagoDto) {
     return this.presupuestosService.registerPago(dto);
+  }
+
+  @Get(':id/pagos')
+  @Roles(Role.ADMIN, Role.RECEPCIONISTA)
+  getPagos(@Param('id', ParseUUIDPipe) id: string) {
+    return this.presupuestosService.findPagosByPresupuesto(id);
+  }
+
+  @Patch(':id/iniciar')
+  @Roles(Role.ADMIN, Role.RECEPCIONISTA)
+  iniciar(@Param('id', ParseUUIDPipe) id: string) {
+    return this.presupuestosService.iniciarTratamiento(id);
   }
 }

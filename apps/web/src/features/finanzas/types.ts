@@ -1,13 +1,14 @@
 export interface Presupuesto {
   id: string;
+  folio: number;
   pacienteId: string;
   profesionalId: string;
-  fechaEmision: string;
+  fechaPresupuesto: string;
   total: number;
   subtotal: number;
   descuento: number;
-  pagado: number;
-  estado: 'pendiente' | 'aprobado' | 'rechazado' | 'pagado' | 'pagado_parcial';
+  totalPagado: number;
+  estado: 'pendiente' | 'iniciado' | 'aprobado' | 'rechazado' | 'pagado' | 'pagado_parcial';
   items: PresupuestoItem[];
   pagos?: Pago[];
   paciente?: {

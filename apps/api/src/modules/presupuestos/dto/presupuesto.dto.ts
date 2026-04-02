@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsUUID, IsOptional, IsDecimal, IsArray, ValidateNested, IsInt } from 'class-validator';
+import { IsString, IsNotEmpty, IsUUID, IsOptional, IsNumber, IsArray, ValidateNested, IsInt } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class PresupuestoItemDto {
@@ -10,11 +10,11 @@ export class PresupuestoItemDto {
   @IsNotEmpty()
   cantidad: number;
 
-  @IsDecimal()
+  @IsNumber()
   @IsNotEmpty()
   precioUnitario: number;
 
-  @IsDecimal()
+  @IsNumber()
   @IsOptional()
   descuento?: number;
 }
@@ -39,7 +39,7 @@ export class RegisterPagoDto {
   @IsNotEmpty()
   presupuestoId: string;
 
-  @IsDecimal()
+  @IsNumber()
   @IsNotEmpty()
   monto: number;
 
