@@ -49,8 +49,12 @@ export const FinanzasTabContent: React.FC<FinanzasTabContentProps> = ({ paciente
   // Calculate Aggregates
   const stats = (presupuestos || []).reduce((acc, p) => {
     const paid = (p.pagos || []).reduce((sum, pago) => sum + Number(pago.monto), 0);
+    
+    // Only 'iniciado' and further states generate debt
+    const generatesDebt = p.estado !== 'pendiente';
+    
     return {
-      total: acc.total + Number(p.total),
+      total: generatesDebt ? acc.total + Number(p.total) : acc.total,
       pagado: acc.pagado + paid,
     };
   }, { total: 0, pagado: 0 });

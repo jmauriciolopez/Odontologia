@@ -11,6 +11,7 @@ import { PresupuestosPage } from './features/finanzas/pages/presupuestos-page';
 import { UsuariosPage } from './features/usuarios/pages/usuarios-page';
 import { ConsultoriosPage } from './features/usuarios/pages/consultorios-page';
 import { ProfesionalesPage } from './features/usuarios/pages/profesionales-page';
+import { AjustesPage } from './features/usuarios/pages/ajustes-page';
 import { RemindersPage } from './features/reminders/pages/reminders-page';
 import { TratamientosPage } from './features/tratamientos/pages/tratamientos-page';
 import { useAuth } from './context/auth-context';
@@ -89,6 +90,10 @@ export const router = createBrowserRouter([
       {
         path: 'tratamientos',
         element: <TratamientosPage />,
+      },
+      {
+        path: 'ajustes',
+        element: <AjustesPage />,
       },
       {
         path: 'usuarios',

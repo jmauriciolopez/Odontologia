@@ -40,9 +40,11 @@ export const PresupuestosPage: React.FC = () => {
     return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(value);
   };
 
-  // Mock aggregates based on the actual list for the UI demo
-  const totalFacturado = presupuestos.reduce((acc, p) => acc + Number(p.total), 0);
-  const totalPagadoAmount = presupuestos.reduce((acc, p) => acc + Number(p.totalPagado || 0), 0);
+  // Only count budgets that have been started (estado === 'iniciado')
+  const budgetsIniciados = presupuestos.filter(p => p.estado === 'iniciado');
+  
+  const totalFacturado = budgetsIniciados.reduce((acc, p) => acc + Number(p.total), 0);
+  const totalPagadoAmount = budgetsIniciados.reduce((acc, p) => acc + Number(p.totalPagado || 0), 0);
   const saldoPendiente = totalFacturado - totalPagadoAmount;
 
   const containerVariants = {

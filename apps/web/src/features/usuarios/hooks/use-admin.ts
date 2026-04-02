@@ -32,6 +32,14 @@ export const useAdminMutations = () => {
       queryClient.invalidateQueries({ queryKey: ['consultorios'] });
     },
   });
+  
+  const updateConsultorio = useMutation({
+    mutationFn: ({ id, data }: { id: string, data: Partial<CreateConsultorioDto> }) => 
+      adminApi.updateConsultorio(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['consultorios'] });
+    },
+  });
 
   const createProfesional = useMutation({
     mutationFn: (data: CreateProfesionalDto) => adminApi.createProfesional(data),
@@ -50,6 +58,7 @@ export const useAdminMutations = () => {
   return {
     createConsultorio,
     deleteConsultorio,
+    updateConsultorio,
     createProfesional,
     deleteProfesional
   };

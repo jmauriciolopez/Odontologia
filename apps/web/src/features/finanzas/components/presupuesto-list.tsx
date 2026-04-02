@@ -1,7 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Presupuesto } from '../types';
-import { CheckCircle2, Clock, AlertCircle, FileText, ArrowRight, User } from 'lucide-react';
+import { CheckCircle2, Clock, AlertCircle, FileText, ArrowRight, User, Play } from 'lucide-react';
+import { useFinanzasMutations } from '../hooks/use-presupuestos';
 import { cn } from '@/lib/utils';
 
 interface PresupuestoListProps {
@@ -46,6 +47,14 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
           text: 'text-rose-600 dark:text-rose-400',
           border: 'border-rose-100 dark:border-rose-500/20'
         };
+      case 'iniciado': 
+        return { 
+          icon: Play, 
+          label: 'Iniciado', 
+          bg: 'bg-blue-50 dark:bg-blue-500/10', 
+          text: 'text-blue-600 dark:text-blue-400',
+          border: 'border-blue-100 dark:border-blue-500/20'
+        };
       default: 
         return { 
           icon: FileText, 
@@ -77,6 +86,7 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
           <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50">
             {presupuestos.map((p, i) => {
               const status = getStatusConfig(p.estado);
+              const { iniciarTratamiento } = useFinanzasMutations();
               return (
                 <motion.tr 
                   key={p.id}
@@ -91,7 +101,7 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
                         <FileText size={20} />
                       </div>
                       <div className="flex flex-col">
-                        <span className="font-bold text-slate-900 dark:text-white">#{p.id.slice(0, 8).toUpperCase()}</span>
+                        <span className="font-bold text-slate-900 dark:text-white">#{p.folio || p.id.slice(0, 8).toUpperCase()}</span>
                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">
                           {new Date(p.fechaPresupuesto).toLocaleDateString([], { day: '2-digit', month: 'short', year: 'numeric' })}
                         </span>
@@ -122,7 +132,20 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
                       {status.label.toUpperCase()}
                     </div>
                   </td>
-                  <td className="p-5 text-right">
+                  <td className="p-5 text-right flex items-center justify-end gap-2">
+                    {p.estado === 'pendiente' && (
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          iniciarTratamiento.mutate(p.id);
+                        }}
+                        disabled={iniciarTratamiento.isPending}
+                        className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all disabled:opacity-50"
+                      >
+                        {iniciarTratamiento.isPending ? 'Iniciando...' : 'Iniciar'}
+                        <Play size={14} />
+                      </button>
+                    )}
                     <button 
                       onClick={() => onSelect(p)}
                       className="inline-flex items-center gap-2 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-blue-500 text-slate-600 dark:text-slate-300 px-4 py-2 rounded-xl text-xs font-bold transition-all hover:text-blue-600 group/btn"

@@ -31,6 +31,7 @@ export const OdontogramaView: React.FC<OdontogramaViewProps> = ({
               caras={p.caras} 
               selected={p.id === selectedPiezaId}
               onClick={() => onPiezaSelect(p)}
+              onCaraClick={() => onPiezaSelect(p)}
             />
           ))}
         </div>
@@ -42,6 +43,7 @@ export const OdontogramaView: React.FC<OdontogramaViewProps> = ({
               caras={p.caras} 
               selected={p.id === selectedPiezaId}
               onClick={() => onPiezaSelect(p)}
+              onCaraClick={() => onPiezaSelect(p)}
             />
           ))}
         </div>
@@ -60,6 +62,7 @@ export const OdontogramaView: React.FC<OdontogramaViewProps> = ({
               caras={p.caras} 
               selected={p.id === selectedPiezaId}
               onClick={() => onPiezaSelect(p)}
+              onCaraClick={() => onPiezaSelect(p)}
             />
           ))}
         </div>

@@ -17,6 +17,9 @@ export const adminApi = {
   deleteConsultorio: async (id: string): Promise<void> => {
     return httpClient.delete(`consultorios/${id}`);
   },
+  updateConsultorio: async (id: string, data: Partial<CreateConsultorioDto>): Promise<Consultorio> => {
+    return httpClient.patch(`consultorios/${id}`, data);
+  },
 
   // Profesionales
   findAllProfesionales: async (): Promise<Profesional[]> => {

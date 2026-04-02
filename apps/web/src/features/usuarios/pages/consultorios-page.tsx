@@ -14,25 +14,42 @@ import {
 import { useConsultorios, useAdminMutations } from '../hooks/use-admin';
 import { PremiumCard } from '@/components/ui/premium-card';
 import { cn } from '@/lib/utils';
+import { Consultorio } from '../types';
 
 export const ConsultoriosPage: React.FC = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newConsultorioName, setNewConsultorioName] = useState('');
+  const [editingId, setEditingId] = useState<string | null>(null);
   
   const { data: consultorios = [], isLoading } = useConsultorios();
-  const { createConsultorio, deleteConsultorio } = useAdminMutations();
+  const { createConsultorio, deleteConsultorio, updateConsultorio } = useAdminMutations();
 
-  const handleCreate = (e: React.FormEvent) => {
+  const handleOpenEdit = (c: Consultorio) => {
+    setEditingId(c.id);
+    setNewConsultorioName(c.nombre);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditingId(null);
+    setNewConsultorioName('');
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newConsultorioName.trim()) return;
     
-    createConsultorio.mutate({ nombre: newConsultorioName }, {
-      onSuccess: () => {
-        setNewConsultorioName('');
-        setIsModalOpen(false);
-      }
-    });
+    if (editingId) {
+      updateConsultorio.mutate({ id: editingId, data: { nombre: newConsultorioName } }, {
+        onSuccess: handleCloseModal
+      });
+    } else {
+      createConsultorio.mutate({ nombre: newConsultorioName }, {
+        onSuccess: handleCloseModal
+      });
+    }
   };
 
   return (
@@ -90,12 +107,20 @@ export const ConsultoriosPage: React.FC = () => {
                   <div className="h-12 w-12 rounded-2xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-600">
                     <MapPin size={24} />
                   </div>
-                  <button 
-                    onClick={() => deleteConsultorio.mutate(c.id)}
-                    className="p-2 text-slate-300 hover:text-rose-500 transition-colors opacity-0 group-hover:opacity-100"
-                  >
-                    <Trash2 size={18} />
-                  </button>
+                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button 
+                      onClick={() => handleOpenEdit(c)}
+                      className="p-2 text-slate-400 hover:text-blue-500 transition-colors"
+                    >
+                      <MoreVertical size={18} />
+                    </button>
+                    <button 
+                      onClick={() => deleteConsultorio.mutate(c.id)}
+                      className="p-2 text-slate-300 hover:text-rose-500 transition-colors"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
                 </div>
 
                 <h3 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2">
@@ -109,7 +134,7 @@ export const ConsultoriosPage: React.FC = () => {
                     <span className="flex items-center gap-1 text-slate-400"><XCircle size={12} /> Inactivo</span>
                   )}
                   <span className="h-1 w-1 rounded-full bg-slate-300 mx-1" />
-                  <span className="text-slate-400">Sede Principal</span>
+                  <span className="text-slate-400 text-[9px]">ID: {c.id.slice(0, 8)}</span>
                 </div>
               </div>
 
@@ -119,7 +144,7 @@ export const ConsultoriosPage: React.FC = () => {
         </div>
       )}
 
-      {/* Modal for New Consultorio */}
+      {/* Modal for New/Edit Consultorio */}
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -127,7 +152,7 @@ export const ConsultoriosPage: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setIsModalOpen(false)}
+              onClick={handleCloseModal}
               className="absolute inset-0 bg-slate-900/60 backdrop-blur-md"
             />
             <motion.div 
@@ -136,10 +161,14 @@ export const ConsultoriosPage: React.FC = () => {
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl p-10 overflow-hidden"
             >
-              <h2 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2">Nuevo Espacio</h2>
-              <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-8">Define el nombre del consultorio o sillón</p>
+              <h2 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2">
+                {editingId ? 'Editar Espacio' : 'Nuevo Espacio'}
+              </h2>
+              <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-8">
+                {editingId ? 'Modifique los detalles del consultorio' : 'Define el nombre del consultorio o sillón'}
+              </p>
               
-              <form onSubmit={handleCreate} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3 ml-1">Nombre / Identificador</label>
                   <input 
@@ -155,17 +184,17 @@ export const ConsultoriosPage: React.FC = () => {
                 <div className="flex gap-3 pt-4">
                   <button 
                     type="button"
-                    onClick={() => setIsModalOpen(false)}
+                    onClick={handleCloseModal}
                     className="flex-1 py-4 px-6 rounded-2xl font-bold text-xs uppercase tracking-widest text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
                   >
                     Cancelar
                   </button>
                   <button 
                     type="submit"
-                    disabled={createConsultorio.isPending}
+                    disabled={createConsultorio.isPending || updateConsultorio.isPending}
                     className="flex-1 py-4 px-6 rounded-2xl bg-blue-600 text-white font-black text-xs uppercase tracking-widest shadow-xl shadow-blue-500/20 active:scale-95 transition-all disabled:opacity-50"
                   >
-                    {createConsultorio.isPending ? 'Creando...' : 'Crear Espacio'}
+                    {editingId ? (updateConsultorio.isPending ? 'Guardando...' : 'Guardar') : (createConsultorio.isPending ? 'Creando...' : 'Crear Espacio')}
                   </button>
                 </div>
               </form>
