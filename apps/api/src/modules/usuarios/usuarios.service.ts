@@ -2,18 +2,29 @@ import { Injectable, NotFoundException, ConflictException } from '@nestjs/common
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Usuario } from './entities/usuario.entity';
+import { Rol } from './entities/rol.entity';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import * as bcrypt from 'bcryptjs';
+
+import { UsuarioRol } from './entities/usuario-rol.entity';
 
 @Injectable()
 export class UsuariosService {
   constructor(
     @InjectRepository(Usuario)
     private readonly usuariosRepository: Repository<Usuario>,
+    @InjectRepository(Rol)
+    private readonly rolesRepository: Repository<Rol>,
+    @InjectRepository(UsuarioRol)
+    private readonly usuarioRolesRepository: Repository<UsuarioRol>,
   ) { }
 
+  async findAllRoles(): Promise<Rol[]> {
+    return await this.rolesRepository.find();
+  }
+
   async create(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
-    const { email, password, ...rest } = createUsuarioDto;
+    const { email, password, rolIds, ...rest } = createUsuarioDto;
 
     const existingUser = await this.usuariosRepository.findOne({ where: { email } });
     if (existingUser) {
@@ -27,13 +38,25 @@ export class UsuariosService {
       passwordHash,
     });
 
-    return await this.usuariosRepository.save(usuario);
+    const savedUser = await this.usuariosRepository.save(usuario);
+
+    if (rolIds && rolIds.length > 0) {
+      const userRoles = rolIds.map(rolId => 
+        this.usuarioRolesRepository.create({
+          usuarioId: savedUser.id,
+          rolId,
+        })
+      );
+      await this.usuarioRolesRepository.save(userRoles);
+    }
+
+    return await this.findOne(savedUser.id);
   }
 
   async findByEmail(email: string): Promise<Usuario | null> {
     return await this.usuariosRepository
       .createQueryBuilder('usuario')
-      .addSelect('usuario.password_hash')
+      .addSelect('usuario.passwordHash')
       .leftJoinAndSelect('usuario.usuarioRoles', 'usuarioRoles')
       .leftJoinAndSelect('usuarioRoles.rol', 'rol')
       .where('usuario.email = :email', { email })

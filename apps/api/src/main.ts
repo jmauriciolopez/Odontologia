@@ -26,7 +26,11 @@ async function bootstrap() {
   app.useGlobalInterceptors(new TransformResponseInterceptor());
 
   // CORS
-  app.enableCors();
+  app.enableCors({
+    origin: true, // Permite el origen de la petición (útil para desarrollo)
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
 
   const port = env.PORT;
   await app.listen(port);

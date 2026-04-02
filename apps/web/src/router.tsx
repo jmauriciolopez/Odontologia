@@ -8,13 +8,30 @@ import { PacienteDetallePage } from './features/pacientes/pages/paciente-detalle
 import { AgendaPage } from './features/agenda/pages/agenda-page';
 import { OdontogramaPage } from './features/odontograma/pages/odontograma-page';
 import { PresupuestosPage } from './features/finanzas/pages/presupuestos-page';
+import { UsuariosPage } from './features/usuarios/pages/usuarios-page';
+import { ConsultoriosPage } from './features/usuarios/pages/consultorios-page';
+import { ProfesionalesPage } from './features/usuarios/pages/profesionales-page';
+import { RemindersPage } from './features/reminders/pages/reminders-page';
+import { TratamientosPage } from './features/tratamientos/pages/tratamientos-page';
 import { useAuth } from './context/auth-context';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { token, isLoading } = useAuth();
 
-  if (isLoading) return <div>Cargando...</div>;
-  if (!token) return <Navigate to="/login" replace />;
+  if (isLoading) return <div className="p-8">Cargando aplicación...</div>;
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <>{children}</>;
+};
+
+const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { token, isLoading } = useAuth();
+
+  if (!isLoading && token) {
+    return <Navigate to="/" replace />;
+  }
 
   return <>{children}</>;
 };
@@ -22,7 +39,11 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 export const router = createBrowserRouter([
   {
     path: '/login',
-    element: <LoginPage />,
+    element: (
+      <PublicRoute>
+        <LoginPage />
+      </PublicRoute>
+    ),
   },
   {
     path: '/',
@@ -38,15 +59,53 @@ export const router = createBrowserRouter([
       },
       {
         path: 'pacientes',
-        element: <div>Módulo de Pacientes en construcción</div>,
+        children: [
+          {
+            index: true,
+            element: <PacientesPage />,
+          },
+          {
+            path: ':id',
+            element: <PacienteDetallePage />,
+          },
+          {
+            path: ':id/odontograma/:fichaId',
+            element: <OdontogramaPage />,
+          },
+        ],
       },
       {
         path: 'agenda',
-        element: <div>Módulo de Agenda en construcción</div>,
+        element: <AgendaPage />,
       },
       {
         path: 'presupuestos',
-        element: <div>Módulo de Presupuestos en construcción</div>,
+        element: <PresupuestosPage />,
+      },
+      {
+        path: 'reminders',
+        element: <RemindersPage />,
+      },
+      {
+        path: 'tratamientos',
+        element: <TratamientosPage />,
+      },
+      {
+        path: 'usuarios',
+        children: [
+          {
+            index: true,
+            element: <UsuariosPage />,
+          },
+          {
+            path: 'consultorios',
+            element: <ConsultoriosPage />,
+          },
+          {
+            path: 'profesionales',
+            element: <ProfesionalesPage />,
+          },
+        ],
       },
     ],
   },

@@ -17,6 +17,9 @@ export class EvolucionClinica extends BaseEntity {
   @Column({ type: 'text' })
   descripcion: string;
 
+  @Column({ name: 'categoria', type: 'varchar', length: 50, nullable: true, default: 'General' })
+  categoria: string;
+
   @Column({ type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP' })
   fecha: Date;
 }

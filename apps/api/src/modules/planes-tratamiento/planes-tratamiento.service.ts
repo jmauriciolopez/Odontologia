@@ -14,6 +14,13 @@ export class PlanesTratamientoService {
     private readonly itemRepository: Repository<PlanTratamientoItem>,
   ) {}
 
+  async findAll(): Promise<PlanTratamiento[]> {
+    return await this.planRepository.find({
+      relations: ['items', 'profesional', 'profesional.usuario'],
+      order: { createdAt: 'DESC' }
+    });
+  }
+
   async create(dto: CreatePlanTratamientoDto): Promise<PlanTratamiento> {
     const { items, ...planData } = dto;
     const plan = this.planRepository.create(planData);
@@ -55,5 +62,14 @@ export class PlanesTratamientoService {
     const plan = await this.findOne(id);
     plan.estado = estado;
     return await this.planRepository.save(plan);
+  }
+
+  async updateItemEstado(itemId: string, estado: string): Promise<PlanTratamientoItem> {
+    const item = await this.itemRepository.findOne({ where: { id: itemId } });
+    if (!item) {
+      throw new NotFoundException(`Item de tratamiento ${itemId} no encontrado`);
+    }
+    item.estado = estado;
+    return await this.itemRepository.save(item);
   }
 }

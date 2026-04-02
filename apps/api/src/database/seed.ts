@@ -32,10 +32,10 @@ async function seed() {
     // 1. Seed Roles
     console.log('🔑 Seeding roles...');
     const rolesData = [
-      { nombre: 'admin', descripcion: 'Administrador del sistema' },
-      { nombre: 'profesional', descripcion: 'Odontólogo / Profesional de salud' },
-      { nombre: 'recepcionista', descripcion: 'Personal de recepción' },
-      { nombre: 'paciente', descripcion: 'Paciente con acceso al portal' },
+      { nombre: 'ADMIN', descripcion: 'Administrador del sistema' },
+      { nombre: 'PROFESIONAL', descripcion: 'Odontólogo / Profesional de salud' },
+      { nombre: 'RECEPCIONISTA', descripcion: 'Personal de recepción' },
+      { nombre: 'PACIENTE', descripcion: 'Paciente con acceso al portal' },
     ];
 
     for (const roleData of rolesData) {
@@ -47,8 +47,8 @@ async function seed() {
     }
 
     const roles = await rolRepository.find();
-    const adminRole = roles.find(r => r.nombre === 'admin')!;
-    const profRole = roles.find(r => r.nombre === 'profesional')!;
+    const adminRole = roles.find(r => r.nombre.toUpperCase() === 'ADMIN')!;
+    const profRole = roles.find(r => r.nombre.toUpperCase() === 'PROFESIONAL')!;
 
     // 2. Seed Admin User
     console.log('👤 Seeding admin user...');

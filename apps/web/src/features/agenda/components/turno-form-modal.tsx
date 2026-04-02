@@ -1,115 +1,263 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useProfesionales, useConsultorios } from '../hooks/use-turnos';
-import { useDisponibilidad } from '../hooks/use-disponibilidad';
+import { useProfesionales, useConsultorios, useAgendaActions } from '../hooks/use-turnos';
+import { usePacientes } from '../../pacientes/hooks/use-pacientes';
+import { Turno, CreateTurnoDto } from '../types';
+import { X, Calendar, Clock, User, Home, Search, AlertCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 
 interface TurnoFormModalProps {
+  turno?: Turno; // If provided, we are editing
+  initialDate?: Date;
   onClose: () => void;
-  onSubmit: (data: any) => void;
-  loading: boolean;
 }
 
-export const TurnoFormModal: React.FC<TurnoFormModalProps> = ({ onClose, onSubmit, loading }) => {
+export const TurnoFormModal: React.FC<TurnoFormModalProps> = ({ turno, initialDate, onClose }) => {
   const { data: profesionales = [] } = useProfesionales();
   const { data: consultorios = [] } = useConsultorios();
+  const { createTurno, updateTurno, isCreating, isUpdating, deleteTurno, isDeleting } = useAgendaActions();
   
-  const { register, handleSubmit, watch } = useForm({
+  const [searchTerm, setSearchTerm] = useState('');
+  const { data: patients = [] } = usePacientes({ query: searchTerm });
+  const [selectedPatientId, setSelectedPatientId] = useState(turno?.pacienteId || '');
+
+  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<CreateTurnoDto>({
     defaultValues: {
-      fecha: new Date().toISOString().split('T')[0],
-      horaInicio: '09:00',
-      horaFin: '09:30',
-      pacienteId: '',
-      profesionalId: '',
-      consultorioId: '',
-      motivo: ''
+      pacienteId: turno?.pacienteId || '',
+      profesionalId: turno?.profesionalId || '',
+      consultorioId: turno?.consultorioId || '',
+      fechaInicio: turno ? format(new Date(turno.fechaInicio), "yyyy-MM-dd'T'HH:mm") : (initialDate ? format(initialDate, "yyyy-MM-dd'T'HH:mm") : format(new Date(), "yyyy-MM-dd'T'HH:mm")),
+      fechaFin: turno ? format(new Date(turno.fechaFin), "yyyy-MM-dd'T'HH:mm") : (initialDate ? format(new Date(initialDate.getTime() + 30 * 60000), "yyyy-MM-dd'T'HH:mm") : format(new Date(new Date().getTime() + 30 * 60000), "yyyy-MM-dd'T'HH:mm")),
+      motivo: turno?.motivo || '',
+      estado: turno?.estado || 'programado'
     }
   });
 
-  const formValues = watch();
-  
-  const { disponibilidad, loading: checkingDispo } = useDisponibilidad({
-    fechaInicio: `${formValues.fecha}T${formValues.horaInicio}:00Z`,
-    fechaFin: `${formValues.fecha}T${formValues.horaFin}:00Z`,
-    profesionalId: formValues.profesionalId,
-    consultorioId: formValues.consultorioId
-  });
+  const onFormSubmit = async (data: CreateTurnoDto) => {
+    try {
+      if (turno) {
+        await updateTurno({ id: turno.id, data });
+      } else {
+        await createTurno(data);
+      }
+      onClose();
+    } catch (error) {
+      console.error('Error saving appointment:', error);
+    }
+  };
 
-  const onFormSubmit = (data: any) => {
-    const formattedData = {
-      ...data,
-      fechaInicio: `${data.fecha}T${data.horaInicio}:00Z`,
-      fechaFin: `${data.fecha}T${data.horaFin}:00Z`
-    };
-    onSubmit(formattedData);
+  const handleDelete = async () => {
+    if (!turno) return;
+    if (window.confirm('¿Estás seguro de que deseas eliminar este turno?')) {
+      await deleteTurno(turno.id);
+      onClose();
+    }
   };
 
   return (
-    <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-      <div className="card" style={{ width: '100%', maxWidth: '500px', margin: '1rem' }}>
-        <div className="flex justify-between items-center" style={{ marginBottom: '1.5rem' }}>
-          <h2 style={{ fontSize: '1.25rem' }}>Agendar Nuevo Turno</h2>
-          <button onClick={onClose} style={{ background: 'transparent', color: 'var(--text-muted)', fontSize: '1.25rem', padding: '0.25rem' }}>✕</button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+        className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+      />
+      
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/20 dark:border-slate-800"
+      >
+        {/* Header */}
+        <div className="px-8 pt-8 pb-6 bg-gradient-to-br from-blue-600 to-indigo-700 text-white relative">
+          <button 
+            onClick={onClose}
+            className="absolute top-6 right-6 p-2 hover:bg-white/20 rounded-full transition-colors"
+          >
+            <X size={20} />
+          </button>
+          
+          <div className="flex items-center gap-3 mb-2">
+            <div className="p-2 bg-white/20 rounded-xl backdrop-blur-md">
+              <Calendar size={20} />
+            </div>
+            <h2 className="text-2xl font-bold tracking-tight">
+              {turno ? 'Editar Turno' : 'Agendar Nuevo Turno'}
+            </h2>
+          </div>
+          <p className="text-white/70 text-sm font-medium"> Completa los datos para coordinar la atención clínica</p>
         </div>
 
-        <form onSubmit={handleSubmit(onFormSubmit)} className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1">
-            <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>ID Paciente (UUID)</label>
-            <input {...register('pacienteId')} className="input" placeholder="ID del paciente..." required />
+        <form onSubmit={handleSubmit(onFormSubmit)} className="p-8 space-y-6 max-h-[calc(100vh-16rem)] overflow-y-auto custom-scrollbar">
+          
+          {/* Patient Selection */}
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+              <Search size={14} /> Paciente
+            </label>
+            <div className="relative group">
+              <input 
+                type="text"
+                placeholder="Buscar por nombre o documento..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border-2 border-transparent focus:border-blue-500 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-slate-900 transition-all text-slate-900 dark:text-white outline-none"
+              />
+              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400">
+                 <Search size={16} />
+              </div>
+
+              {searchTerm && patients.length > 0 && !selectedPatientId && (
+                <div className="absolute z-10 w-full mt-2 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xl overflow-hidden max-h-48 overflow-y-auto">
+                  {patients.map(p => (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => {
+                        setSelectedPatientId(p.id);
+                        setValue('pacienteId', p.id);
+                        setSearchTerm(`${p.nombre} ${p.apellido}`);
+                      }}
+                      className="w-full px-4 py-3 text-left hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors border-b last:border-0 border-slate-100 dark:border-slate-700 flex flex-col"
+                    >
+                      <span className="font-bold text-slate-900 dark:text-white text-sm">{p.nombre} {p.apellido}</span>
+                      <span className="text-xs text-slate-500 dark:text-slate-400">Doc: {p.documento}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            {selectedPatientId && (
+              <div className="flex items-center justify-between px-4 py-2 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded-xl text-xs font-bold border border-emerald-200/50 dark:border-emerald-500/20">
+                <span>✓ Paciente Seleccionado</span>
+                <button type="button" onClick={() => { setSelectedPatientId(''); setSearchTerm(''); setValue('pacienteId', ''); }} className="hover:underline">Cambiar</button>
+              </div>
+            )}
+            <input type="hidden" {...register('pacienteId', { required: true })} />
           </div>
 
-          <div className="grid" style={{ gridTemplateColumns: '1.5fr 1fr 1fr', gap: '0.75rem' }}>
-            <div className="flex flex-col gap-1">
-              <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>Fecha</label>
-              <input type="date" {...register('fecha')} className="input" required />
+          {/* Dates Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                <Clock size={14} /> Inicio
+              </label>
+              <input 
+                type="datetime-local" 
+                {...register('fechaInicio', { required: true })} 
+                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border-2 border-transparent focus:border-blue-500 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-slate-900 transition-all text-slate-900 dark:text-white outline-none"
+              />
             </div>
-            <div className="flex flex-col gap-1">
-              <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>Inicio</label>
-              <input type="time" {...register('horaInicio')} className="input" required />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>Fin</label>
-              <input type="time" {...register('horaFin')} className="input" required />
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                <Clock size={14} /> Fin
+              </label>
+              <input 
+                type="datetime-local" 
+                {...register('fechaFin', { required: true })} 
+                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border-2 border-transparent focus:border-blue-500 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-slate-900 transition-all text-slate-900 dark:text-white outline-none"
+              />
             </div>
           </div>
 
-          <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-            <div className="flex flex-col gap-1">
-              <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>Profesional</label>
-              <select {...register('profesionalId')} className="input" required>
+          {/* Profesional and Consultorio Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                <User size={14} /> Profesional
+              </label>
+              <select 
+                {...register('profesionalId', { required: true })}
+                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border-2 border-transparent focus:border-blue-500 transition-all text-slate-900 dark:text-white outline-none appearance-none"
+              >
                 <option value="">Seleccionar...</option>
-                {profesionales.map((p: any) => (
-                  <option key={p.id} value={p.id}>{p.usuario?.nombre}</option>
-                ))}
+                {profesionales.map(p => <option key={p.id} value={p.id}>{p.usuario.nombre} {p.usuario.apellido}</option>)}
               </select>
             </div>
-            <div className="flex flex-col gap-1">
-              <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>Consultorio</label>
-              <select {...register('consultorioId')} className="input" required>
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                <Home size={14} /> Consultorio
+              </label>
+              <select 
+                {...register('consultorioId', { required: true })}
+                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border-2 border-transparent focus:border-blue-500 transition-all text-slate-900 dark:text-white outline-none appearance-none"
+              >
                 <option value="">Seleccionar...</option>
-                {consultorios.map((c: any) => (
-                  <option key={c.id} value={c.id}>{c.nombre}</option>
-                ))}
+                {consultorios.map(c => <option key={c.id} value={c.id}>{c.nombre}</option>)}
               </select>
             </div>
           </div>
 
-          {checkingDispo && <p className="text-muted" style={{ fontSize: '0.75rem' }}>🔍 Verificando disponibilidad...</p>}
-          {disponibilidad && !disponibilidad.disponible && (
-            <div style={{ padding: '0.75rem', background: 'rgba(239,68,68,0.1)', color: 'var(--danger)', borderRadius: 'var(--radius)', fontSize: '0.8125rem' }}>
-              ⚠️ Conflicto detectado: {disponibilidad.conflictos.length} turno(s) en ese horario.
+          {/* Motivo and Estado */}
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Estado</label>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                {['programado', 'confirmado', 'atendido', 'cancelado'].map(est => (
+                  <label 
+                    key={est}
+                    className={cn(
+                      "flex items-center justify-center p-3 rounded-xl border-2 cursor-pointer transition-all text-[11px] font-bold uppercase tracking-tighter",
+                      watch('estado') === est 
+                        ? "border-blue-500 bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400" 
+                        : "border-slate-100 dark:border-slate-800 text-slate-400 hover:border-slate-200"
+                    )}
+                  >
+                    <input type="radio" value={est} {...register('estado')} className="hidden" />
+                    {est}
+                  </label>
+                ))}
+              </div>
             </div>
-          )}
 
-          <div className="flex flex-col gap-1">
-            <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>Motivo</label>
-            <textarea {...register('motivo')} className="input" rows={2} style={{ resize: 'none' }} />
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                Motivo / Notas
+              </label>
+              <textarea 
+                {...register('motivo')}
+                placeholder="Indica el motivo de la consulta..."
+                rows={3}
+                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border-2 border-transparent focus:border-blue-500 transition-all text-slate-900 dark:text-white outline-none resize-none"
+              />
+            </div>
           </div>
 
-          <button type="submit" className="btn-primary" disabled={loading || disponibilidad?.disponible === false} style={{ marginTop: '0.5rem' }}>
-            {loading ? 'Confirmando...' : 'Agendar Turno'}
-          </button>
+          {/* Actions */}
+          <div className="pt-6 flex flex-col-reverse sm:flex-row gap-3">
+            {turno && (
+              <button
+                type="button"
+                onClick={handleDelete}
+                disabled={isDeleting}
+                className="flex-1 sm:flex-none px-6 py-3.5 text-rose-600 dark:text-rose-400 font-bold text-sm bg-rose-50 dark:bg-rose-500/10 rounded-2xl border border-rose-100 dark:border-rose-500/20 hover:bg-rose-100 transition-colors"
+              >
+                Eliminar
+              </button>
+            )}
+            
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 px-6 py-3.5 text-slate-600 dark:text-slate-400 font-bold text-sm bg-slate-100 dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 hover:bg-slate-200 transition-colors"
+            >
+              Cancelar
+            </button>
+            
+            <button
+              type="submit"
+              disabled={isCreating || isUpdating}
+              className="flex-[2] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3.5 px-6 rounded-2xl shadow-xl shadow-blue-500/20 disabled:grayscale transition-all active:scale-95"
+            >
+              {isCreating || isUpdating ? 'Guardando...' : (turno ? 'Guardar Cambios' : 'Agendar Turno')}
+            </button>
+          </div>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 };

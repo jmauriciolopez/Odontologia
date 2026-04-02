@@ -11,6 +11,12 @@ import { Role } from '../../common/constants/roles.constants';
 export class PlanesTratamientoController {
   constructor(private readonly planesService: PlanesTratamientoService) {}
 
+  @Get()
+  @Roles(Role.ADMIN, Role.ODONTOLOGO)
+  findAll() {
+    return this.planesService.findAll();
+  }
+
   @Post()
   @Roles(Role.ADMIN, Role.ODONTOLOGO)
   create(@Body() dto: CreatePlanTratamientoDto) {
@@ -31,5 +37,11 @@ export class PlanesTratamientoController {
   @Roles(Role.ADMIN, Role.ODONTOLOGO)
   updateEstado(@Param('id', ParseUUIDPipe) id: string, @Body('estado') estado: string) {
     return this.planesService.updateEstado(id, estado);
+  }
+
+  @Patch('items/:id/estado')
+  @Roles(Role.ADMIN, Role.ODONTOLOGO)
+  updateItemEstado(@Param('id', ParseUUIDPipe) id: string, @Body('estado') estado: string) {
+    return this.planesService.updateItemEstado(id, estado);
   }
 }

@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, ConflictException } from '@nestjs/common
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Paciente } from './entities/paciente.entity';
+import { FichaClinica } from '../fichas-clinicas/entities/ficha-clinica.entity';
 import { CreatePacienteDto } from './dto/create-paciente.dto';
 import { UpdatePacienteDto } from './dto/update-paciente.dto';
 import { PacienteFiltrosDto } from './dto/paciente-filtros.dto';
@@ -11,6 +12,8 @@ export class PacientesService {
   constructor(
     @InjectRepository(Paciente)
     private readonly pacientesRepository: Repository<Paciente>,
+    @InjectRepository(FichaClinica)
+    private readonly fichaRepository: Repository<FichaClinica>,
   ) {}
 
   async create(createPacienteDto: CreatePacienteDto): Promise<Paciente> {
@@ -42,18 +45,30 @@ export class PacientesService {
   }
 
   async findOne(id: string): Promise<Paciente> {
-    const paciente = await this.pacientesRepository.findOne({
+    let paciente = await this.pacientesRepository.findOne({
       where: { id },
-      relations: ['fichaClinica', 'fichaClinica.antecedentes', 'fichaClinica.evoluciones'],
+      relations: ['ficha', 'ficha.antecedentes', 'ficha.evoluciones'],
     });
 
     if (!paciente) {
       throw new NotFoundException(`Paciente con ID ${id} no encontrado`);
     }
 
+    // Si no tiene ficha, crearla automáticamente
+    if (!paciente.ficha) {
+      const newFicha = this.fichaRepository.create({
+        pacienteId: paciente.id,
+      });
+      paciente.ficha = await this.fichaRepository.save(newFicha);
+    }
+
     // Ordenar evoluciones por fecha descendente
-    if (paciente.fichaClinica && paciente.fichaClinica.evoluciones) {
-      paciente.fichaClinica.evoluciones.sort((a, b) => b.fecha.getTime() - a.fecha.getTime());
+    if (paciente.ficha && paciente.ficha.evoluciones) {
+      paciente.ficha.evoluciones.sort((a, b) => {
+        const dateA = a.createdAt ? new Date(a.createdAt) : new Date(0);
+        const dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
+        return dateB.getTime() - dateA.getTime();
+      });
     }
 
     return paciente;

@@ -1,10 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DocumentoAdjunto } from './entities/documento-adjunto.entity';
 import { Radiografia } from './entities/radiografia.entity';
-import { LocalStorageService } from './storage/local-storage.service';
-import { StorageFile } from './storage/storage.interface';
+import { IStorageService, StorageFile } from './storage/storage.interface';
 
 @Injectable()
 export class ArchivosService {
@@ -15,7 +14,8 @@ export class ArchivosService {
     private readonly documentoRepository: Repository<DocumentoAdjunto>,
     @InjectRepository(Radiografia)
     private readonly radiografiaRepository: Repository<Radiografia>,
-    private readonly storageService: LocalStorageService,
+    @Inject('STORAGE_SERVICE')
+    private readonly storageService: IStorageService,
   ) {}
 
   async saveDocumento(

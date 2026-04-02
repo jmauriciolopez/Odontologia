@@ -13,7 +13,7 @@ export const LoginScreen = () => {
     if (!email || !password) return;
     setLoading(true);
     try {
-      const response = await api.post('/auth/login', { email, password });
+      const response = await api.post('auth/login', { email, password });
       await login(response.data.access_token, response.data.user);
     } catch (error) {
       Alert.alert('Error', 'Credenciales inválidas o problema de conexión.');

@@ -6,6 +6,7 @@ export interface Presupuesto {
   total: number;
   subtotal: number;
   descuento: number;
+  pagado: number;
   estado: 'pendiente' | 'aprobado' | 'rechazado' | 'pagado' | 'pagado_parcial';
   items: PresupuestoItem[];
   pagos?: Pago[];

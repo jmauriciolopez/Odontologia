@@ -1,0 +1,4 @@
+﻿src/features/agenda/hooks/use-disponibilidad.ts(14,39): error TS2339: Property 'checkDisponibilidad' does not exist on type '{ findAll: (params?: TurnosFiltros | undefined) => Promise<Turno[]>; findOne: (id: string) => Promise<Turno>; create: (data: CreateTurnoDto) => Promise<...>; update: (id: string, data: UpdateTurnoDto) => Promise<...>; remove: (id: string) => Promise<...>; getProfesionales: () => Promise<...>; getConsultorios: () => ...'.
+src/features/finanzas/components/pago-modal.tsx(15,71): error TS2339: Property 'pagado' does not exist on type 'Presupuesto'.
+src/features/finanzas/components/pago-modal.tsx(28,59): error TS2339: Property 'pagado' does not exist on type 'Presupuesto'.
+src/features/pacientes/components/PacienteTabs.tsx(61,21): error TS2322: Type 'number' is not assignable to type 'never'.

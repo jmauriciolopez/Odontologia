@@ -35,4 +35,14 @@ export class FichasClinicasController {
   addEvolucion(@Body() dto: CreateEvolucionClinicaDto) {
     return this.fichasService.addEvolucion(dto);
   }
+
+  @Post(':fichaId/mediciones-periodontales/:diente')
+  @Roles(Role.ADMIN, Role.ODONTOLOGO)
+  upsertMedicion(
+    @Param('fichaId') fichaId: string,
+    @Param('diente') diente: string,
+    @Body() data: any
+  ) {
+    return this.fichasService.upsertMedicion(fichaId, parseInt(diente), data);
+  }
 }

@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { FichaClinica } from './entities/ficha-clinica.entity';
 import { Antecedente } from './entities/antecedente.entity';
 import { EvolucionClinica } from './entities/evolucion-clinica.entity';
+import { MedicionPeriodontal } from './entities/medicion-periodontal.entity';
 import { CreateFichaClinicaDto } from './dto/create-ficha-clinica.dto';
 import { CreateAntecedenteDto } from './dto/create-antecedente.dto';
 import { CreateEvolucionClinicaDto } from './dto/create-evolucion-clinica.dto';
@@ -17,6 +18,8 @@ export class FichasClinicasService {
     private readonly antecedenteRepository: Repository<Antecedente>,
     @InjectRepository(EvolucionClinica)
     private readonly evolucionRepository: Repository<EvolucionClinica>,
+    @InjectRepository(MedicionPeriodontal)
+    private readonly medicionRepository: Repository<MedicionPeriodontal>,
   ) {}
 
   async createFicha(dto: CreateFichaClinicaDto): Promise<FichaClinica> {
@@ -27,7 +30,7 @@ export class FichasClinicasService {
   async findByPaciente(pacienteId: string): Promise<FichaClinica> {
     const ficha = await this.fichaRepository.findOne({
       where: { pacienteId },
-      relations: ['antecedentes', 'evoluciones'],
+      relations: ['antecedentes', 'evoluciones', 'medicionesPeriodontales'],
     });
 
     if (!ficha) {
@@ -45,5 +48,19 @@ export class FichasClinicasService {
   async addEvolucion(dto: CreateEvolucionClinicaDto): Promise<EvolucionClinica> {
     const evolucion = this.evolucionRepository.create(dto);
     return await this.evolucionRepository.save(evolucion);
+  }
+
+  async upsertMedicion(fichaId: string, diente: number, data: Partial<MedicionPeriodontal>): Promise<MedicionPeriodontal> {
+    let medicion = await this.medicionRepository.findOne({
+      where: { fichaId, posicionDiente: diente }
+    });
+
+    if (medicion) {
+      Object.assign(medicion, data);
+    } else {
+      medicion = this.medicionRepository.create({ ...data, fichaId, posicionDiente: diente });
+    }
+
+    return await this.medicionRepository.save(medicion);
   }
 }

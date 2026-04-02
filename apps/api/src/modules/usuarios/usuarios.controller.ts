@@ -17,6 +17,12 @@ export class UsuariosController {
     return await this.usuariosService.create(createUsuarioDto);
   }
 
+  @Get('roles')
+  @Roles(Role.ADMIN)
+  async findAllRoles() {
+    return await this.usuariosService.findAllRoles();
+  }
+
   @Get()
   @Roles(Role.ADMIN)
   async findAll() {

@@ -12,7 +12,7 @@ export const DashboardScreen = ({ navigation }) => {
   const fetchTurnos = async () => {
     try {
       const hoy = new Date().toISOString().split('T')[0];
-      const response = await api.get('/turnos', { params: { fecha: hoy } });
+      const response = await api.get('turnos', { params: { fecha: hoy } });
       setTurnos(response.data);
     } catch (error) {
       console.error(error);

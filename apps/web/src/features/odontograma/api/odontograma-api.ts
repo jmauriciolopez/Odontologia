@@ -1,19 +1,16 @@
-import api from '../../../lib/api';
+import { httpClient } from '../../../lib/Httpclient';
 import { PiezaDental, UpdatePiezaDto, AddProcedimientoDto } from '../types';
 
 export const odontogramaApi = {
   getOdontograma: async (fichaId: string): Promise<PiezaDental[]> => {
-    const response = await api.get(`/odontograma/ficha/${fichaId}`);
-    return response.data;
+    return httpClient.get(`odontograma/ficha/${fichaId}`);
   },
 
   updatePieza: async (dto: UpdatePiezaDto): Promise<PiezaDental> => {
-    const response = await api.patch('/odontograma/pieza', dto);
-    return response.data;
+    return httpClient.patch('odontograma/pieza', dto);
   },
 
   addProcedimiento: async (dto: AddProcedimientoDto) => {
-    const response = await api.post('/odontograma/procedimiento', dto);
-    return response.data;
+    return httpClient.post('odontograma/procedimiento', dto);
   }
 };

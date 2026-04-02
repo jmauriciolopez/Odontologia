@@ -3,13 +3,14 @@ import { BaseEntity } from '../../../common/entities/base.entity';
 import { Paciente } from '../../pacientes/entities/paciente.entity';
 import { Antecedente } from './antecedente.entity';
 import { EvolucionClinica } from './evolucion-clinica.entity';
+import { MedicionPeriodontal } from './medicion-periodontal.entity';
 
 @Entity('fichas_clinicas')
 export class FichaClinica extends BaseEntity {
   @Column({ name: 'paciente_id' })
   pacienteId: string;
 
-  @OneToOne(() => Paciente, (paciente) => paciente.fichaClinica)
+  @OneToOne(() => Paciente, (paciente) => paciente.ficha)
   @JoinColumn({ name: 'paciente_id' })
   paciente: Paciente;
 
@@ -21,4 +22,7 @@ export class FichaClinica extends BaseEntity {
 
   @OneToMany(() => EvolucionClinica, (evolucion) => evolucion.ficha)
   evoluciones: EvolucionClinica[];
+
+  @OneToMany(() => MedicionPeriodontal, (medicion) => medicion.ficha)
+  medicionesPeriodontales: MedicionPeriodontal[];
 }

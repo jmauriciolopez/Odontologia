@@ -1,5 +1,8 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Presupuesto } from '../types';
+import { CheckCircle2, Clock, AlertCircle, FileText, ArrowRight, User } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface PresupuestoListProps {
   presupuestos: Presupuesto[];
@@ -8,71 +11,144 @@ interface PresupuestoListProps {
 }
 
 export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, isLoading, onSelect }) => {
-  if (isLoading) return <div>Cargando presupuestos...</div>;
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 gap-4">
+        <div className="h-10 w-10 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
+        <p className="text-slate-500 font-medium">Sincronizando presupuestos clínicos...</p>
+      </div>
+    );
+  }
 
-  const getBadgeStyle = (estado: string) => {
+  const getStatusConfig = (estado: string) => {
     switch (estado) {
-      case 'pagado': return { background: 'rgba(16,185,129,0.1)', color: 'var(--success)' };
-      case 'pagado_parcial': return { background: 'rgba(245,158,11,0.1)', color: 'var(--warning)' };
-      case 'rechazado': return { background: 'rgba(239,68,68,0.1)', color: 'var(--danger)' };
-      default: return { background: 'var(--bg-app)', color: 'var(--text-muted)' };
+      case 'pagado': 
+        return { 
+          icon: CheckCircle2, 
+          label: 'Pagado', 
+          bg: 'bg-emerald-50 dark:bg-emerald-500/10', 
+          text: 'text-emerald-600 dark:text-emerald-400',
+          border: 'border-emerald-100 dark:border-emerald-500/20'
+        };
+      case 'pagado_parcial': 
+        return { 
+          icon: Clock, 
+          label: 'Parcial', 
+          bg: 'bg-amber-50 dark:bg-amber-500/10', 
+          text: 'text-amber-600 dark:text-amber-400',
+          border: 'border-amber-100 dark:border-amber-500/20'
+        };
+      case 'rechazado': 
+        return { 
+          icon: AlertCircle, 
+          label: 'Rechazado', 
+          bg: 'bg-rose-50 dark:bg-rose-500/10', 
+          text: 'text-rose-600 dark:text-rose-400',
+          border: 'border-rose-100 dark:border-rose-500/20'
+        };
+      default: 
+        return { 
+          icon: FileText, 
+          label: 'Pendiente', 
+          bg: 'bg-slate-50 dark:bg-slate-800', 
+          text: 'text-slate-600 dark:text-slate-400',
+          border: 'border-slate-200 dark:border-slate-700'
+        };
     }
   };
 
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(value);
+  };
+
   return (
-    <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-      <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-        <thead style={{ background: 'var(--bg-app)', borderBottom: '1px solid var(--border)' }}>
-          <tr>
-            <th style={{ padding: '1rem', fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--text-muted)' }}>ID / Fecha</th>
-            <th style={{ padding: '1rem', fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--text-muted)' }}>Paciente</th>
-            <th style={{ padding: '1rem', fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--text-muted)' }}>Total</th>
-            <th style={{ padding: '1rem', fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--text-muted)' }}>Estado</th>
-            <th style={{ padding: '1rem' }}></th>
-          </tr>
-        </thead>
-        <tbody>
-          {presupuestos.map((p) => (
-            <tr key={p.id} style={{ borderBottom: '1px solid var(--border)' }}>
-              <td style={{ padding: '1rem' }}>
-                <div className="flex flex-col">
-                  <span style={{ fontWeight: 600, fontSize: '0.875rem' }}>#{p.id.slice(0, 8)}</span>
-                  <span className="text-muted" style={{ fontSize: '0.75rem' }}>{new Date(p.fechaEmision).toLocaleDateString()}</span>
-                </div>
-              </td>
-              <td style={{ padding: '1rem', fontSize: '0.875rem' }}>
-                {p.paciente ? `${p.paciente.apellido}, ${p.paciente.nombre}` : 'Paciente #'+p.pacienteId.slice(0, 5)}
-              </td>
-              <td style={{ padding: '1rem', fontSize: '0.875rem', fontWeight: 700 }}>
-                ${p.total.toLocaleString()}
-              </td>
-              <td style={{ padding: '1rem' }}>
-                <span style={{ 
-                  fontSize: '0.75rem', 
-                  padding: '0.25rem 0.6rem', 
-                  borderRadius: '1rem', 
-                  fontWeight: 600,
-                  ...getBadgeStyle(p.estado)
-                }}>
-                  {p.estado.replace('_', ' ').toUpperCase()}
-                </span>
-              </td>
-              <td style={{ padding: '1rem', textAlign: 'right' }}>
-                <button className="btn-primary" style={{ padding: '0.25rem 0.75rem', fontSize: '0.75rem' }} onClick={() => onSelect(p)}>
-                  Gestionar
-                </button>
-              </td>
-            </tr>
-          ))}
-          {presupuestos.length === 0 && (
+    <div className="premium-card p-0 overflow-hidden bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 shadow-sm rounded-3xl">
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-left">
+          <thead className="bg-slate-50/50 dark:bg-slate-800/30 border-b border-slate-100 dark:border-slate-800">
             <tr>
-              <td colSpan={5} style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-                No hay presupuestos para mostrar.
-              </td>
+              <th className="p-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Presupuesto</th>
+              <th className="p-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Paciente</th>
+              <th className="p-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Total</th>
+              <th className="p-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Estado</th>
+              <th className="p-5"></th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50">
+            {presupuestos.map((p, i) => {
+              const status = getStatusConfig(p.estado);
+              return (
+                <motion.tr 
+                  key={p.id}
+                  initial={{ opacity: 0, x: -5 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  className="group hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors"
+                >
+                  <td className="p-5">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-blue-500 transition-colors">
+                        <FileText size={20} />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-bold text-slate-900 dark:text-white">#{p.id.slice(0, 8).toUpperCase()}</span>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">
+                          {new Date(p.fechaEmision).toLocaleDateString([], { day: '2-digit', month: 'short', year: 'numeric' })}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="p-5">
+                    <div className="flex items-center gap-3">
+                      <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                        <User size={14} />
+                      </div>
+                      <span className="font-semibold text-sm text-slate-700 dark:text-slate-300">
+                        {p.paciente ? `${p.paciente.apellido}, ${p.paciente.nombre}` : 'Paciente Clínica'}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="p-5">
+                    <span className="font-black text-slate-900 dark:text-white tracking-tight">
+                      {formatCurrency(p.total)}
+                    </span>
+                  </td>
+                  <td className="p-5">
+                    <div className={cn(
+                      "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-[11px] font-bold tracking-tight",
+                      status.bg, status.text, status.border
+                    )}>
+                      <status.icon size={14} />
+                      {status.label.toUpperCase()}
+                    </div>
+                  </td>
+                  <td className="p-5 text-right">
+                    <button 
+                      onClick={() => onSelect(p)}
+                      className="inline-flex items-center gap-2 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-blue-500 text-slate-600 dark:text-slate-300 px-4 py-2 rounded-xl text-xs font-bold transition-all hover:text-blue-600 group/btn"
+                    >
+                      Gestionar
+                      <ArrowRight size={14} className="transition-transform group-hover/btn:translate-x-0.5" />
+                    </button>
+                  </td>
+                </motion.tr>
+              );
+            })}
+          </tbody>
+        </table>
+        
+        {presupuestos.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
+             <div className="h-20 w-20 rounded-full bg-slate-50 dark:bg-slate-800/40 flex items-center justify-center mb-6">
+                <FileText className="text-slate-200" size={40} />
+             </div>
+             <h3 className="font-bold text-slate-900 dark:text-white mb-1">Sin Registros</h3>
+             <p className="text-slate-500 text-sm max-w-[280px]">
+               No hay presupuestos generados aún. Comience creando uno nuevo para sus pacientes.
+             </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

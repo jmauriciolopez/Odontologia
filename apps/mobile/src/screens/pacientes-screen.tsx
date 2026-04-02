@@ -9,7 +9,7 @@ export const PacientesScreen = () => {
 
   const fetchPacientes = async (query = '') => {
     try {
-      const response = await api.get('/pacientes', { params: { q: query } });
+      const response = await api.get('pacientes', { params: { q: query } });
       setPacientes(response.data);
     } catch (error) {
       console.error(error);

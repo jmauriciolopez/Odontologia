@@ -1,34 +1,32 @@
-import api from '../../../lib/api';
-import { Paciente, CreatePacienteDto, UpdatePacienteDto } from '../types';
+import { httpClient } from '../../../lib/Httpclient';
+import { Paciente } from '../types';
 
 export const pacientesApi = {
-  findAll: async (params?: any) => {
-    const response = await api.get('/pacientes', { params });
-    return response.data;
+  getPacientes: async (params?: { query?: string }): Promise<Paciente[]> => {
+    return httpClient.get('pacientes', { params });
   },
   
-  findOne: async (id: string) => {
-    const response = await api.get(`/pacientes/${id}`);
-    return response.data;
+  getPacienteById: async (id: string): Promise<Paciente> => {
+    return httpClient.get(`pacientes/${id}`);
+  },
+  
+  createPaciente: async (data: Partial<Paciente>): Promise<Paciente> => {
+    return httpClient.post('pacientes', data);
+  },
+  
+  updatePaciente: async (id: string, data: Partial<Paciente>): Promise<Paciente> => {
+    return httpClient.patch(`pacientes/${id}`, data);
+  },
+  
+  addEvolucion: async (fichaId: string, data: { descripcion: string, categoria?: string }): Promise<any> => {
+    return httpClient.post(`fichas-clinicas/${fichaId}/evoluciones`, data);
   },
 
-  create: async (data: any) => {
-    const response = await api.post('/pacientes', data);
-    return response.data;
+  getFichaByPacienteId: async (pacienteId: string): Promise<any> => {
+    return httpClient.get(`fichas-clinicas/paciente/${pacienteId}`);
   },
 
-  update: async (id: string, data: any) => {
-    const response = await api.patch(`/pacientes/${id}`, data);
-    return response.data;
-  },
-
-  createEvolucion: async (fichaId: string, data: any) => {
-    const response = await api.post(`/fichas-clinicas/${fichaId}/evoluciones`, data);
-    return response.data;
-  },
-
-  getFicha: async (fichaId: string) => {
-    const response = await api.get(`/fichas-clinicas/${fichaId}`);
-    return response.data;
+  upsertMedicionPeriodontal: async (fichaId: string, diente: number, data: any): Promise<any> => {
+    return httpClient.post(`fichas-clinicas/${fichaId}/mediciones-periodontales/${diente}`, data);
   }
 };

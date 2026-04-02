@@ -17,6 +17,14 @@ export const usePresupuestoDetalle = (id: string) => {
   });
 };
 
+export const usePacienteFinanzas = (pacienteId: string) => {
+  return useQuery({
+    queryKey: ['presupuestos', 'paciente', pacienteId],
+    queryFn: () => finanzasApi.findByPaciente(pacienteId),
+    enabled: !!pacienteId,
+  });
+};
+
 export const useFinanzasMutations = () => {
   const queryClient = useQueryClient();
 

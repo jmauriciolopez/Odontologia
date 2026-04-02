@@ -1,99 +1,48 @@
-import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { useOdontograma, useOdontogramaMutations } from '../hooks/use-odontograma';
-import { OdontogramaView } from '../components/odontograma-view';
-import { PiezaDental } from '../types';
+import React from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { OdontogramaManager } from '../components/OdontogramaManager';
+import { ChevronLeft, Stethoscope } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export const OdontogramaPage: React.FC = () => {
-  const { fichaId } = useParams<{ fichaId: string }>();
-  const { data: piezas = [], isLoading } = useOdontograma(fichaId!);
-  const { updatePieza, addProcedimiento } = useOdontogramaMutations(fichaId!);
-  const [selectedPieza, setSelectedPieza] = useState<PiezaDental | null>(null);
-
-  if (isLoading) return <div>Cargando odontograma...</div>;
-
-  const handleUpdateCara = async (cara: string, estado: string) => {
-    if (selectedPieza) {
-      await updatePieza.mutateAsync({
-        piezaId: selectedPieza.id,
-        caras: { [cara]: estado }
-      });
-      // Update local state if needed (react-query handles refetch)
-    }
-  };
-
-  const states = [
-    { id: 'sano', label: 'Sano', color: '#fff' },
-    { id: 'caries', label: 'Caries', color: '#ef4444' },
-    { id: 'restauracion', label: 'Restauración', color: '#10b981' },
-    { id: 'ausente', label: 'Ausente', color: '#cbd5e1' },
-    { id: 'corona', label: 'Corona', color: '#f59e0b' },
-  ];
+  const { id, fichaId } = useParams<{ id: string, fichaId: string }>();
+  const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex justify-between items-center">
+    <motion.div 
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="flex flex-col gap-8 min-h-screen"
+    >
+      <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-4">
-          <Link to={`/pacientes`} style={{ fontSize: '1.25rem', textDecoration: 'none', color: 'var(--text-muted)' }}>⬅️</Link>
+          <button 
+            onClick={() => navigate(`/pacientes/${id}`)}
+            className="flex h-10 w-10 items-center justify-center rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 hover:text-primary hover:border-primary/30 transition-all shadow-sm active:scale-95"
+            title="Volver a la ficha del paciente"
+          >
+            <ChevronLeft size={20} />
+          </button>
           <div>
-            <h1 style={{ fontSize: '1.5rem' }}>Odontograma Interactivo</h1>
-            <p className="text-muted">Ficha Clínica ID: {fichaId?.slice(0, 8)}</p>
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Odontograma Externo</h1>
+            <div className="flex items-center gap-2 text-sm text-slate-500">
+               <span className="font-mono bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded leading-none text-[10px] border border-slate-200 dark:border-slate-700">FICHA ID: {fichaId?.slice(0, 8)}...</span>
+               <span className="h-1 w-1 rounded-full bg-slate-300" />
+               <span className="flex items-center gap-1 font-bold text-primary/80 uppercase tracking-tighter text-[11px]"><Stethoscope size={12} /> Modo Edición Clínica Full</span>
+            </div>
           </div>
         </div>
-        <div className="flex gap-4">
-          {states.map(s => (
-            <div key={s.id} className="flex items-center gap-2">
-              <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: s.color, border: '1px solid #ddd' }} />
-              <span style={{ fontSize: '0.75rem', fontWeight: 600 }}>{s.label}</span>
-            </div>
-          ))}
+        
+        <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-500/10 rounded-xl border border-blue-100 dark:border-blue-500/20">
+           <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
+           <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Historial Clínico Sincronizado</span>
         </div>
       </header>
 
-      <div className="grid" style={{ gridTemplateColumns: '1fr 300px', gap: '2rem' }}>
-        <OdontogramaView 
-          piezas={piezas} 
-          onPiezaSelect={setSelectedPieza} 
-          selectedPiezaId={selectedPieza?.id} 
-        />
-
-        <div className="card flex flex-col gap-4">
-          {selectedPieza ? (
-            <>
-              <h3 style={{ fontSize: '1.25rem' }}>Pieza {selectedPieza.posicion}</h3>
-              <div className="flex flex-col gap-3">
-                <p style={{ fontSize: '0.875rem', fontWeight: 600 }}>Actualizar Cara:</p>
-                {['vestibular', 'lingual', 'oclusal', 'distal', 'mesial'].map(cara => (
-                  <div key={cara} className="flex flex-col gap-1">
-                    <span style={{ fontSize: '0.75rem', textTransform: 'capitalize' }}>{cara}</span>
-                    <select 
-                      className="input" 
-                      value={(selectedPieza.caras as any)[cara]}
-                      onChange={(e) => handleUpdateCara(cara, e.target.value)}
-                    >
-                      {states.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
-                    </select>
-                  </div>
-                ))}
-              </div>
-
-              <div style={{ marginTop: '1rem', borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>
-                <p style={{ fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.5rem' }}>Procedimientos:</p>
-                {selectedPieza.procedimientos?.length ? selectedPieza.procedimientos.map(proc => (
-                  <div key={proc.id} style={{ fontSize: '0.75rem', padding: '0.5rem', background: 'var(--bg-app)', borderRadius: 'var(--radius)', marginBottom: '0.5rem' }}>
-                    <span style={{ fontWeight: 600 }}>{proc.tipo}</span> - {new Date(proc.fechaRealizacion).toLocaleDateString()}
-                  </div>
-                )) : <p className="text-muted" style={{ fontSize: '0.75rem' }}>Sin procedimientos registrados.</p>}
-              </div>
-            </>
-          ) : (
-            <div className="flex flex-col items-center justify-center p-8 text-center text-muted">
-              <span>🦷</span>
-              <p style={{ fontSize: '0.875rem' }}>Seleccione una pieza dental para ver detalles y editar estados.</p>
-            </div>
-          )}
-        </div>
+      {/* Reusable Manager Component */}
+      <div className="flex-1">
+        <OdontogramaManager fichaId={fichaId!} />
       </div>
-    </div>
+    </motion.div>
   );
 };

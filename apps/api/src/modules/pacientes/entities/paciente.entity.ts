@@ -35,5 +35,5 @@ export class Paciente extends BaseEntity {
   nroAfiliado: string;
 
   @OneToOne(() => FichaClinica, (ficha) => ficha.paciente)
-  fichaClinica: FichaClinica;
+  ficha: FichaClinica;
 }

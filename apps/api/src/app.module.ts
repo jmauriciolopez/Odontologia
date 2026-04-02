@@ -13,6 +13,7 @@ import { OdontogramaModule } from './modules/odontograma/odontograma.module';
 import { PlanesTratamientoModule } from './modules/planes-tratamiento/planes-tratamiento.module';
 import { PresupuestosModule } from './modules/presupuestos/presupuestos.module';
 import { RemindersModule } from './modules/reminders/reminders.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { RemindersModule } from './modules/reminders/reminders.module';
     PlanesTratamientoModule,
     PresupuestosModule,
     RemindersModule,
+    DashboardModule,
   ],
   controllers: [],
   providers: [],

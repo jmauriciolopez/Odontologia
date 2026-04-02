@@ -1,29 +1,28 @@
-import api from '../../../lib/api';
+import { httpClient } from '../../../lib/Httpclient';
 import { Presupuesto, CreatePresupuestoDto, Pago, CreatePagoDto } from '../types';
 
 export const finanzasApi = {
   findAll: async (params?: any): Promise<Presupuesto[]> => {
-    const response = await api.get('/presupuestos', { params });
-    return response.data;
+    return httpClient.get('presupuestos', { params });
   },
 
   findOne: async (id: string): Promise<Presupuesto> => {
-    const response = await api.get(`/presupuestos/${id}`);
-    return response.data;
+    return httpClient.get(`presupuestos/${id}`);
   },
 
   create: async (data: CreatePresupuestoDto): Promise<Presupuesto> => {
-    const response = await api.post('/presupuestos', data);
-    return response.data;
+    return httpClient.post('presupuestos', data);
+  },
+
+  findByPaciente: async (pacienteId: string): Promise<Presupuesto[]> => {
+    return httpClient.get(`presupuestos/paciente/${pacienteId}`);
   },
 
   registerPago: async (data: CreatePagoDto): Promise<Pago> => {
-    const response = await api.post('/presupuestos/pago', data);
-    return response.data;
+    return httpClient.post('presupuestos/pago', data);
   },
 
   getPagosByPresupuesto: async (id: string): Promise<Pago[]> => {
-    const response = await api.get(`/presupuestos/${id}/pagos`);
-    return response.data;
+    return httpClient.get(`presupuestos/${id}/pagos`);
   }
 };
