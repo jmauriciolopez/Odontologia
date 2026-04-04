@@ -29,12 +29,26 @@ export interface CreateUsuarioDto {
 export interface Consultorio {
   id: string;
   nombre: string;
+  direccion?: string;
+  numeroSillones?: number;
+  piso?: string;
+  telefono?: string;
+  whatsapp?: string;
+  horario?: string;
+  diasAtencion?: string[];
   sucursalId?: string;
   activo: boolean;
 }
 
 export interface CreateConsultorioDto {
   nombre: string;
+  direccion?: string;
+  numeroSillones?: number;
+  piso?: string;
+  telefono?: string;
+  whatsapp?: string;
+  horario?: string;
+  diasAtencion?: string[];
   sucursalId?: string;
   activo?: boolean;
 }

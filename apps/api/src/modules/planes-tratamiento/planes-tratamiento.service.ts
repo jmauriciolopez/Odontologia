@@ -16,7 +16,7 @@ export class PlanesTratamientoService {
 
   async findAll(): Promise<PlanTratamiento[]> {
     return await this.planRepository.find({
-      relations: ['items', 'profesional', 'profesional.usuario'],
+      relations: ['items', 'profesional', 'profesional.usuario', 'paciente'],
       order: { createdAt: 'DESC' }
     });
   }
@@ -40,7 +40,7 @@ export class PlanesTratamientoService {
   async findByPaciente(pacienteId: string): Promise<PlanTratamiento[]> {
     return await this.planRepository.find({
       where: { pacienteId },
-      relations: ['items', 'profesional', 'profesional.usuario'],
+      relations: ['items', 'profesional', 'profesional.usuario', 'paciente'],
       order: { createdAt: 'DESC' }
     });
   }
@@ -48,7 +48,7 @@ export class PlanesTratamientoService {
   async findOne(id: string): Promise<PlanTratamiento> {
     const plan = await this.planRepository.findOne({
       where: { id },
-      relations: ['items', 'profesional', 'profesional.usuario'],
+      relations: ['items', 'profesional', 'profesional.usuario', 'paciente'],
     });
 
     if (!plan) {

@@ -23,9 +23,21 @@ export const TratamientosPage: React.FC = () => {
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
 
   const activePlanes = planes.filter((p: PlanTratamiento) => p.estado === 'activo');
-  const filteredPlanes = activePlanes.filter((p: PlanTratamiento) => 
-    p.nombre.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  
+  const filteredPlanes = React.useMemo(() => {
+    if (!searchTerm.trim()) return activePlanes;
+    const term = searchTerm.toLowerCase();
+    return activePlanes.filter((p: PlanTratamiento) => {
+      const planNombre = p.nombre.toLowerCase();
+      const profesionalNombre = `${p.profesional?.usuario.nombre || ''} ${p.profesional?.usuario.apellido || ''}`.toLowerCase();
+      const pacienteNombre = `${p.paciente?.nombre || ''} ${p.paciente?.apellido || ''}`.toLowerCase();
+      return (
+        planNombre.includes(term) || 
+        profesionalNombre.includes(term) || 
+        pacienteNombre.includes(term)
+      );
+    });
+  }, [activePlanes, searchTerm]);
 
   const selectedPlan = planes.find((p: PlanTratamiento) => p.id === selectedPlanId);
 
@@ -77,11 +89,19 @@ export const TratamientosPage: React.FC = () => {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={18} />
                 <input 
                   type="text"
-                  placeholder="Buscar plan o paciente..."
+                  placeholder="Buscar por plan, paciente o profesional..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full bg-white/50 dark:bg-slate-800/50 border-transparent focus:bg-white dark:focus:bg-slate-900 border focus:border-blue-500/30 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none transition-all shadow-sm"
+                  className="w-full bg-white/50 dark:bg-slate-800/50 border-transparent focus:bg-white dark:focus:bg-slate-900 border focus:border-blue-500/30 rounded-xl py-2.5 pl-10 pr-10 text-sm outline-none transition-all shadow-sm"
                 />
+                {searchTerm && (
+                  <button 
+                    onClick={() => setSearchTerm('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 transition-colors"
+                  >
+                    <AlertCircle size={16} className="rotate-45" /> {/* Using AlertCircle as an X alternative if X not imported yet, wait I will use X if I import it */}
+                  </button>
+                )}
               </div>
               <button className="p-2.5 rounded-xl bg-white/50 dark:bg-slate-800/50 text-slate-500 hover:text-blue-500 border border-slate-200/50 dark:border-slate-800/50 transition-all">
                 <Filter size={20} />
@@ -106,12 +126,15 @@ export const TratamientosPage: React.FC = () => {
                         )}
                       >
                         <div className="flex items-start justify-between mb-4">
-                          <div>
-                            <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors">
+                          <div className="space-y-1">
+                            <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors leading-none">
                               {plan.nombre}
                             </h3>
-                            <p className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mt-1">
-                              <Stethoscope size={12} className="text-slate-400" />
+                            <p className="text-xs font-bold text-slate-600 dark:text-slate-300">
+                              🛒 {plan.paciente?.nombre} {plan.paciente?.apellido}
+                            </p>
+                            <p className="text-[11px] font-medium text-slate-400 flex items-center gap-1.5 pt-1">
+                              <Stethoscope size={12} className="text-slate-300" />
                               Dr. {plan.profesional?.usuario.nombre} {plan.profesional?.usuario.apellido}
                             </p>
                           </div>
@@ -150,9 +173,10 @@ export const TratamientosPage: React.FC = () => {
                     );
                   })
                 ) : (
-                  <div className="p-20 text-center text-slate-400">
-                    <Activity size={48} className="mx-auto mb-4 opacity-20" />
-                    <p className="font-medium">No hay planes de tratamiento activos que coincidan.</p>
+                  <div className="medical-card p-20 text-center mx-6 my-10 border-dashed border-slate-200 dark:border-slate-800 shadow-none">
+                    <Activity size={48} className="mx-auto text-slate-200 dark:text-slate-800 mb-4" />
+                    <p className="text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest text-[11px]">No se encontraron planes</p>
+                    <p className="text-slate-400 dark:text-slate-500 text-xs mt-2">Intenta con otro término de búsqueda (paciente, profesional o plan).</p>
                   </div>
                 )}
               </AnimatePresence>

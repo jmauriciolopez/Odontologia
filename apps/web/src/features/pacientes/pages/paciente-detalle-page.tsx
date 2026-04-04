@@ -68,7 +68,8 @@ export const PacienteDetallePage: React.FC = () => {
   };
 
   const balance = presupuestos.reduce((acc, curr) => {
-    const total = Number(curr.total || 0);
+    // Presupuestos pendientes no generan deuda aún
+    const total = curr.estado === 'pendiente' ? 0 : Number(curr.total || 0);
     const pagado = (curr.pagos || []).reduce((pAcc, pCurr) => pAcc + Number(pCurr.monto), 0);
     return acc + (total - pagado);
   }, 0);

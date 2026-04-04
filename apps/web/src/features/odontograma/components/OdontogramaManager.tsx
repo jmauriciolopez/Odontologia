@@ -4,7 +4,7 @@ import { useOdontograma, useOdontogramaMutations } from '../hooks/use-odontogram
 import { OdontogramaView } from './odontograma-view';
 import { Odontograma3D } from './Odontograma3D';
 import { PiezaDental } from '../types';
-import { Info, Activity, Stethoscope, Loader2, Box, LayoutGrid } from 'lucide-react';
+import { Info, Activity, Stethoscope, Loader2, Box, LayoutGrid, Plus as PlusIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface OdontogramaManagerProps {
@@ -14,9 +14,12 @@ interface OdontogramaManagerProps {
 
 export const OdontogramaManager: React.FC<OdontogramaManagerProps> = ({ fichaId, isReadOnly = false }) => {
   const { data: piezas = [], isLoading } = useOdontograma(fichaId);
-  const { updatePieza } = useOdontogramaMutations(fichaId);
-  const [selectedPieza, setSelectedPieza] = useState<PiezaDental | null>(null);
+  const { updatePieza, addProcedimiento } = useOdontogramaMutations(fichaId);
+  const [selectedPiezaId, setSelectedPiezaId] = useState<string | null>(null);
   const [show3D, setShow3D] = useState(false);
+
+  // Derivamos la pieza seleccionada de la data para mantener reactividad tras mutaciones
+  const selectedPieza = piezas.find(p => p.id === selectedPiezaId) || null;
 
   const handleUpdateCara = async (cara: string, estado: string) => {
     if (isReadOnly || !selectedPieza) return;
@@ -42,8 +45,8 @@ export const OdontogramaManager: React.FC<OdontogramaManagerProps> = ({ fichaId,
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-8">
-      {/* Left Side: The Interactive Map */}
-      <div className="medical-card p-4 md:p-8 bg-white/50 backdrop-blur-sm shadow-medical">
+      {/* Visualización Principal */}
+      <div className="medical-card p-4 md:p-8 bg-white/50 backdrop-blur-sm shadow-medical overflow-hidden">
         <div className="flex items-center justify-between mb-6">
            <div className="flex items-center gap-2">
               <div className="p-2 bg-primary/10 rounded-lg text-primary">
@@ -51,6 +54,7 @@ export const OdontogramaManager: React.FC<OdontogramaManagerProps> = ({ fichaId,
               </div>
               <h3 className="font-bold text-slate-800">Mapa Dental Interactivo</h3>
            </div>
+           
            <div className="flex items-center gap-4">
               <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl items-center gap-1">
                  <button 
@@ -74,33 +78,25 @@ export const OdontogramaManager: React.FC<OdontogramaManagerProps> = ({ fichaId,
                    <Box size={16} />
                  </button>
               </div>
-              <div className="hidden lg:flex gap-4">
-                {states.slice(0, 3).map(s => (
-                  <div key={s.id} className="hidden sm:flex items-center gap-1.5">
-                    <div className={cn("h-2 w-2 rounded-full", s.bg)} />
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{s.label}</span>
-                  </div>
-                ))}
-              </div>
            </div>
         </div>
         
         {show3D ? (
           <Odontograma3D 
             piezas={piezas} 
-            onPiezaSelect={setSelectedPieza} 
-            selectedPiezaId={selectedPieza?.id} 
+            onPiezaSelect={(p) => setSelectedPiezaId(p.id)} 
+            selectedPiezaId={selectedPiezaId || undefined} 
           />
         ) : (
           <OdontogramaView 
             piezas={piezas} 
-            onPiezaSelect={setSelectedPieza} 
-            selectedPiezaId={selectedPieza?.id} 
+            onPiezaSelect={(p) => setSelectedPiezaId(p.id)} 
+            selectedPiezaId={selectedPiezaId || undefined} 
           />
         )}
       </div>
 
-      {/* Right Side: Detail Panel */}
+      {/* Panel Lateral de Gestión */}
       <aside className="flex flex-col gap-6">
         <AnimatePresence mode="wait">
           {selectedPieza ? (
@@ -109,7 +105,7 @@ export const OdontogramaManager: React.FC<OdontogramaManagerProps> = ({ fichaId,
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="medical-card p-6 flex flex-col gap-6 border-primary/20 bg-white shadow-xl shadow-primary/5"
+              className="medical-card p-6 flex flex-col gap-6 border-primary/20 bg-white shadow-xl shadow-primary/5 h-full max-h-[calc(100vh-250px)] overflow-y-auto custom-scrollbar"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -117,14 +113,15 @@ export const OdontogramaManager: React.FC<OdontogramaManagerProps> = ({ fichaId,
                     {selectedPieza.posicion}
                   </div>
                   <div>
-                    <h3 className="font-extrabold text-slate-900 tracking-tight">Pieza Dental</h3>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-none">Detalle Clínico Activo</p>
+                    <h3 className="font-extrabold text-slate-900 tracking-tight">Pieza {selectedPieza.posicion}</h3>
+                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-none">Gestión Clínica Activa</p>
                   </div>
                 </div>
               </div>
 
+              {/* Hallazgos por Cara */}
               <div className="space-y-4">
-                <div className="flex items-center gap-2 text-sm font-bold text-slate-700">
+                <div className="flex items-center gap-2 text-sm font-bold text-slate-700 border-b border-slate-50 pb-2">
                   <Activity size={16} className="text-primary" />
                   Hallazgos por Cara
                 </div>
@@ -140,7 +137,7 @@ export const OdontogramaManager: React.FC<OdontogramaManagerProps> = ({ fichaId,
                         )} />
                       </div>
                       <select 
-                        disabled={isReadOnly}
+                        disabled={isReadOnly || updatePieza.isPending}
                         className="input-clinical py-2.5 text-xs font-bold border-slate-200 hover:border-primary/30 focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all outline-none" 
                         value={(selectedPieza.caras as any)[cara]}
                         onChange={(e) => handleUpdateCara(cara, e.target.value)}
@@ -152,7 +149,54 @@ export const OdontogramaManager: React.FC<OdontogramaManagerProps> = ({ fichaId,
                 </div>
               </div>
 
-              <div className="pt-6 border-t border-slate-100 space-y-4">
+              {/* Registro de Tratamiento */}
+              <div className="pt-4 border-t border-slate-100 space-y-4">
+                <div className="flex items-center gap-2 text-sm font-bold text-slate-700">
+                  <PlusIcon size={16} className="text-primary" />
+                  Nuevo Tratamiento
+                </div>
+                <div className="flex gap-2">
+                  <input 
+                    id="new-proc-input"
+                    placeholder="Ej: Limpieza, Amalgama..."
+                    className="flex-1 input-clinical text-xs font-bold py-2.5"
+                    disabled={addProcedimiento.isPending}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        const val = (e.currentTarget as HTMLInputElement).value;
+                        if (val) {
+                          addProcedimiento.mutate({
+                            piezaId: selectedPieza.id,
+                            tipo: val,
+                            observaciones: ''
+                          });
+                          (e.currentTarget as HTMLInputElement).value = '';
+                        }
+                      }
+                    }}
+                  />
+                  <button 
+                    onClick={() => {
+                      const input = document.getElementById('new-proc-input') as HTMLInputElement;
+                      if (input.value) {
+                        addProcedimiento.mutate({
+                          piezaId: selectedPieza.id,
+                          tipo: input.value,
+                          observaciones: ''
+                        });
+                        input.value = '';
+                      }
+                    }}
+                    disabled={addProcedimiento.isPending}
+                    className="bg-primary text-white p-2.5 rounded-xl transition-all shadow-md active:scale-95 disabled:opacity-50"
+                  >
+                    <PlusIcon size={16} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Historial */}
+              <div className="pt-4 border-t border-slate-100 space-y-4 pb-4">
                 <div className="flex items-center gap-2 text-sm font-bold text-slate-700">
                   <Info size={16} className="text-primary" />
                   Procedimientos Históricos
@@ -181,7 +225,7 @@ export const OdontogramaManager: React.FC<OdontogramaManagerProps> = ({ fichaId,
               <div className="space-y-2">
                 <p className="font-extrabold text-slate-800 tracking-tight">Pieza no seleccionada</p>
                 <p className="text-xs text-slate-400 leading-relaxed max-w-[200px]">
-                  Interactúe con el mapa dental para visualizar el historial y editar los hallazgos clínicos de cada pieza.
+                  InteractúE con el mapa dental para visualizar el historial y editar los hallazgos clínicos de cada pieza.
                 </p>
               </div>
             </motion.div>

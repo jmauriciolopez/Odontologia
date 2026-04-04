@@ -60,6 +60,13 @@ export const AjustesPage: React.FC = () => {
       icon: CreditCard,
       path: '#',
       color: 'violet'
+    },
+    {
+      title: 'Nomenclatura y Clínica',
+      description: 'Configure sistemas dentales, colores de diagnóstico y nomenclador nacional.',
+      icon: Database,
+      path: '/ajustes/nomenclatura',
+      color: 'orange'
     }
   ];
 

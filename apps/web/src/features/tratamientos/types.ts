@@ -25,6 +25,12 @@ export interface PlanTratamiento {
       apellido: string;
     }
   };
+  paciente?: {
+    id: string;
+    nombre: string;
+    apellido: string;
+    documento?: string;
+  };
   createdAt: string;
   updatedAt: string;
 }

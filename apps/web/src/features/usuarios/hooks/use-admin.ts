@@ -16,7 +16,7 @@ export const useProfesionales = () => {
   });
 };
 
-export const useAdminMutations = () => {
+export const useConsultorioMutations = () => {
   const queryClient = useQueryClient();
 
   const createConsultorio = useMutation({
@@ -41,6 +41,16 @@ export const useAdminMutations = () => {
     },
   });
 
+  return {
+    createConsultorio,
+    deleteConsultorio,
+    updateConsultorio,
+  };
+};
+
+export const useProfesionalMutations = () => {
+  const queryClient = useQueryClient();
+
   const createProfesional = useMutation({
     mutationFn: (data: CreateProfesionalDto) => adminApi.createProfesional(data),
     onSuccess: () => {
@@ -55,11 +65,17 @@ export const useAdminMutations = () => {
     },
   });
 
+  const updateProfesional = useMutation({
+    mutationFn: ({ id, data }: { id: string, data: Partial<CreateProfesionalDto> }) => 
+      adminApi.updateProfesional(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['profesionales'] });
+    },
+  });
+
   return {
-    createConsultorio,
-    deleteConsultorio,
-    updateConsultorio,
     createProfesional,
-    deleteProfesional
+    deleteProfesional,
+    updateProfesional
   };
 };

@@ -102,10 +102,18 @@ export const AppLayout: React.FC = () => {
 
           <div className="space-y-1">
              <h3 className="px-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-4">Configuración</h3>
-             <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-slate-200 transition-all duration-200">
+             <Link 
+               to="/ajustes"
+               className={cn(
+                 "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200",
+                 location.pathname === '/ajustes'
+                   ? "bg-primary/10 text-primary"
+                   : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-slate-200"
+               )}
+             >
                <Settings size={20} />
                <span className="text-sm font-semibold tracking-tight">Ajustes</span>
-             </button>
+             </Link>
           </div>
         </div>
 

@@ -30,5 +30,8 @@ export const adminApi = {
   },
   deleteProfesional: async (id: string): Promise<void> => {
     return httpClient.delete(`profesionales/${id}`);
+  },
+  updateProfesional: async (id: string, data: Partial<CreateProfesionalDto>): Promise<Profesional> => {
+    return httpClient.patch(`profesionales/${id}`, data);
   }
 };

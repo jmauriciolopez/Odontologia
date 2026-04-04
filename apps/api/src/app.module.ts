@@ -14,6 +14,7 @@ import { PlanesTratamientoModule } from './modules/planes-tratamiento/planes-tra
 import { PresupuestosModule } from './modules/presupuestos/presupuestos.module';
 import { RemindersModule } from './modules/reminders/reminders.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { ConfiguracionModule } from './modules/configuracion/configuracion.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
     PresupuestosModule,
     RemindersModule,
     DashboardModule,
+    ConfiguracionModule,
   ],
   controllers: [],
   providers: [],

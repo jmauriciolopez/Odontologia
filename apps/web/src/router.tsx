@@ -12,6 +12,7 @@ import { UsuariosPage } from './features/usuarios/pages/usuarios-page';
 import { ConsultoriosPage } from './features/usuarios/pages/consultorios-page';
 import { ProfesionalesPage } from './features/usuarios/pages/profesionales-page';
 import { AjustesPage } from './features/usuarios/pages/ajustes-page';
+import { NomenclaturaPage } from './features/usuarios/pages/nomenclatura-page';
 import { RemindersPage } from './features/reminders/pages/reminders-page';
 import { TratamientosPage } from './features/tratamientos/pages/tratamientos-page';
 import { useAuth } from './context/auth-context';
@@ -93,7 +94,16 @@ export const router = createBrowserRouter([
       },
       {
         path: 'ajustes',
-        element: <AjustesPage />,
+        children: [
+          {
+            index: true,
+            element: <AjustesPage />,
+          },
+          {
+            path: 'nomenclatura',
+            element: <NomenclaturaPage />,
+          },
+        ],
       },
       {
         path: 'usuarios',
