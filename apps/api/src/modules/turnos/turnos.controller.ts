@@ -3,6 +3,7 @@ import { TurnosService } from './turnos.service';
 import { CreateTurnoDto } from './dto/create-turnos.dto';
 import { UpdateTurnoDto } from './dto/update-turnos.dto';
 import { TurnoFiltrosDto } from './dto/turnos-filtros.dto';
+import { DisponibilidadQueryDto } from './dto/disponibilidad-query.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -22,6 +23,11 @@ export class TurnosController {
   @Get()
   findAll(@Query() filtros: TurnoFiltrosDto) {
     return this.turnosService.findAll(filtros);
+  }
+
+  @Get('disponibilidad')
+  checkDisponibilidad(@Query() query: DisponibilidadQueryDto) {
+    return this.turnosService.checkDisponibilidad(query);
   }
 
   @Get(':id')

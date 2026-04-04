@@ -63,5 +63,5 @@ export interface Consultorio {
 
 export interface DisponibilidadResponse {
   disponible: boolean;
-  conflictos: Turno[];
+  conflictos: { tipo: string; turnoId: string; fechaInicio: string; fechaFin: string }[];
 }

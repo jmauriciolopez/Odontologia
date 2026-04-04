@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ConfiguracionClinica } from './entities/configuracion-clinica.entity';
 import { Prestacion } from './entities/prestacion.entity';
+import { UpdateConfiguracionDto, CreatePrestacionDto, UpdatePrestacionDto } from './dto/configuracion.dto';
 
 @Injectable()
 export class ConfiguracionService {
@@ -31,7 +32,7 @@ export class ConfiguracionService {
     return config;
   }
 
-  async updateConfig(data: any) {
+  async updateConfig(data: UpdateConfiguracionDto) {
     const config = await this.getConfig();
     return this.configRepository.save({ ...config, ...data });
   }
@@ -40,11 +41,11 @@ export class ConfiguracionService {
     return this.prestacionRepository.find({ order: { codigo: 'ASC' } });
   }
 
-  async createPrestacion(data: any) {
+  async createPrestacion(data: CreatePrestacionDto) {
     return this.prestacionRepository.save(data);
   }
 
-  async updatePrestacion(id: string, data: any) {
+  async updatePrestacion(id: string, data: UpdatePrestacionDto) {
     const p = await this.prestacionRepository.findOne({ where: { id } });
     if (!p) throw new NotFoundException();
     return this.prestacionRepository.save({ ...p, ...data });

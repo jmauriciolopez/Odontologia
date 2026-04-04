@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { usuariosApi } from '../api/usuarios-api';
+import { usuariosApi, UpdateUsuarioDto } from '../api/usuarios-api';
 import { CreateUsuarioDto } from '../types';
 
 export const useUsuarios = () => {
@@ -22,6 +22,14 @@ export const useUsuarios = () => {
     },
   });
 
+  const updateUsuarioMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdateUsuarioDto }) =>
+      usuariosApi.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['usuarios'] });
+    },
+  });
+
   return {
     usuarios: usuariosQuery.data || [],
     isLoading: usuariosQuery.isLoading,
@@ -30,5 +38,7 @@ export const useUsuarios = () => {
     isLoadingRoles: rolesQuery.isLoading,
     createUsuario: createUsuarioMutation.mutateAsync,
     isCreating: createUsuarioMutation.isPending,
+    updateUsuario: updateUsuarioMutation.mutateAsync,
+    isUpdating: updateUsuarioMutation.isPending,
   };
 };

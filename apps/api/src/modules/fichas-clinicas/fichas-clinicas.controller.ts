@@ -3,6 +3,7 @@ import { FichasClinicasService } from './fichas-clinicas.service';
 import { CreateFichaClinicaDto } from './dto/create-ficha-clinica.dto';
 import { CreateAntecedenteDto } from './dto/create-antecedente.dto';
 import { CreateEvolucionClinicaDto } from './dto/create-evolucion-clinica.dto';
+import { UpsertMedicionPeriodontalDto } from './dto/upsert-medicion-periodontal.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -41,7 +42,7 @@ export class FichasClinicasController {
   upsertMedicion(
     @Param('fichaId') fichaId: string,
     @Param('diente') diente: string,
-    @Body() data: any
+    @Body() data: UpsertMedicionPeriodontalDto
   ) {
     return this.fichasService.upsertMedicion(fichaId, parseInt(diente), data);
   }

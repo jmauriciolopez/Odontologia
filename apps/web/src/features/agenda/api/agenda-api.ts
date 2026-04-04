@@ -1,9 +1,9 @@
 import { httpClient } from '../../../lib/Httpclient';
-import { 
-  Turno, 
-  TurnosFiltros, 
-  DisponibilidadResponse, 
-  CreateTurnoDto, 
+import {
+  Turno,
+  TurnosFiltros,
+  DisponibilidadResponse,
+  CreateTurnoDto,
   UpdateTurnoDto,
   Profesional,
   Consultorio
@@ -38,30 +38,13 @@ export const agendaApi = {
     return httpClient.get<Consultorio[]>('consultorios');
   },
 
-  checkDisponibilidad: async (params: { 
-    fechaInicio: string; 
-    fechaFin: string; 
-    profesionalId: string; 
-    consultorioId: string; 
+  checkDisponibilidad: async (params: {
+    fechaInicio: string;
+    fechaFin: string;
+    profesionalId: string;
+    consultorioId: string;
+    excludeTurnoId?: string;
   }): Promise<DisponibilidadResponse> => {
-    // Falls back to checking conflicts via findAll since dedicated endpoint isn't fully implemented
-    const turnos = await httpClient.get<Turno[]>('turnos', { params: {
-      profesionalId: params.profesionalId,
-      consultorioId: params.consultorioId
-    }});
-    
-    const start = new Date(params.fechaInicio).getTime();
-    const end = new Date(params.fechaFin).getTime();
-    
-    const conflictos = turnos.filter(t => {
-      const tStart = new Date(t.fechaInicio).getTime();
-      const tEnd = new Date(t.fechaFin).getTime();
-      return (start < tEnd && end > tStart);
-    });
-
-    return {
-      disponible: conflictos.length === 0,
-      conflictos
-    };
+    return httpClient.get<DisponibilidadResponse>('turnos/disponibilidad', { params });
   }
 };

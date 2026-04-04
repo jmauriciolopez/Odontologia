@@ -5,6 +5,7 @@ import { Turno } from './entities/turno.entity';
 import { CreateTurnoDto } from './dto/create-turnos.dto';
 import { UpdateTurnoDto } from './dto/update-turnos.dto';
 import { TurnoFiltrosDto } from './dto/turnos-filtros.dto';
+import { DisponibilidadQueryDto } from './dto/disponibilidad-query.dto';
 
 @Injectable()
 export class TurnosService {
@@ -49,7 +50,7 @@ export class TurnosService {
 
   async create(createTurnoDto: CreateTurnoDto): Promise<Turno> {
     const { fechaInicio, fechaFin, profesionalId, consultorioId } = createTurnoDto;
-    
+
     const inicio = new Date(fechaInicio);
     const fin = new Date(fechaFin);
 
@@ -107,7 +108,7 @@ export class TurnosService {
 
   async update(id: string, updateTurnoDto: UpdateTurnoDto): Promise<Turno> {
     const turno = await this.findOne(id);
-    
+
     const inicio = updateTurnoDto.fechaInicio ? new Date(updateTurnoDto.fechaInicio) : turno.fechaInicio;
     const fin = updateTurnoDto.fechaFin ? new Date(updateTurnoDto.fechaFin) : turno.fechaFin;
     const profesionalId = updateTurnoDto.profesionalId || turno.profesionalId;
@@ -129,5 +130,39 @@ export class TurnosService {
   async remove(id: string): Promise<void> {
     const turno = await this.findOne(id);
     await this.turnosRepository.remove(turno);
+  }
+
+  async checkDisponibilidad(query: DisponibilidadQueryDto): Promise<{
+    disponible: boolean;
+    conflictos: { tipo: string; turnoId: string; fechaInicio: Date; fechaFin: Date }[];
+  }> {
+    const inicio = new Date(query.fechaInicio);
+    const fin = new Date(query.fechaFin);
+
+    const qb = this.turnosRepository.createQueryBuilder('turno')
+      .where('turno.estado NOT IN (:...estadosIgnorar)', { estadosIgnorar: ['cancelado'] })
+      .andWhere('turno.fecha_inicio < :fin AND turno.fecha_fin > :inicio', { inicio, fin })
+      .andWhere(
+        '(turno.profesional_id = :profesionalId OR turno.consultorio_id = :consultorioId)',
+        { profesionalId: query.profesionalId, consultorioId: query.consultorioId }
+      );
+
+    if (query.excludeTurnoId) {
+      qb.andWhere('turno.id != :excludeTurnoId', { excludeTurnoId: query.excludeTurnoId });
+    }
+
+    const conflictivos = await qb.getMany();
+
+    const conflictos = conflictivos.map(t => ({
+      tipo: t.profesionalId === query.profesionalId ? 'profesional' : 'consultorio',
+      turnoId: t.id,
+      fechaInicio: t.fechaInicio,
+      fechaFin: t.fechaFin,
+    }));
+
+    return {
+      disponible: conflictos.length === 0,
+      conflictos,
+    };
   }
 }

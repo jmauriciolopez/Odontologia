@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Usuario } from './entities/usuario.entity';
 import { Rol } from './entities/rol.entity';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
+import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import * as bcrypt from 'bcryptjs';
 
 import { UsuarioRol } from './entities/usuario-rol.entity';
@@ -41,7 +42,7 @@ export class UsuariosService {
     const savedUser = await this.usuariosRepository.save(usuario);
 
     if (rolIds && rolIds.length > 0) {
-      const userRoles = rolIds.map(rolId => 
+      const userRoles = rolIds.map(rolId =>
         this.usuarioRolesRepository.create({
           usuarioId: savedUser.id,
           rolId,
@@ -80,5 +81,27 @@ export class UsuariosService {
     return await this.usuariosRepository.find({
       relations: ['usuarioRoles', 'usuarioRoles.rol'],
     });
+  }
+
+  async update(id: string, dto: UpdateUsuarioDto): Promise<Usuario> {
+    const usuario = await this.findOne(id);
+
+    if (dto.nombre !== undefined) usuario.nombre = dto.nombre;
+    if (dto.apellido !== undefined) usuario.apellido = dto.apellido;
+    if (dto.activo !== undefined) usuario.activo = dto.activo;
+
+    await this.usuariosRepository.save(usuario);
+
+    if (dto.rolIds !== undefined) {
+      await this.usuarioRolesRepository.delete({ usuarioId: id });
+      if (dto.rolIds.length > 0) {
+        const userRoles = dto.rolIds.map(rolId =>
+          this.usuarioRolesRepository.create({ usuarioId: id, rolId })
+        );
+        await this.usuarioRolesRepository.save(userRoles);
+      }
+    }
+
+    return await this.findOne(id);
   }
 }
