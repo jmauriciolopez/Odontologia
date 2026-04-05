@@ -20,8 +20,8 @@ export const useArchivosMutations = (pacienteId: string) => {
   });
 
   const uploadRadiografia = useMutation({
-    mutationFn: ({ file, tipo }: { file: File, tipo: string }) => 
-      archivosApi.uploadRadiografia(pacienteId, file, tipo),
+    mutationFn: ({ file, tipo, fechaToma }: { file: File, tipo: string, fechaToma?: string }) =>
+      archivosApi.uploadRadiografia(pacienteId, file, tipo, fechaToma),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['archivos', pacienteId] });
     },

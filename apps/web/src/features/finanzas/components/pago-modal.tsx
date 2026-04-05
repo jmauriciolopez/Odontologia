@@ -14,6 +14,7 @@ interface PagoModalProps {
 export const PagoModal: React.FC<PagoModalProps> = ({ presupuesto, onClose, onSubmit, loading }) => {
   const [monto, setMonto] = useState(presupuesto.total - (presupuesto.totalPagado || 0));
   const [metodo, setMetodo] = useState<'efectivo' | 'transferencia' | 'tarjeta'>('efectivo');
+  const [notas, setNotas] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +22,7 @@ export const PagoModal: React.FC<PagoModalProps> = ({ presupuesto, onClose, onSu
       presupuestoId: presupuesto.id,
       monto,
       metodoPago: metodo,
-      fecha: new Date().toISOString()
+      ...(notas.trim() ? { notas } : {}),
     });
   };
 
@@ -54,7 +55,7 @@ export const PagoModal: React.FC<PagoModalProps> = ({ presupuesto, onClose, onSu
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">FLUJO DE CAJA CLÍNICO</p>
               </div>
             </div>
-            <button 
+            <button
               onClick={onClose}
               className="h-10 w-10 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-rose-500 transition-all font-black text-xl"
             >
@@ -103,8 +104,8 @@ export const PagoModal: React.FC<PagoModalProps> = ({ presupuesto, onClose, onSu
                       />
                    </div>
                    <div className="flex justify-center gap-2">
-                      <button 
-                        type="button" 
+                      <button
+                        type="button"
                         onClick={() => setMonto(saldoPendiente)}
                         className="text-[10px] font-bold text-blue-600 hover:text-blue-500 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full transition-colors"
                       >
@@ -126,8 +127,8 @@ export const PagoModal: React.FC<PagoModalProps> = ({ presupuesto, onClose, onSu
                           onClick={() => setMetodo(item.id as any)}
                           className={cn(
                             "flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all group",
-                            metodo === item.id 
-                              ? "bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/20" 
+                            metodo === item.id
+                              ? "bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/20"
                               : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 hover:border-blue-400"
                           )}
                         >
@@ -138,17 +139,31 @@ export const PagoModal: React.FC<PagoModalProps> = ({ presupuesto, onClose, onSu
                    </div>
                 </div>
 
+                {/* Notas */}
+                <div className="space-y-2">
+                  <label className="text-[11px] font-black uppercase tracking-wider text-slate-400 ml-1">
+                    Notas (opcional)
+                  </label>
+                  <input
+                    type="text"
+                    value={notas}
+                    onChange={(e) => setNotas(e.target.value)}
+                    placeholder="Ej: Pago en cuotas, recibo nro..."
+                    className="w-full bg-slate-50 dark:bg-slate-800/50 border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-900 dark:text-white outline-none focus:border-blue-500/50 transition-all placeholder:text-slate-400"
+                  />
+                </div>
+
                 {/* Actions */}
                 <div className="flex items-center gap-4 pt-4">
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     onClick={onClose}
                     className="flex-1 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-slate-300 text-slate-600 dark:text-slate-300 py-4 rounded-2xl font-bold transition-all"
                   >
                     Cerrar
                   </button>
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     disabled={loading || monto <= 0}
                     className="flex-3 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white py-4 rounded-2xl font-bold shadow-lg shadow-emerald-500/25 transition-all px-12"
                   >

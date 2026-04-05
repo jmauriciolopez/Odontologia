@@ -6,8 +6,8 @@ export class CreateEvolucionClinicaDto {
   fichaId: string;
 
   @IsUUID()
-  @IsNotEmpty()
-  profesionalId: string;
+  @IsOptional()
+  profesionalId?: string;
 
   @IsString()
   @IsNotEmpty()

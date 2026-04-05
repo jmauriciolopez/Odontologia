@@ -7,7 +7,9 @@ export interface Paciente {
   telefono: string;
   email?: string;
   direccion?: string;
-  sexo?: string;
+  genero?: string;
+  obraSocial?: string;
+  nroAfiliado?: string;
   createdAt: string;
   updatedAt: string;
   ficha?: FichaClinica;

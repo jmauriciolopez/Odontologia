@@ -7,6 +7,7 @@ import { X, Calendar, Clock, User, Home, Search, AlertCircle } from 'lucide-reac
 import { motion, AnimatePresence } from 'framer-motion';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 interface TurnoFormModalProps {
   turno?: Turno; // If provided, we are editing
@@ -18,7 +19,7 @@ export const TurnoFormModal: React.FC<TurnoFormModalProps> = ({ turno, initialDa
   const { data: profesionales = [] } = useProfesionales();
   const { data: consultorios = [] } = useConsultorios();
   const { createTurno, updateTurno, isCreating, isUpdating, deleteTurno, isDeleting } = useAgendaActions();
-  
+
   const [searchTerm, setSearchTerm] = useState('');
   const { data: patients = [] } = usePacientes({ query: searchTerm });
   const [selectedPatientId, setSelectedPatientId] = useState(turno?.pacienteId || '');
@@ -39,33 +40,42 @@ export const TurnoFormModal: React.FC<TurnoFormModalProps> = ({ turno, initialDa
     try {
       if (turno) {
         await updateTurno({ id: turno.id, data });
+        toast.success('Turno actualizado');
       } else {
         await createTurno(data);
+        toast.success('Turno creado correctamente');
       }
       onClose();
-    } catch (error) {
-      console.error('Error saving appointment:', error);
+    } catch (error: any) {
+      toast.error(error.message || 'Error al guardar el turno');
     }
   };
 
   const handleDelete = async () => {
     if (!turno) return;
-    if (window.confirm('¿Estás seguro de que deseas eliminar este turno?')) {
-      await deleteTurno(turno.id);
-      onClose();
-    }
+    toast('¿Eliminar este turno?', {
+      action: {
+        label: 'Eliminar',
+        onClick: async () => {
+          await deleteTurno(turno.id);
+          toast.success('Turno eliminado');
+          onClose();
+        },
+      },
+      cancel: { label: 'Cancelar', onClick: () => {} },
+    });
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
         className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
       />
-      
+
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -74,13 +84,13 @@ export const TurnoFormModal: React.FC<TurnoFormModalProps> = ({ turno, initialDa
       >
         {/* Header */}
         <div className="px-8 pt-8 pb-6 bg-gradient-to-br from-blue-600 to-indigo-700 text-white relative">
-          <button 
+          <button
             onClick={onClose}
             className="absolute top-6 right-6 p-2 hover:bg-white/20 rounded-full transition-colors"
           >
             <X size={20} />
           </button>
-          
+
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-white/20 rounded-xl backdrop-blur-md">
               <Calendar size={20} />
@@ -93,14 +103,14 @@ export const TurnoFormModal: React.FC<TurnoFormModalProps> = ({ turno, initialDa
         </div>
 
         <form onSubmit={handleSubmit(onFormSubmit)} className="p-8 space-y-6 max-h-[calc(100vh-16rem)] overflow-y-auto custom-scrollbar">
-          
+
           {/* Patient Selection */}
           <div className="space-y-2">
             <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
               <Search size={14} /> Paciente
             </label>
             <div className="relative group">
-              <input 
+              <input
                 type="text"
                 placeholder="Buscar por nombre o documento..."
                 value={searchTerm}
@@ -146,9 +156,9 @@ export const TurnoFormModal: React.FC<TurnoFormModalProps> = ({ turno, initialDa
               <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                 <Clock size={14} /> Inicio
               </label>
-              <input 
-                type="datetime-local" 
-                {...register('fechaInicio', { required: true })} 
+              <input
+                type="datetime-local"
+                {...register('fechaInicio', { required: true })}
                 className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border-2 border-transparent focus:border-blue-500 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-slate-900 transition-all text-slate-900 dark:text-white outline-none"
               />
             </div>
@@ -156,9 +166,9 @@ export const TurnoFormModal: React.FC<TurnoFormModalProps> = ({ turno, initialDa
               <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                 <Clock size={14} /> Fin
               </label>
-              <input 
-                type="datetime-local" 
-                {...register('fechaFin', { required: true })} 
+              <input
+                type="datetime-local"
+                {...register('fechaFin', { required: true })}
                 className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border-2 border-transparent focus:border-blue-500 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-slate-900 transition-all text-slate-900 dark:text-white outline-none"
               />
             </div>
@@ -170,7 +180,7 @@ export const TurnoFormModal: React.FC<TurnoFormModalProps> = ({ turno, initialDa
               <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                 <User size={14} /> Profesional
               </label>
-              <select 
+              <select
                 {...register('profesionalId', { required: true })}
                 className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border-2 border-transparent focus:border-blue-500 transition-all text-slate-900 dark:text-white outline-none appearance-none"
               >
@@ -182,7 +192,7 @@ export const TurnoFormModal: React.FC<TurnoFormModalProps> = ({ turno, initialDa
               <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                 <Home size={14} /> Consultorio
               </label>
-              <select 
+              <select
                 {...register('consultorioId', { required: true })}
                 className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border-2 border-transparent focus:border-blue-500 transition-all text-slate-900 dark:text-white outline-none appearance-none"
               >
@@ -198,12 +208,12 @@ export const TurnoFormModal: React.FC<TurnoFormModalProps> = ({ turno, initialDa
               <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Estado</label>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                 {['programado', 'confirmado', 'atendido', 'cancelado'].map(est => (
-                  <label 
+                  <label
                     key={est}
                     className={cn(
                       "flex items-center justify-center p-3 rounded-xl border-2 cursor-pointer transition-all text-[11px] font-bold uppercase tracking-tighter",
-                      watch('estado') === est 
-                        ? "border-blue-500 bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400" 
+                      watch('estado') === est
+                        ? "border-blue-500 bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400"
                         : "border-slate-100 dark:border-slate-800 text-slate-400 hover:border-slate-200"
                     )}
                   >
@@ -218,7 +228,7 @@ export const TurnoFormModal: React.FC<TurnoFormModalProps> = ({ turno, initialDa
               <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                 Motivo / Notas
               </label>
-              <textarea 
+              <textarea
                 {...register('motivo')}
                 placeholder="Indica el motivo de la consulta..."
                 rows={3}
@@ -239,7 +249,7 @@ export const TurnoFormModal: React.FC<TurnoFormModalProps> = ({ turno, initialDa
                 Eliminar
               </button>
             )}
-            
+
             <button
               type="button"
               onClick={onClose}
@@ -247,7 +257,7 @@ export const TurnoFormModal: React.FC<TurnoFormModalProps> = ({ turno, initialDa
             >
               Cancelar
             </button>
-            
+
             <button
               type="submit"
               disabled={isCreating || isUpdating}

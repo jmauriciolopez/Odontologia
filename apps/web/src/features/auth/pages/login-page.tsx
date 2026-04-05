@@ -1,160 +1,242 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { httpClient } from '../../../lib/Httpclient';
-import { useAuth } from '../../../context/auth-context';
-import { Eye, EyeOff, Lock, Mail, Loader2, Sparkles } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, Loader2, Activity, Shield, Stethoscope } from 'lucide-react';
+import { useLogin } from '../hooks/use-login';
+
+const FEATURES = [
+  { icon: Stethoscope, label: 'Fichas clínicas digitales' },
+  { icon: Activity,    label: 'Odontograma interactivo' },
+  { icon: Shield,      label: 'Acceso seguro por roles' },
+];
 
 export const LoginPage: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail]               = useState('');
+  const [password, setPassword]         = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const { login, token } = useAuth();
-  const navigate = useNavigate();
+  const { submit, isLoading, error }    = useLogin();
 
-  useEffect(() => {
-    if (token) {
-      navigate('/', { replace: true });
-    }
-  }, [token, navigate]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    try {
-      const response: any = await httpClient.post('auth/login', { email, password });
-      // Con httpClient y auto-unwrap, response ya es { access_token, user }
-      login(response.access_token, response.user);
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Error al iniciar sesión. Verifique sus credenciales.');
-    } finally {
-      setLoading(false);
-    }
+    submit({ email, password });
   };
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-4 font-sans text-slate-100">
-      {/* Dynamic Background Effects */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute -left-[10%] -top-[10%] h-[50%] w-[50%] rounded-full bg-blue-500/10 blur-[120px]" />
-        <div className="absolute -bottom-[10%] -right-[10%] h-[50%] w-[50%] rounded-full bg-emerald-500/10 blur-[120px]" />
-        <div className="absolute left-1/2 top-1/2 h-[30%] w-[30%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-400/5 blur-[100px]" />
-        <div className="h-full w-full opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, #334155 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
-      </div>
+    <div className="relative flex min-h-screen overflow-hidden bg-slate-950 font-sans">
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="z-10 w-full max-w-[440px]"
-      >
-        <div className="glass rounded-3xl p-8 backdrop-blur-2xl md:p-10 bg-slate-900/40 border border-slate-800">
-          <div className="mb-10 flex flex-col items-center gap-3 text-center">
-            <motion.div
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-              className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary text-3xl shadow-xl shadow-primary/20"
-            >
-              🦷
-            </motion.div>
-            <div className="space-y-1">
-              <h1 className="font-heading text-3xl font-bold tracking-tight">OdontoSaaS</h1>
-              <p className="flex items-center justify-center gap-2 text-sm text-slate-400">
-                <Sparkles size={14} className="text-blue-400" />
-                Gestión clínica inteligente
-              </p>
+      {/* ── Left panel — branding ── */}
+      <div className="relative hidden lg:flex lg:w-1/2 flex-col justify-between p-14 overflow-hidden">
+
+        {/* Ambient blobs */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -top-32 -left-32 h-[500px] w-[500px] rounded-full bg-blue-600/20 blur-[120px]" />
+          <div className="absolute bottom-0 right-0 h-[400px] w-[400px] rounded-full bg-emerald-500/10 blur-[100px]" />
+          <div className="absolute top-1/2 left-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-400/5 blur-[80px]" />
+          {/* Dot grid */}
+          <div
+            className="absolute inset-0 opacity-[0.04]"
+            style={{ backgroundImage: 'radial-gradient(circle, #94a3b8 1px, transparent 1px)', backgroundSize: '28px 28px' }}
+          />
+        </div>
+
+        {/* Logo */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="relative z-10 flex items-center gap-3"
+        >
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-600 shadow-lg shadow-blue-600/30 text-2xl">
+            🦷
+          </div>
+          <span className="text-xl font-bold tracking-tight text-white">OdontoSaaS</span>
+        </motion.div>
+
+        {/* Hero copy */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.15 }}
+          className="relative z-10 space-y-8"
+        >
+          <div className="space-y-4">
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-blue-400">
+              <span className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse" />
+              Plataforma clínica v2.0
             </div>
+            <h1 className="text-5xl font-black leading-[1.1] tracking-tight text-white">
+              Gestión clínica<br />
+              <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                sin fricciones.
+              </span>
+            </h1>
+            <p className="max-w-sm text-base font-medium leading-relaxed text-slate-400">
+              Centraliza fichas, turnos, odontogramas y finanzas en un solo sistema diseñado para clínicas modernas.
+            </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-2">
-              <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Correo Electrónico</label>
-              <div className="relative group">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 transition-colors group-focus-within:text-blue-400" size={18} />
-                <input
-                  type="email"
-                  className="input-clinical pl-11"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  placeholder="admin@odontologia.com"
-                />
-              </div>
+          {/* Feature pills */}
+          <div className="flex flex-col gap-3">
+            {FEATURES.map(({ icon: Icon, label }, i) => (
+              <motion.div
+                key={label}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4 + i * 0.1 }}
+                className="flex items-center gap-3"
+              >
+                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-800 border border-slate-700">
+                  <Icon size={15} className="text-blue-400" />
+                </div>
+                <span className="text-sm font-medium text-slate-300">{label}</span>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Bottom badge */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8 }}
+          className="relative z-10 text-xs font-medium text-slate-600"
+        >
+          © 2026 Antigravity Labs · Todos los derechos reservados
+        </motion.p>
+      </div>
+
+      {/* ── Right panel — form ── */}
+      <div className="relative flex w-full items-center justify-center px-6 py-12 lg:w-1/2">
+
+        {/* Subtle right-side glow */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute top-1/4 right-0 h-[400px] w-[300px] rounded-full bg-blue-600/10 blur-[100px]" />
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="relative z-10 w-full max-w-[420px]"
+        >
+          {/* Mobile logo */}
+          <div className="mb-10 flex items-center gap-3 lg:hidden">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-xl shadow-lg shadow-blue-600/30">
+              🦷
+            </div>
+            <span className="text-lg font-bold text-white">OdontoSaaS</span>
+          </div>
+
+          {/* Card */}
+          <div className="rounded-3xl border border-slate-800 bg-slate-900/80 p-8 shadow-2xl shadow-black/40 backdrop-blur-xl">
+
+            <div className="mb-8 space-y-1">
+              <h2 className="text-2xl font-black tracking-tight text-white">Bienvenido de vuelta</h2>
+              <p className="text-sm font-medium text-slate-500">Ingresá tus credenciales para continuar</p>
             </div>
 
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Contraseña</label>
+            <form onSubmit={handleSubmit} className="space-y-5">
+
+              {/* Email */}
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-bold uppercase tracking-widest text-slate-500">
+                  Correo electrónico
+                </label>
+                <div className="group relative">
+                  <Mail
+                    size={16}
+                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600 transition-colors group-focus-within:text-blue-400"
+                  />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    required
+                    placeholder="admin@clinica.com"
+                    className="w-full rounded-xl border border-slate-800 bg-slate-800/60 py-3 pl-10 pr-4 text-sm font-medium text-white placeholder-slate-600 outline-none transition-all focus:border-blue-500/50 focus:bg-slate-800 focus:ring-2 focus:ring-blue-500/10"
+                  />
+                </div>
               </div>
-              <div className="relative group">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 transition-colors group-focus-within:text-blue-400" size={18} />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  className="input-clinical pl-11 pr-12"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  placeholder="••••••••"
-                />
+
+              {/* Password */}
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-bold uppercase tracking-widest text-slate-500">
+                  Contraseña
+                </label>
+                <div className="group relative">
+                  <Lock
+                    size={16}
+                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600 transition-colors group-focus-within:text-blue-400"
+                  />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    required
+                    placeholder="••••••••"
+                    className="w-full rounded-xl border border-slate-800 bg-slate-800/60 py-3 pl-10 pr-12 text-sm font-medium text-white placeholder-slate-600 outline-none transition-all focus:border-blue-500/50 focus:bg-slate-800 focus:ring-2 focus:ring-blue-500/10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(v => !v)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-600 transition-colors hover:text-slate-300"
+                  >
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+              </div>
+
+              {/* Error */}
+              <AnimatePresence>
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="overflow-hidden rounded-xl border border-rose-500/20 bg-rose-500/10 px-4 py-3 text-xs font-medium text-rose-400"
+                  >
+                    {error}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Submit */}
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="group relative w-full overflow-hidden rounded-xl bg-blue-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition-all hover:bg-blue-500 active:scale-[0.98] disabled:opacity-60"
+              >
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  {isLoading
+                    ? <><Loader2 size={16} className="animate-spin" /> Verificando...</>
+                    : 'Iniciar sesión'
+                  }
+                </span>
+                {/* Shine sweep */}
+                <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+              </button>
+            </form>
+
+            {/* Demo shortcut — only on localhost */}
+            {typeof window !== 'undefined' && window.location.hostname === 'localhost' && (
+              <div className="mt-6 border-t border-slate-800 pt-5">
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-500 hover:text-slate-300 transition-colors"
+                  onClick={() => { setEmail('admin@odontologia.com'); setPassword('Admin123!'); }}
+                  className="w-full rounded-xl border border-slate-800 bg-slate-800/40 py-2.5 text-[11px] font-bold uppercase tracking-widest text-slate-500 transition-all hover:border-slate-700 hover:bg-slate-800 hover:text-slate-300"
                 >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  🚀 Cargar credenciales demo
                 </button>
               </div>
-            </div>
+            )}
+          </div>
 
-            <AnimatePresence mode="wait">
-              {error && (
-                <motion.p
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="text-xs font-medium text-rose-400 bg-rose-400/10 border border-rose-400/20 rounded-lg p-2.5"
-                >
-                  {error}
-                </motion.p>
-              )}
-            </AnimatePresence>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="relative w-full overflow-hidden rounded-xl bg-primary py-3.5 text-sm font-semibold text-white transition-all hover:bg-blue-500 active:scale-[0.98] disabled:opacity-70 disabled:active:scale-100 shadow-lg shadow-primary/20 group"
-            >
-              <div className="relative z-10 flex items-center justify-center gap-2">
-                {loading ? <Loader2 className="animate-spin" size={18} /> : 'Iniciar Sesión'}
-              </div>
-            </button>
-          </form>
-
-          {window.location.hostname === 'localhost' && (
-            <div className="mt-8 pt-6 border-t border-slate-700/50">
-              <button
-                type="button"
-                onClick={() => {
-                  setEmail('admin@odontologia.com');
-                  setPassword('Admin123!');
-                }}
-                className="w-full flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-300 transition-colors"
-              >
-                🚀 Cargar Credenciales Demo
-              </button>
-            </div>
-          )}
-        </div>
-        
-        <p className="mt-8 text-center text-xs text-slate-500">
-          &copy; 2026 Antigravity Labs. Todos los derechos reservados.
-        </p>
-      </motion.div>
+          {/* Status indicator */}
+          <div className="mt-6 flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-widest text-slate-600">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            Sistema operativo · Todos los servicios activos
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 };

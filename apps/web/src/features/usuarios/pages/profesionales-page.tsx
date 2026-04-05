@@ -1,10 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Users, 
-  Stethoscope, 
-  Award, 
-  Trash2, 
+import { toast } from 'sonner';
+import {
+  Users,
+  Stethoscope,
+  Award,
+  Trash2,
   ExternalLink,
   ChevronRight,
   Filter,
@@ -32,7 +33,7 @@ export const ProfesionalesPage: React.FC = () => {
   const filteredProfesionales = React.useMemo(() => {
     if (!searchTerm.trim()) return profesionales;
     const term = searchTerm.toLowerCase();
-    return profesionales.filter(p => 
+    return profesionales.filter(p =>
       p.usuario.nombre.toLowerCase().includes(term) ||
       p.usuario.apellido.toLowerCase().includes(term) ||
       (p.especialidad && p.especialidad.toLowerCase().includes(term))
@@ -64,9 +65,9 @@ export const ProfesionalesPage: React.FC = () => {
          <div className="flex items-center gap-2">
             <div className="relative group">
                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={16} />
-               <input 
-                 type="text" 
-                 placeholder="Buscar por nombre o especialidad..." 
+               <input
+                 type="text"
+                 placeholder="Buscar por nombre o especialidad..."
                  value={searchTerm}
                  onChange={(e) => setSearchTerm(e.target.value)}
                  className="bg-slate-100 dark:bg-slate-800 border-none rounded-2xl py-3 pl-10 pr-4 text-xs font-bold outline-none w-64 focus:ring-2 focus:ring-blue-500/20 transition-all"
@@ -102,7 +103,7 @@ export const ProfesionalesPage: React.FC = () => {
                       {p.especialidad || 'General'}
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                     <span className="flex items-center gap-1.5"><Award size={14}/> MN: {p.matricula || '---'}</span>
                     <span className="h-1 w-1 rounded-full bg-slate-300" />
@@ -111,17 +112,21 @@ export const ProfesionalesPage: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                   <button 
+                   <button
                     onClick={() => {
-                      if (confirm('¿Está seguro de eliminar este profesional?')) {
-                        deleteProfesional.mutate(p.id);
-                      }
+                      toast('¿Eliminar este profesional?', {
+                        action: {
+                          label: 'Eliminar',
+                          onClick: () => deleteProfesional.mutate(p.id),
+                        },
+                        cancel: { label: 'Cancelar', onClick: () => {} },
+                      });
                     }}
                     className="p-3 text-slate-300 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-2xl transition-all opacity-0 group-hover:opacity-100"
                    >
                      <Trash2 size={20} />
                    </button>
-                   <button 
+                   <button
                     onClick={() => handleOpenEdit(p)}
                     className="p-3 text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 transition-all"
                    >
@@ -134,7 +139,7 @@ export const ProfesionalesPage: React.FC = () => {
         </div>
       )}
 
-      <EditProfesionalModal 
+      <EditProfesionalModal
         isOpen={isModalOpen}
         profesional={editingProfesional}
         onClose={handleCloseModal}
@@ -191,14 +196,14 @@ const EditProfesionalModal: React.FC<EditModalProps> = ({ isOpen, profesional, o
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
             className="absolute inset-0 bg-slate-900/60 backdrop-blur-md"
           />
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -213,7 +218,7 @@ const EditProfesionalModal: React.FC<EditModalProps> = ({ isOpen, profesional, o
                   Dr. {profesional?.usuario.nombre} {profesional?.usuario.apellido}
                 </p>
               </div>
-              <button 
+              <button
                 onClick={onClose}
                 className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
               >
@@ -225,8 +230,8 @@ const EditProfesionalModal: React.FC<EditModalProps> = ({ isOpen, profesional, o
               <div className="space-y-4">
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Especialidad</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     value={formData.especialidad}
                     onChange={(e) => setFormData({...formData, especialidad: e.target.value})}
                     placeholder="Ej: Ortodoncia, Implantología..."
@@ -237,8 +242,8 @@ const EditProfesionalModal: React.FC<EditModalProps> = ({ isOpen, profesional, o
 
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Matrícula Nacional/Provincial</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     value={formData.matricula}
                     onChange={(e) => setFormData({...formData, matricula: e.target.value})}
                     placeholder="Nro. de Matrícula"
@@ -249,14 +254,14 @@ const EditProfesionalModal: React.FC<EditModalProps> = ({ isOpen, profesional, o
               </div>
 
               <div className="pt-4 flex gap-3">
-                <button 
+                <button
                   type="button"
                   onClick={onClose}
                   className="flex-1 py-4 px-6 rounded-2xl text-[11px] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
                 >
                   Cancelar
                 </button>
-                <button 
+                <button
                   type="submit"
                   disabled={isSaving}
                   className="flex-[2] bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white py-4 px-6 rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2 transition-all"

@@ -12,6 +12,7 @@ interface PresupuestoListProps {
 }
 
 export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, isLoading, onSelect }) => {
+  const { iniciarTratamiento } = useFinanzasMutations();
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center py-20 gap-4">
@@ -23,43 +24,43 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
 
   const getStatusConfig = (estado: string) => {
     switch (estado) {
-      case 'pagado': 
-        return { 
-          icon: CheckCircle2, 
-          label: 'Pagado', 
-          bg: 'bg-emerald-50 dark:bg-emerald-500/10', 
+      case 'pagado':
+        return {
+          icon: CheckCircle2,
+          label: 'Pagado',
+          bg: 'bg-emerald-50 dark:bg-emerald-500/10',
           text: 'text-emerald-600 dark:text-emerald-400',
           border: 'border-emerald-100 dark:border-emerald-500/20'
         };
-      case 'pagado_parcial': 
-        return { 
-          icon: Clock, 
-          label: 'Parcial', 
-          bg: 'bg-amber-50 dark:bg-amber-500/10', 
+      case 'pagado_parcial':
+        return {
+          icon: Clock,
+          label: 'Parcial',
+          bg: 'bg-amber-50 dark:bg-amber-500/10',
           text: 'text-amber-600 dark:text-amber-400',
           border: 'border-amber-100 dark:border-amber-500/20'
         };
-      case 'rechazado': 
-        return { 
-          icon: AlertCircle, 
-          label: 'Rechazado', 
-          bg: 'bg-rose-50 dark:bg-rose-500/10', 
+      case 'rechazado':
+        return {
+          icon: AlertCircle,
+          label: 'Rechazado',
+          bg: 'bg-rose-50 dark:bg-rose-500/10',
           text: 'text-rose-600 dark:text-rose-400',
           border: 'border-rose-100 dark:border-rose-500/20'
         };
-      case 'iniciado': 
-        return { 
-          icon: Play, 
-          label: 'Iniciado', 
-          bg: 'bg-blue-50 dark:bg-blue-500/10', 
+      case 'iniciado':
+        return {
+          icon: Play,
+          label: 'Iniciado',
+          bg: 'bg-blue-50 dark:bg-blue-500/10',
           text: 'text-blue-600 dark:text-blue-400',
           border: 'border-blue-100 dark:border-blue-500/20'
         };
-      default: 
-        return { 
-          icon: FileText, 
-          label: 'Pendiente', 
-          bg: 'bg-slate-50 dark:bg-slate-800', 
+      default:
+        return {
+          icon: FileText,
+          label: 'Pendiente',
+          bg: 'bg-slate-50 dark:bg-slate-800',
           text: 'text-slate-600 dark:text-slate-400',
           border: 'border-slate-200 dark:border-slate-700'
         };
@@ -86,9 +87,8 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
           <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50">
             {presupuestos.map((p, i) => {
               const status = getStatusConfig(p.estado);
-              const { iniciarTratamiento } = useFinanzasMutations();
               return (
-                <motion.tr 
+                <motion.tr
                   key={p.id}
                   initial={{ opacity: 0, x: -5 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -134,7 +134,7 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
                   </td>
                   <td className="p-5 text-right flex items-center justify-end gap-2">
                     {p.estado === 'pendiente' && (
-                      <button 
+                      <button
                         onClick={(e) => {
                           e.stopPropagation();
                           iniciarTratamiento.mutate(p.id);
@@ -146,7 +146,7 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
                         <Play size={14} />
                       </button>
                     )}
-                    <button 
+                    <button
                       onClick={() => onSelect(p)}
                       className="inline-flex items-center gap-2 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-blue-500 text-slate-600 dark:text-slate-300 px-4 py-2 rounded-xl text-xs font-bold transition-all hover:text-blue-600 group/btn"
                     >
@@ -159,7 +159,7 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
             })}
           </tbody>
         </table>
-        
+
         {presupuestos.length === 0 && (
           <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
              <div className="h-20 w-20 rounded-full bg-slate-50 dark:bg-slate-800/40 flex items-center justify-center mb-6">

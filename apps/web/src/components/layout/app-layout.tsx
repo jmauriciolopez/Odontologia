@@ -1,21 +1,23 @@
 import React from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/auth-context';
-import { 
-  LayoutDashboard, 
-  Users, 
-  Calendar, 
-  CreditCard, 
-  LogOut, 
-  Bell, 
-  Settings, 
+import { useTheme } from '../../context/theme-context';
+import {
+  LayoutDashboard,
+  Users,
+  Calendar,
+  CreditCard,
+  LogOut,
+  Bell,
+  Settings,
   Search,
-  ChevronRight,
   Menu,
   Shield,
   Stethoscope,
   MapPin,
-  Heart
+  Heart,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -23,6 +25,7 @@ import { CommandPalette } from './CommandPalette';
 
 export const AppLayout: React.FC = () => {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = React.useState(false);
@@ -81,15 +84,15 @@ export const AppLayout: React.FC = () => {
                     to={item.path}
                     className={cn(
                       "group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 relative",
-                      isActive 
-                        ? `${activeBg} ${activeColor}` 
+                      isActive
+                        ? `${activeBg} ${activeColor}`
                         : "text-slate-400 dark:text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-slate-200"
                     )}
                   >
                     <item.icon size={20} className={cn("transition-transform group-hover:scale-110", isActive && activeColor)} />
                     <span className="text-sm font-semibold tracking-tight">{item.name}</span>
                     {isActive && (
-                      <motion.div 
+                      <motion.div
                         layoutId="activeNav"
                         className="absolute right-2 h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--primary)]"
                       />
@@ -102,7 +105,7 @@ export const AppLayout: React.FC = () => {
 
           <div className="space-y-1">
              <h3 className="px-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-4">Configuración</h3>
-             <Link 
+             <Link
                to="/ajustes"
                className={cn(
                  "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200",
@@ -128,7 +131,7 @@ export const AppLayout: React.FC = () => {
                    <span className="text-[10px] text-slate-400 truncate uppercase tracking-wider font-bold">{user?.rol || 'Doctor'}</span>
                 </div>
              </div>
-             <button 
+             <button
                onClick={handleLogout}
                className="p-2 rounded-lg text-slate-300 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-colors"
                title="Cerrar Sesión"
@@ -149,17 +152,34 @@ export const AppLayout: React.FC = () => {
              </button>
               <div className="relative group hidden md:block">
                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={18} />
-                 <input 
-                   type="text" 
+                 <input
+                   type="text"
                    readOnly
                    onClick={() => setIsCommandPaletteOpen(true)}
-                   placeholder="Buscar pacientes, turnos... (Ctrl+K)" 
+                   placeholder="Buscar pacientes, turnos... (Ctrl+K)"
                    className="bg-slate-100 dark:bg-slate-800/50 border-transparent focus:bg-white dark:focus:bg-slate-900 border focus:border-blue-500/30 rounded-xl py-2.5 pl-10 pr-4 text-sm w-96 cursor-pointer outline-none transition-all shadow-sm hover:shadow-md"
                  />
               </div>
           </div>
 
           <div className="flex items-center gap-3">
+             <button
+               onClick={toggleTheme}
+               className="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+               title={theme === 'dark' ? 'Modo claro' : 'Modo oscuro'}
+             >
+               <AnimatePresence mode="wait" initial={false}>
+                 <motion.div
+                   key={theme}
+                   initial={{ rotate: -90, opacity: 0 }}
+                   animate={{ rotate: 0, opacity: 1 }}
+                   exit={{ rotate: 90, opacity: 0 }}
+                   transition={{ duration: 0.2 }}
+                 >
+                   {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                 </motion.div>
+               </AnimatePresence>
+             </button>
              <button className="relative p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
                 <Bell size={20} />
                 <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-rose-500 border-2 border-white dark:border-slate-900" />
@@ -190,9 +210,9 @@ export const AppLayout: React.FC = () => {
         </div>
       </main>
 
-      <CommandPalette 
-        isOpen={isCommandPaletteOpen} 
-        onClose={() => setIsCommandPaletteOpen(false)} 
+      <CommandPalette
+        isOpen={isCommandPaletteOpen}
+        onClose={() => setIsCommandPaletteOpen(false)}
       />
     </div>
   );

@@ -29,18 +29,15 @@ export const archivosApi = {
   uploadDocumento: async (pacienteId: string, file: File): Promise<PatientFile> => {
     const formData = new FormData();
     formData.append('file', file);
-    return httpClient.post(`archivos/paciente/${pacienteId}/documento`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    return httpClient.post(`archivos/paciente/${pacienteId}/documento`, formData);
   },
 
-  uploadRadiografia: async (pacienteId: string, file: File, tipo: string): Promise<Radiografia> => {
+  uploadRadiografia: async (pacienteId: string, file: File, tipo: string, fechaToma?: string): Promise<Radiografia> => {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('tipo', tipo);
-    return httpClient.post(`archivos/paciente/${pacienteId}/radiografia`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    if (fechaToma) formData.append('fechaToma', fechaToma);
+    return httpClient.post(`archivos/paciente/${pacienteId}/radiografia`, formData);
   },
 
   deleteDocumento: async (id: string): Promise<void> => {

@@ -11,19 +11,19 @@ interface PresupuestoFormProps {
   initialPacienteNombre?: string;
 }
 
-export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({ 
-  onClose, 
-  onSubmit, 
+export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
+  onClose,
+  onSubmit,
   loading,
   initialPacienteId = '',
   initialPacienteNombre = ''
 }) => {
-  const [items, setItems] = useState([{ descripcion: '', precioUnitario: 0, cantidad: 1 }]);
+  const [items, setItems] = useState([{ descripcion: '', precioUnitario: 0, cantidad: 1, descuento: 0 }]);
   const [pacienteId, setPacienteId] = useState(initialPacienteId);
 
-  const addItem = () => setItems([...items, { descripcion: '', precioUnitario: 0, cantidad: 1 }]);
+  const addItem = () => setItems([...items, { descripcion: '', precioUnitario: 0, cantidad: 1, descuento: 0 }]);
   const removeItem = (index: number) => setItems(items.filter((_, i) => i !== index));
-  
+
   const updateItem = (index: number, field: string, value: any) => {
     const newItems = [...items];
     newItems[index] = { ...newItems[index], [field]: value };
@@ -37,9 +37,10 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
     onSubmit({
       pacienteId,
       items: items.map(item => ({
-        ...item,
+        descripcion: item.descripcion,
         precioUnitario: Number(item.precioUnitario),
-        cantidad: Number(item.cantidad)
+        cantidad: Number(item.cantidad),
+        ...(Number(item.descuento) > 0 ? { descuento: Number(item.descuento) } : {}),
       }))
     });
   };
@@ -65,7 +66,7 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">DETALLES CLÍNICOS Y COSTOS</p>
               </div>
             </div>
-            <button 
+            <button
               onClick={onClose}
               className="h-10 w-10 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-rose-500 transition-all"
             >
@@ -114,8 +115,8 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
                   <List size={12} />
                   Procedimientos y Tratamientos
                 </label>
-                <button 
-                   type="button" 
+                <button
+                   type="button"
                    onClick={addItem}
                    className="text-[10px] font-bold text-blue-600 hover:text-blue-500 uppercase tracking-widest flex items-center gap-1"
                 >
@@ -127,7 +128,7 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
               <div className="space-y-3 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
                 <AnimatePresence initial={false}>
                   {items.map((item, index) => (
-                    <motion.div 
+                    <motion.div
                       key={index}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -163,8 +164,8 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
                           required
                         />
                       </div>
-                      <button 
-                        type="button" 
+                      <button
+                        type="button"
                         onClick={() => removeItem(index)}
                         disabled={items.length === 1}
                         className="p-2.5 rounded-xl text-slate-300 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all opacity-0 group-hover:opacity-100 disabled:opacity-0"
@@ -197,15 +198,15 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
 
             {/* Actions */}
             <div className="flex items-center gap-4 pt-4">
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={onClose}
                 className="flex-1 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-slate-300 text-slate-600 dark:text-slate-300 py-3.5 rounded-2xl font-bold transition-all"
               >
                 Cancelar
               </button>
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 disabled={loading}
                 className="flex-3 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white py-3.5 rounded-2xl font-bold shadow-lg shadow-blue-500/25 transition-all px-12"
               >

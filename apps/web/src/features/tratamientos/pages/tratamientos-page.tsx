@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Activity, 
-  CheckCircle2, 
-  Clock, 
-  Search, 
-  Filter, 
-  ChevronRight, 
+import {
+  Activity,
+  CheckCircle2,
+  Clock,
+  Search,
+  X,
+  ChevronRight,
   Stethoscope,
-  TrendingUp,
-  AlertCircle
+  TrendingUp
 } from 'lucide-react';
 import { useTratamientos } from '../hooks/use-tratamientos';
 import { PremiumCard } from '@/components/ui/premium-card';
@@ -23,7 +22,7 @@ export const TratamientosPage: React.FC = () => {
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
 
   const activePlanes = planes.filter((p: PlanTratamiento) => p.estado === 'activo');
-  
+
   const filteredPlanes = React.useMemo(() => {
     if (!searchTerm.trim()) return activePlanes;
     const term = searchTerm.toLowerCase();
@@ -32,8 +31,8 @@ export const TratamientosPage: React.FC = () => {
       const profesionalNombre = `${p.profesional?.usuario.nombre || ''} ${p.profesional?.usuario.apellido || ''}`.toLowerCase();
       const pacienteNombre = `${p.paciente?.nombre || ''} ${p.paciente?.apellido || ''}`.toLowerCase();
       return (
-        planNombre.includes(term) || 
-        profesionalNombre.includes(term) || 
+        planNombre.includes(term) ||
+        profesionalNombre.includes(term) ||
         pacienteNombre.includes(term)
       );
     });
@@ -72,7 +71,7 @@ export const TratamientosPage: React.FC = () => {
           <div className="px-4 py-2 text-center">
             <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Promedio</p>
             <p className="text-xl font-bold text-emerald-500">
-              {activePlanes.length > 0 
+              {activePlanes.length > 0
                 ? Math.round(activePlanes.reduce((acc: number, p: PlanTratamiento) => acc + calculateProgress(p), 0) / activePlanes.length)
                 : 0}%
             </p>
@@ -87,7 +86,7 @@ export const TratamientosPage: React.FC = () => {
             <div className="p-6 border-b border-slate-100/50 dark:border-slate-800/50 flex items-center gap-4">
               <div className="relative flex-1 group">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={18} />
-                <input 
+                <input
                   type="text"
                   placeholder="Buscar por plan, paciente o profesional..."
                   value={searchTerm}
@@ -95,17 +94,23 @@ export const TratamientosPage: React.FC = () => {
                   className="w-full bg-white/50 dark:bg-slate-800/50 border-transparent focus:bg-white dark:focus:bg-slate-900 border focus:border-blue-500/30 rounded-xl py-2.5 pl-10 pr-10 text-sm outline-none transition-all shadow-sm"
                 />
                 {searchTerm && (
-                  <button 
+                  <button
                     onClick={() => setSearchTerm('')}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 transition-colors"
                   >
-                    <AlertCircle size={16} className="rotate-45" /> {/* Using AlertCircle as an X alternative if X not imported yet, wait I will use X if I import it */}
+                    <X size={16} />
                   </button>
                 )}
               </div>
-              <button className="p-2.5 rounded-xl bg-white/50 dark:bg-slate-800/50 text-slate-500 hover:text-blue-500 border border-slate-200/50 dark:border-slate-800/50 transition-all">
-                <Filter size={20} />
-              </button>
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className="p-2.5 rounded-xl bg-white/50 dark:bg-slate-800/50 text-blue-500 border border-blue-200/50 dark:border-blue-800/50 transition-all"
+                  title="Limpiar búsqueda"
+                >
+                  <X size={18} />
+                </button>
+              )}
             </div>
 
             <div className="flex-1 overflow-y-auto max-h-[calc(100vh-350px)] custom-scrollbar">
@@ -148,7 +153,7 @@ export const TratamientosPage: React.FC = () => {
 
                         {/* Progress Bar Mini */}
                         <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                          <motion.div 
+                          <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: `${progress}%` }}
                             className={cn(
@@ -187,7 +192,7 @@ export const TratamientosPage: React.FC = () => {
         {/* Detail Section */}
         <AnimatePresence>
           {selectedPlanId && selectedPlan && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
@@ -197,7 +202,7 @@ export const TratamientosPage: React.FC = () => {
                 <div className="p-8 border-b border-slate-100 dark:border-slate-800">
                   <div className="flex justify-between items-start mb-6">
                     <div>
-                      <button 
+                      <button
                         onClick={() => setSelectedPlanId(null)}
                         className="lg:hidden text-blue-500 font-bold text-sm mb-4 flex items-center gap-1"
                       >
@@ -220,7 +225,7 @@ export const TratamientosPage: React.FC = () => {
                   {/* Large Progress Indicator */}
                   <div className="relative pt-1">
                     <div className="overflow-hidden h-3 mb-4 text-xs flex rounded-full bg-slate-100 dark:bg-slate-800">
-                      <motion.div 
+                      <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${calculateProgress(selectedPlan)}%` }}
                         transition={{ duration: 0.8, ease: "circOut" }}
@@ -232,9 +237,9 @@ export const TratamientosPage: React.FC = () => {
 
                 <div className="flex-1 p-8 overflow-y-auto max-h-[calc(100vh-450px)] custom-scrollbar">
                   <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6 py-2 border-b border-slate-50 dark:border-slate-800">Hoja de Ruta Clínica</h4>
-                  
-                  <TratamientoProgreso 
-                    plan={selectedPlan} 
+
+                  <TratamientoProgreso
+                    plan={selectedPlan}
                     onUpdateEstado={(itemId: string, estado: string) => updateItemEstado({ itemId, estado })}
                   />
                 </div>

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  FileText, 
-  Image as ImageIcon, 
-  Upload, 
-  Trash2, 
-  Eye, 
-  Download, 
+import {
+  FileText,
+  Image as ImageIcon,
+  Upload,
+  Trash2,
+  Eye,
+  Download,
   FolderOpen,
   Search,
   Plus,
@@ -65,25 +65,25 @@ export const DocumentosPanel: React.FC<DocumentosPanelProps> = ({ pacienteId }) 
     <div className="flex flex-col gap-8">
       {/* 1. Vault Stats & Actions */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <PremiumStatCard 
-           title="Archivos Totales" 
-           value={stats.total} 
-           icon={<FolderOpen size={20} />} 
+        <PremiumStatCard
+           title="Archivos Totales"
+           value={stats.total}
+           icon={<FolderOpen size={20} />}
            color="blue"
         />
-        <PremiumStatCard 
-           title="Documentos" 
-           value={stats.docs} 
-           icon={<FileText size={20} />} 
+        <PremiumStatCard
+           title="Documentos"
+           value={stats.docs}
+           icon={<FileText size={20} />}
            color="slate"
         />
-        <PremiumStatCard 
-           title="Radiografías" 
-           value={stats.rads} 
-           icon={<ImageIcon size={20} />} 
+        <PremiumStatCard
+           title="Radiografías"
+           value={stats.rads}
+           icon={<ImageIcon size={20} />}
            color="amber"
         />
-        
+
         <div className="flex flex-col gap-2">
             <label className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white p-3 rounded-2xl font-bold shadow-lg shadow-blue-500/20 transition-all active:scale-95 cursor-pointer text-xs">
                 <Upload size={16} />
@@ -107,8 +107,8 @@ export const DocumentosPanel: React.FC<DocumentosPanelProps> = ({ pacienteId }) 
               onClick={() => setFilter(t)}
               className={cn(
                 "px-6 py-2 rounded-xl text-xs font-bold capitalize transition-all",
-                filter === t 
-                  ? "bg-white dark:bg-slate-700 text-blue-600 shadow-sm" 
+                filter === t
+                  ? "bg-white dark:bg-slate-700 text-blue-600 shadow-sm"
                   : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
               )}
             >
@@ -119,7 +119,7 @@ export const DocumentosPanel: React.FC<DocumentosPanelProps> = ({ pacienteId }) 
 
         <div className="relative w-full sm:w-64">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-          <input 
+          <input
             type="text"
             placeholder="Buscar por nombre..."
             className="w-full pl-12 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800/20 border-none rounded-2xl text-xs font-semibold focus:ring-2 focus:ring-blue-500/20 transition-all"
@@ -151,16 +151,22 @@ export const DocumentosPanel: React.FC<DocumentosPanelProps> = ({ pacienteId }) 
                     ) : (
                        <FileIcon size={48} className="text-slate-200 group-hover:text-blue-200 transition-all" />
                     )}
-                    
+
                     {/* Hover Actions Overlay */}
                     <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-all backdrop-blur-sm flex items-center justify-center gap-3">
-                        <button className="h-10 w-10 bg-white text-slate-900 rounded-full flex items-center justify-center hover:scale-110 transition-all shadow-lg shadow-black/20">
+                        <a
+                          href={file.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="h-10 w-10 bg-white text-slate-900 rounded-full flex items-center justify-center hover:scale-110 transition-all shadow-lg shadow-black/20"
+                          title="Ver archivo"
+                        >
                            <Eye size={18} />
-                        </button>
+                        </a>
                         <a href={file.url} download className="h-10 w-10 bg-white text-slate-900 rounded-full flex items-center justify-center hover:scale-110 transition-all shadow-lg shadow-black/20">
                            <Download size={18} />
                         </a>
-                        <button 
+                        <button
                           onClick={() => deleteDocumento.mutate(file.id)}
                           className="h-10 w-10 bg-rose-500 text-white rounded-full flex items-center justify-center hover:scale-110 transition-all shadow-lg shadow-rose-500/20"
                         >

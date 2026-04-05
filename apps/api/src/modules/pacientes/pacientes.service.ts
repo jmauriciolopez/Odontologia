@@ -76,8 +76,22 @@ export class PacientesService {
 
   async update(id: string, updatePacienteDto: UpdatePacienteDto): Promise<Paciente> {
     const paciente = await this.findOne(id);
-    this.pacientesRepository.merge(paciente, updatePacienteDto);
-    return await this.pacientesRepository.save(paciente);
+
+    // Strip empty strings — don't overwrite existing values with ''
+    const sanitized = Object.fromEntries(
+      Object.entries(updatePacienteDto).filter(([, v]) => v !== '' && v !== null && v !== undefined)
+    ) as UpdatePacienteDto;
+
+    this.pacientesRepository.merge(paciente, sanitized);
+
+    try {
+      return await this.pacientesRepository.save(paciente);
+    } catch (err: any) {
+      if (err.code === '23505') {
+        throw new ConflictException('El documento ingresado ya pertenece a otro paciente');
+      }
+      throw err;
+    }
   }
 
   async remove(id: string): Promise<void> {

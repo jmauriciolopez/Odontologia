@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Receipt, Loader2, TrendingUp } from 'lucide-react';
 
 // Hooks
-import { usePresupuestos, useFinanzasMutations } from '../hooks/use-presupuestos';
+import { usePacienteFinanzas, useFinanzasMutations } from '../hooks/use-presupuestos';
 
 // Components
 import { FinanzasPatientSummary } from './FinanzasPatientSummary';
@@ -24,7 +24,7 @@ export const FinanzasTabContent: React.FC<FinanzasTabContentProps> = ({ paciente
   const [selectedPresupuesto, setSelectedPresupuesto] = useState<Presupuesto | null>(null);
   const [showPagoModal, setShowPagoModal] = useState(false);
 
-  const { data: presupuestos = [], isLoading } = usePresupuestos({ pacienteId });
+  const { data: presupuestos = [], isLoading } = usePacienteFinanzas(pacienteId);
   const { createPresupuesto, registerPago } = useFinanzasMutations();
 
   const handleCreate = async (data: any) => {
@@ -49,10 +49,10 @@ export const FinanzasTabContent: React.FC<FinanzasTabContentProps> = ({ paciente
   // Calculate Aggregates
   const stats = (presupuestos || []).reduce((acc, p) => {
     const paid = (p.pagos || []).reduce((sum, pago) => sum + Number(pago.monto), 0);
-    
+
     // Only 'iniciado' and further states generate debt
     const generatesDebt = p.estado !== 'pendiente';
-    
+
     return {
       total: generatesDebt ? acc.total + Number(p.total) : acc.total,
       pagado: acc.pagado + paid,
@@ -71,10 +71,10 @@ export const FinanzasTabContent: React.FC<FinanzasTabContentProps> = ({ paciente
   return (
     <div className="flex flex-col gap-10">
       {/* 1. Header Summary */}
-      <FinanzasPatientSummary 
-        total={stats.total} 
-        pagado={stats.pagado} 
-        pendiente={pendiente} 
+      <FinanzasPatientSummary
+        total={stats.total}
+        pagado={stats.pagado}
+        pendiente={pendiente}
       />
 
       {/* 2. Actions & List */}
@@ -89,8 +89,8 @@ export const FinanzasTabContent: React.FC<FinanzasTabContentProps> = ({ paciente
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Historial de Tratamientos y Cobros</p>
              </div>
           </div>
-          
-          <button 
+
+          <button
             onClick={() => setShowCreateModal(true)}
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-blue-500/25 transition-all active:scale-95 text-xs"
           >
@@ -101,9 +101,9 @@ export const FinanzasTabContent: React.FC<FinanzasTabContentProps> = ({ paciente
 
         {presupuestos.length > 0 ? (
           <div className="medical-card p-0 overflow-hidden bg-white/50 backdrop-blur-sm border-slate-100 shadow-sm transition-all hover:shadow-md">
-            <PresupuestoList 
-              presupuestos={presupuestos} 
-              isLoading={isLoading} 
+            <PresupuestoList
+              presupuestos={presupuestos}
+              isLoading={isLoading}
               onSelect={(p) => {
                 setSelectedPresupuesto(p);
                 setShowPagoModal(true);
@@ -126,7 +126,7 @@ export const FinanzasTabContent: React.FC<FinanzasTabContentProps> = ({ paciente
       {/* 3. Modals */}
       <AnimatePresence>
         {showCreateModal && (
-          <PresupuestoForm 
+          <PresupuestoForm
             onClose={() => setShowCreateModal(false)}
             onSubmit={handleCreate}
             loading={createPresupuesto.isPending}
@@ -136,7 +136,7 @@ export const FinanzasTabContent: React.FC<FinanzasTabContentProps> = ({ paciente
         )}
 
         {showPagoModal && selectedPresupuesto && (
-          <PagoModal 
+          <PagoModal
             presupuesto={selectedPresupuesto}
             onClose={() => {
               setShowPagoModal(false);

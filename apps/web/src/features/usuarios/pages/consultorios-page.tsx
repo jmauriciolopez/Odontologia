@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Plus, 
-  Search, 
-  MapPin, 
-  Trash2, 
-  MoreVertical, 
-  CheckCircle2, 
+import { toast } from 'sonner';
+import {
+  Plus,
+  Search,
+  MapPin,
+  Trash2,
+  MoreVertical,
+  CheckCircle2,
   XCircle,
   LayoutGrid,
   List as ListIcon
@@ -32,7 +33,7 @@ export const ConsultoriosPage: React.FC = () => {
   });
   const [editingId, setEditingId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  
+
   const { data: consultorios = [], isLoading } = useConsultorios();
   const { createConsultorio, deleteConsultorio, updateConsultorio } = useConsultorioMutations();
 
@@ -40,7 +41,7 @@ export const ConsultoriosPage: React.FC = () => {
   const filteredConsultorios = React.useMemo(() => {
     if (!searchTerm.trim()) return consultorios;
     const term = searchTerm.toLowerCase();
-    return consultorios.filter(c => 
+    return consultorios.filter(c =>
       c.nombre.toLowerCase().includes(term) ||
       (c.direccion && c.direccion.toLowerCase().includes(term))
     );
@@ -84,23 +85,23 @@ export const ConsultoriosPage: React.FC = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditingId(null);
-    setFormData({ 
-      nombre: '', 
-      direccion: '', 
-      numeroSillones: 1, 
-      piso: '', 
-      telefono: '', 
-      whatsapp: '', 
+    setFormData({
+      nombre: '',
+      direccion: '',
+      numeroSillones: 1,
+      piso: '',
+      telefono: '',
+      whatsapp: '',
       horario: '',
       diasAtencion: [],
-      activo: true 
+      activo: true
     });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.nombre.trim()) return;
-    
+
     if (editingId) {
       updateConsultorio.mutate({ id: editingId, data: formData }, {
         onSuccess: handleCloseModal
@@ -127,9 +128,9 @@ export const ConsultoriosPage: React.FC = () => {
         <div className="flex items-center gap-2">
           <div className="relative group mr-2">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={16} />
-            <input 
-              type="text" 
-              placeholder="Buscar por nombre..." 
+            <input
+              type="text"
+              placeholder="Buscar por nombre..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="bg-slate-100 dark:bg-slate-800 border-none rounded-xl py-2.5 pl-10 pr-4 text-xs font-bold outline-none w-64 focus:ring-2 focus:ring-primary/20 transition-all"
@@ -137,20 +138,20 @@ export const ConsultoriosPage: React.FC = () => {
           </div>
 
           <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl mr-2">
-            <button 
+            <button
               onClick={() => setViewMode('grid')}
               className={cn("p-2 rounded-lg transition-all", viewMode === 'grid' ? "bg-white dark:bg-slate-700 shadow-sm text-primary" : "text-slate-400")}
             >
               <LayoutGrid size={18} />
             </button>
-            <button 
+            <button
               onClick={() => setViewMode('list')}
               className={cn("p-2 rounded-lg transition-all", viewMode === 'list' ? "bg-white dark:bg-slate-700 shadow-sm text-primary" : "text-slate-400")}
             >
               <ListIcon size={18} />
             </button>
           </div>
-          <button 
+          <button
             onClick={() => setIsModalOpen(true)}
             className="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-2xl font-bold text-sm shadow-xl shadow-primary/20 hover:bg-primary/90 transition-all active:scale-95"
           >
@@ -180,17 +181,21 @@ export const ConsultoriosPage: React.FC = () => {
                       <MapPin size={24} />
                     </div>
                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button 
+                      <button
                         onClick={() => handleOpenEdit(c)}
                         className="p-2 text-slate-400 hover:text-primary transition-colors"
                       >
                         <MoreVertical size={18} />
                       </button>
-                      <button 
+                      <button
                         onClick={() => {
-                          if (confirm('¿Está seguro de eliminar este consultorio?')) {
-                            deleteConsultorio.mutate(c.id);
-                          }
+                          toast('¿Eliminar este consultorio?', {
+                            action: {
+                              label: 'Eliminar',
+                              onClick: () => deleteConsultorio.mutate(c.id),
+                            },
+                            cancel: { label: 'Cancelar', onClick: () => {} },
+                          });
                         }}
                         className="p-2 text-slate-300 hover:text-rose-500 transition-colors"
                       >
@@ -228,12 +233,12 @@ export const ConsultoriosPage: React.FC = () => {
                         {Array.isArray(c.diasAtencion) && c.diasAtencion.length > 0 && (
                           <div className="flex flex-wrap gap-1">
                             {diasSemana.map(d => (
-                              <span 
+                              <span
                                 key={d.value}
                                 className={cn(
                                   "text-[9px] px-1.5 py-0.5 rounded font-black uppercase",
-                                  c.diasAtencion?.includes(d.value) 
-                                    ? "bg-primary/10 text-primary" 
+                                  c.diasAtencion?.includes(d.value)
+                                    ? "bg-primary/10 text-primary"
                                     : "text-slate-300 dark:text-slate-600"
                                 )}
                               >
@@ -251,7 +256,7 @@ export const ConsultoriosPage: React.FC = () => {
                              {c.direccion}
                           </p>
                         )}
-                        
+
                         <div className="flex flex-wrap gap-4 pt-1">
                           {c.telefono && (
                             <p className="text-[11px] font-medium text-slate-500 flex items-center gap-2">
@@ -293,14 +298,14 @@ export const ConsultoriosPage: React.FC = () => {
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={handleCloseModal}
               className="absolute inset-0 bg-slate-900/60 backdrop-blur-md"
             />
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -312,14 +317,14 @@ export const ConsultoriosPage: React.FC = () => {
               <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-8">
                 {editingId ? 'Modifique los detalles de la clínica o espacio' : 'Cree una nueva sede para su organización'}
               </p>
-              
+
               <form onSubmit={handleSubmit} className="space-y-6 max-h-[70vh] overflow-y-auto px-2 custom-scrollbar">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* Fila 1 - Info Principal */}
                   <div className="space-y-6">
                     <div>
                       <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3 ml-1">Nombre / Identificador</label>
-                      <input 
+                      <input
                         type="text"
                         autoFocus
                         required
@@ -332,7 +337,7 @@ export const ConsultoriosPage: React.FC = () => {
 
                     <div>
                       <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3 ml-1">Dirección Postale</label>
-                      <input 
+                      <input
                         type="text"
                         value={formData.direccion}
                         onChange={(e) => setFormData({ ...formData, direccion: e.target.value })}
@@ -344,7 +349,7 @@ export const ConsultoriosPage: React.FC = () => {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3 ml-1">Piso / Nivel</label>
-                        <input 
+                        <input
                           type="text"
                           value={formData.piso}
                           onChange={(e) => setFormData({ ...formData, piso: e.target.value })}
@@ -354,7 +359,7 @@ export const ConsultoriosPage: React.FC = () => {
                       </div>
                       <div>
                         <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3 ml-1">Sillones</label>
-                        <input 
+                        <input
                           type="number"
                           min="1"
                           value={formData.numeroSillones}
@@ -390,7 +395,7 @@ export const ConsultoriosPage: React.FC = () => {
 
                     <div>
                       <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3 ml-1">Horario Operativo</label>
-                      <input 
+                      <input
                         type="text"
                         value={formData.horario}
                         onChange={(e) => setFormData({ ...formData, horario: e.target.value })}
@@ -402,7 +407,7 @@ export const ConsultoriosPage: React.FC = () => {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3 ml-1">Teléfono</label>
-                        <input 
+                        <input
                           type="text"
                           value={formData.telefono}
                           onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
@@ -412,7 +417,7 @@ export const ConsultoriosPage: React.FC = () => {
                       </div>
                       <div>
                         <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3 ml-1">WhatsApp</label>
-                        <input 
+                        <input
                           type="text"
                           value={formData.whatsapp}
                           onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
@@ -423,7 +428,7 @@ export const ConsultoriosPage: React.FC = () => {
                     </div>
 
                     <div className="flex items-center gap-3 p-4 bg-primary/5 dark:bg-white/5 rounded-2xl">
-                      <input 
+                      <input
                         type="checkbox"
                         id="activo"
                         checked={formData.activo}
@@ -438,14 +443,14 @@ export const ConsultoriosPage: React.FC = () => {
                 </div>
 
                 <div className="flex gap-4 pt-8 border-t border-slate-100 dark:border-white/5">
-                  <button 
+                  <button
                     type="button"
                     onClick={handleCloseModal}
                     className="flex-1 py-4 px-6 rounded-2xl font-bold text-xs uppercase tracking-widest text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
                   >
                     Descartar
                   </button>
-                  <button 
+                  <button
                     type="submit"
                     disabled={createConsultorio.isPending || updateConsultorio.isPending}
                     className="flex-[2] py-4 px-6 rounded-2xl bg-primary text-white font-black text-xs uppercase tracking-widest shadow-xl shadow-primary/20 active:scale-95 transition-all disabled:opacity-50"

@@ -1,21 +1,27 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, UserPlus, Search, Filter, Shield, Mail, CheckCircle2, XCircle } from 'lucide-react';
+import { UserPlus, Search, Filter, Shield, Mail, CheckCircle2, XCircle, Pencil } from 'lucide-react';
 import { useUsuarios } from '../hooks/use-usuarios';
 import { UsuarioFormModal } from '../components/usuario-form-modal';
 import { PremiumCard } from '@/components/ui/premium-card';
 import { cn } from '@/lib/utils';
+import { Usuario } from '../types';
 
 export const UsuariosPage: React.FC = () => {
   const { usuarios, isLoading } = useUsuarios();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<Usuario | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredUsuarios = usuarios.filter(u => 
+  const filteredUsuarios = usuarios.filter(u =>
     u.nombre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     u.apellido?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     u.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleOpenCreate = () => { setEditingUser(null); setIsModalOpen(true); };
+  const handleOpenEdit = (user: Usuario) => { setEditingUser(user); setIsModalOpen(true); };
+  const handleClose = () => { setIsModalOpen(false); setEditingUser(null); };
 
   return (
     <div className="space-y-8 pb-10">
@@ -35,7 +41,7 @@ export const UsuariosPage: React.FC = () => {
           animate={{ opacity: 1, scale: 1 }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => handleOpenCreate()}
           className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 text-white px-6 py-3 rounded-2xl font-bold shadow-xl shadow-blue-500/20 transition-all"
         >
           <UserPlus size={20} />
@@ -64,7 +70,7 @@ export const UsuariosPage: React.FC = () => {
         <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white/50 dark:bg-slate-900/50">
           <div className="relative group w-full md:w-96">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={18} />
-            <input 
+            <input
               type="text"
               placeholder="Buscar por nombre or email..."
               value={searchTerm}
@@ -136,8 +142,12 @@ export const UsuariosPage: React.FC = () => {
                       )}
                     </td>
                     <td className="px-6 py-5 text-right">
-                      <button className="p-2 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-all">
-                        <Plus size={18} className="rotate-45" /> Edit
+                      <button
+                        onClick={() => handleOpenEdit(user)}
+                        className="p-2 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-all"
+                        title="Editar usuario"
+                      >
+                        <Pencil size={16} />
                       </button>
                     </td>
                   </tr>
@@ -154,7 +164,7 @@ export const UsuariosPage: React.FC = () => {
         </div>
       </PremiumCard>
 
-      <UsuarioFormModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <UsuarioFormModal isOpen={isModalOpen} onClose={handleClose} editingUser={editingUser} />
     </div>
   );
 };

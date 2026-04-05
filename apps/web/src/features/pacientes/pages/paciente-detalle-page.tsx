@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ChevronLeft, 
-  Edit3, 
-  ExternalLink, 
-  User, 
-  Phone, 
-  Contact, 
+import {
+  ChevronLeft,
+  Edit3,
+  ExternalLink,
+  User,
+  Phone,
+  Contact,
   CalendarDays,
   MoreVertical,
   Activity,
@@ -18,10 +18,14 @@ import {
 } from 'lucide-react';
 
 // Hooks
-import { usePacienteDetalle, useEvolucionMutations } from '../hooks/use-pacientes';
+import { usePacienteDetalle, useEvolucionMutations, usePacienteMutations } from '../hooks/use-pacientes';
 import { useTratamientos } from '../../tratamientos/hooks/use-tratamientos';
 import { useTurnos } from '../../agenda/hooks/use-turnos';
 import { usePacienteFinanzas } from '../../finanzas/hooks/use-presupuestos';
+import { toast } from 'sonner';
+
+// Components
+import { PacienteForm } from '../components/paciente-form';
 
 // Components
 import { PacienteTabs } from '../components/PacienteTabs';
@@ -30,11 +34,15 @@ import { AntecedentesAlerts } from '../components/AntecedentesAlerts';
 import { EvolucionClinicaTimeline } from '../components/EvolucionClinicaTimeline';
 import { DocumentosPanel } from '../components/DocumentosPanel';
 import { PeriodontogramaManager } from '../components/PeriodontogramaManager';
-import { OdontogramaManager } from '../../odontograma/components/OdontogramaManager';
 import { TratamientoProgreso } from '../../tratamientos/components/TratamientoProgreso';
 import { FinanzasTabContent } from '../../finanzas/components/FinanzasTabContent';
 import { PremiumCard } from '@/components/ui/premium-card';
 import { cn } from '@/lib/utils';
+
+// Lazy load Three.js heavy component to avoid blocking initial render
+const OdontogramaManager = React.lazy(() =>
+  import('../../odontograma/components/OdontogramaManager').then(m => ({ default: m.OdontogramaManager }))
+);
 
 export const PacienteDetallePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -43,9 +51,11 @@ export const PacienteDetallePage: React.FC = () => {
 
   const { data: paciente, isLoading, error } = usePacienteDetalle(id!);
   const { createEvolucion } = useEvolucionMutations();
+  const { updatePaciente } = usePacienteMutations();
   const { planes: planesTratamiento, updateItemEstado } = useTratamientos(id);
   const { data: turnos = [] } = useTurnos({ pacienteId: id });
   const { data: presupuestos = [] } = usePacienteFinanzas(id!);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   if (isLoading) return (
     <div className="flex h-[60vh] flex-col items-center justify-center gap-4 text-slate-400">
@@ -79,10 +89,12 @@ export const PacienteDetallePage: React.FC = () => {
     currency: 'CLP',
   }).format(balance);
 
-  const calculateAge = (birthday: string) => {
-    const ageDifMs = Date.now() - new Date(birthday).getTime();
-    const ageDate = new Date(ageDifMs);
-    return Math.abs(ageDate.getUTCFullYear() - 1970);
+  const calculateAge = (birthday: string | null | undefined) => {
+    if (!birthday) return '?';
+    const d = new Date(birthday);
+    if (isNaN(d.getTime())) return '?';
+    const ageDifMs = Date.now() - d.getTime();
+    return Math.abs(new Date(ageDifMs).getUTCFullYear() - 1970);
   };
 
   return (
@@ -92,14 +104,14 @@ export const PacienteDetallePage: React.FC = () => {
         <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-1000">
            <User size={120} />
         </div>
-        
+
         <div className="flex flex-col md:flex-row items-center gap-6 relative z-10">
           <div className="h-24 w-24 rounded-[2rem] bg-gradient-to-br from-blue-600 to-indigo-700 p-0.5 shadow-xl shadow-blue-500/20">
              <div className="h-full w-full rounded-[2.1rem] bg-white dark:bg-slate-900 flex items-center justify-center text-3xl font-black text-transparent bg-clip-text bg-gradient-to-br from-blue-600 to-indigo-600">
                {paciente.nombre[0]}{paciente.apellido[0]}
              </div>
           </div>
-          
+
           <div className="text-center md:text-left">
             <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 mb-2">
                <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight uppercase">
@@ -109,7 +121,7 @@ export const PacienteDetallePage: React.FC = () => {
                  Paciente Activo
                </div>
             </div>
-            
+
                <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs font-bold text-slate-400">
                   <div className="flex items-center gap-1.5"><Contact size={14} /> {paciente.documento}</div>
                   <div className="h-1 w-1 rounded-full bg-slate-300" />
@@ -121,30 +133,32 @@ export const PacienteDetallePage: React.FC = () => {
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-3 relative z-10">
-          <button className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all active:scale-95 shadow-sm">
+          <button className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all active:scale-95 shadow-sm"
+            onClick={() => setShowEditModal(true)}
+          >
             <Edit3 size={16} /> Editar Perfil
           </button>
-          
-          <button 
+
+          <button
             onClick={() => navigate(`/pacientes/${id}/odontograma/${paciente.ficha?.id}`)}
             className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-700 transition-all active:scale-95 shadow-lg shadow-blue-500/25"
           >
             <ExternalLink size={16} /> Odontograma Full
           </button>
-          
+
           <button className="p-2.5 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-slate-600 transition-colors">
             <MoreVertical size={20} />
           </button>
         </div>
       </header>
-      
+
       {/* Productivity Quick Jumps */}
       <div className="flex items-center gap-4 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm p-2 rounded-2xl border border-slate-100 dark:border-slate-800 self-start ml-4 -mt-2">
          <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-3 border-r border-slate-200 dark:border-slate-700">Accesos Rápidos</span>
           <div className="flex items-center gap-1">
-            <button 
+            <button
               disabled={!paciente.ficha}
-              onClick={() => navigate(`/pacientes/${id}/odontograma/${paciente.ficha?.id}`)} 
+              onClick={() => navigate(`/pacientes/${id}/odontograma/${paciente.ficha?.id}`)}
               className="px-3 py-1.5 text-[11px] font-bold text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-500/10 rounded-xl transition-all disabled:opacity-50"
             >
               Odontograma
@@ -207,7 +221,7 @@ export const PacienteDetallePage: React.FC = () => {
                   </div>
 
                   <AntecedentesAlerts antecedentes={paciente.ficha?.antecedentes} />
-                  
+
                   {/* Last Note Preview */}
                   {paciente.ficha?.evoluciones?.[0] && (
                     <div className="medical-card p-8 bg-gradient-to-br from-white to-slate-50 border-slate-100 shadow-md">
@@ -260,7 +274,9 @@ export const PacienteDetallePage: React.FC = () => {
             )}
 
             {activeTab === 'odontograma' && paciente.ficha && (
-              <OdontogramaManager fichaId={paciente.ficha.id} />
+              <React.Suspense fallback={<div className="flex h-64 items-center justify-center"><div className="h-8 w-8 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" /></div>}>
+                <OdontogramaManager fichaId={paciente.ficha.id} />
+              </React.Suspense>
             )}
 
             {activeTab === 'odontograma' && !paciente.ficha && (
@@ -270,7 +286,7 @@ export const PacienteDetallePage: React.FC = () => {
             )}
 
             {activeTab === 'periodontograma' && paciente.ficha && (
-              <PeriodontogramaManager 
+              <PeriodontogramaManager
                 fichaId={paciente.ficha.id}
                 pacienteId={paciente.id}
                 mediciones={paciente.ficha.medicionesPeriodontales}
@@ -278,10 +294,10 @@ export const PacienteDetallePage: React.FC = () => {
             )}
 
             {activeTab === 'evoluciones' && (
-              <EvolucionClinicaTimeline 
-                evoluciones={paciente.ficha?.evoluciones} 
-                onAdd={handleAddEvolucion} 
-                loading={createEvolucion.isPending} 
+              <EvolucionClinicaTimeline
+                evoluciones={paciente.ficha?.evoluciones}
+                onAdd={handleAddEvolucion}
+                loading={createEvolucion.isPending}
               />
             )}
 
@@ -296,13 +312,13 @@ export const PacienteDetallePage: React.FC = () => {
                     + Nuevo Plan
                   </button>
                 </div>
-                
+
                 {planesTratamiento.length > 0 ? (
                   <div className="grid gap-12">
                     {planesTratamiento.map(plan => (
-                      <TratamientoProgreso 
+                      <TratamientoProgreso
                         key={plan.id}
-                        plan={plan} 
+                        plan={plan}
                         onUpdateEstado={(itemId, estado) => updateItemEstado({ itemId, estado })}
                       />
                     ))}
@@ -321,14 +337,45 @@ export const PacienteDetallePage: React.FC = () => {
             )}
 
             {activeTab === 'finanzas' && (
-              <FinanzasTabContent 
-                pacienteId={id!} 
+              <FinanzasTabContent
+                pacienteId={id!}
                 pacienteNombre={`${paciente.nombre} ${paciente.apellido}`}
               />
             )}
           </motion.div>
         </AnimatePresence>
       </div>
+
+      {/* Edit Modal */}
+      <AnimatePresence>
+        {showEditModal && (
+          <PacienteForm
+            initialData={{
+              nombre:          paciente.nombre,
+              apellido:        paciente.apellido,
+              documento:       paciente.documento,
+              fechaNacimiento: paciente.fechaNacimiento ? String(paciente.fechaNacimiento).slice(0, 10) : '',
+              genero:          paciente.genero,
+              telefono:        paciente.telefono,
+              email:           paciente.email ?? '',
+              direccion:       paciente.direccion,
+              obraSocial:      paciente.obraSocial,
+              nroAfiliado:     paciente.nroAfiliado,
+            }}
+            loading={updatePaciente.isPending}
+            onClose={() => setShowEditModal(false)}
+            onSubmit={async (data) => {
+              try {
+                await updatePaciente.mutateAsync({ id: id!, data });
+                setShowEditModal(false);
+                toast.success('Paciente actualizado correctamente');
+              } catch (err: any) {
+                toast.error(err.message || 'Error al actualizar el paciente');
+              }
+            }}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };

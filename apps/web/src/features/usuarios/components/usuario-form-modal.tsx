@@ -2,27 +2,75 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, User, Mail, Shield, Lock, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 import { useUsuarios } from '../hooks/use-usuarios';
-import { CreateUsuarioDto } from '../types';
+import { Usuario, CreateUsuarioDto } from '../types';
 
 interface UsuarioFormModalProps {
   isOpen: boolean;
   onClose: () => void;
+  editingUser?: Usuario | null;
 }
 
-export const UsuarioFormModal: React.FC<UsuarioFormModalProps> = ({ isOpen, onClose }) => {
-  const { roles, createUsuario, isCreating } = useUsuarios();
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateUsuarioDto>();
+export const UsuarioFormModal: React.FC<UsuarioFormModalProps> = ({ isOpen, onClose, editingUser }) => {
+  const { roles, createUsuario, isCreating, updateUsuario, isUpdating } = useUsuarios();
+  const isEdit = !!editingUser;
 
-  const onSubmit = async (data: CreateUsuarioDto) => {
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateUsuarioDto & { rolIds: string[] }>({
+    defaultValues: isEdit
+      ? {
+          nombre:   editingUser.nombre   ?? '',
+          apellido: editingUser.apellido ?? '',
+          email:    editingUser.email,
+          rolIds:   editingUser.usuarioRoles.map(ur => ur.rolId),
+        }
+      : {},
+  });
+
+  // Reset form when switching between create/edit
+  React.useEffect(() => {
+    if (isOpen) {
+      reset(
+        isEdit
+          ? {
+              nombre:   editingUser.nombre   ?? '',
+              apellido: editingUser.apellido ?? '',
+              email:    editingUser.email,
+              rolIds:   editingUser.usuarioRoles.map(ur => ur.rolId),
+            }
+          : { nombre: '', apellido: '', email: '', rolIds: [], password: '' }
+      );
+    }
+  }, [isOpen, editingUser]);
+
+  const onSubmit = async (data: any) => {
     try {
-      await createUsuario(data);
+      if (isEdit) {
+        await updateUsuario({
+          id: editingUser.id,
+          data: {
+            nombre:   data.nombre,
+            apellido: data.apellido,
+            activo:   editingUser.activo,
+            rolIds:   Array.isArray(data.rolIds) ? data.rolIds : [data.rolIds],
+          },
+        });
+        toast.success('Usuario actualizado correctamente');
+      } else {
+        await createUsuario({
+          ...data,
+          rolIds: Array.isArray(data.rolIds) ? data.rolIds : [data.rolIds],
+        });
+        toast.success('Usuario creado correctamente');
+      }
       reset();
       onClose();
-    } catch (error) {
-      console.error('Error al crear usuario:', error);
+    } catch (err: any) {
+      toast.error(err.message || 'Error al guardar el usuario');
     }
   };
+
+  const isPending = isCreating || isUpdating;
 
   return (
     <AnimatePresence>
@@ -33,7 +81,7 @@ export const UsuarioFormModal: React.FC<UsuarioFormModalProps> = ({ isOpen, onCl
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-slate-950/40 backdrop-blur-sm z-50 transition-all"
+            className="fixed inset-0 bg-slate-950/40 backdrop-blur-sm z-50"
           />
           <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6 pointer-events-none">
             <motion.div
@@ -42,97 +90,120 @@ export const UsuarioFormModal: React.FC<UsuarioFormModalProps> = ({ isOpen, onCl
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               className="w-full max-w-lg pointer-events-auto"
             >
-              <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-white/20 dark:border-slate-800 shadow-2xl rounded-3xl overflow-hidden max-h-[calc(100vh-4rem)] flex flex-col">
+              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl rounded-3xl overflow-hidden max-h-[calc(100vh-4rem)] flex flex-col">
+
+                {/* Header */}
                 <div className="px-8 py-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between shrink-0">
                   <div>
-                    <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Nuevo Usuario</h2>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">Registra un nuevo miembro en el equipo</p>
+                    <h2 className="text-xl font-black tracking-tight text-slate-900 dark:text-white uppercase">
+                      {isEdit ? 'Editar Usuario' : 'Nuevo Usuario'}
+                    </h2>
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+                      {isEdit ? `Modificando: ${editingUser.email}` : 'Registrar nuevo miembro del equipo'}
+                    </p>
                   </div>
                   <button onClick={onClose} className="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 transition-colors">
                     <X size={20} />
                   </button>
                 </div>
 
-                <form onSubmit={handleSubmit(onSubmit)} className="p-8 space-y-5 overflow-y-auto custom-scrollbar">
+                {/* Form */}
+                <form onSubmit={handleSubmit(onSubmit)} className="p-8 space-y-5 overflow-y-auto">
+
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold uppercase tracking-widest text-slate-400 ml-1">Nombre</label>
+                      <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Nombre</label>
                       <div className="relative group">
-                        <User className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={18} />
+                        <User className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={16} />
                         <input
-                          {...register('nombre', { required: true })}
-                          className="w-full bg-slate-50 dark:bg-slate-800/50 border border-transparent focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none transition-all"
-                          placeholder="Ej: Juan"
+                          {...register('nombre', { required: 'Requerido' })}
+                          className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 rounded-xl py-2.5 pl-9 pr-4 text-sm outline-none transition-all"
+                          placeholder="Juan"
                         />
                       </div>
+                      {errors.nombre && <p className="text-[10px] text-rose-500">{errors.nombre.message}</p>}
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold uppercase tracking-widest text-slate-400 ml-1">Apellido</label>
+                      <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Apellido</label>
                       <input
-                        {...register('apellido', { required: true })}
-                        className="w-full bg-slate-50 dark:bg-slate-800/50 border border-transparent focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 rounded-xl py-2.5 px-4 text-sm outline-none transition-all"
-                        placeholder="Ej: Pérez"
+                        {...register('apellido', { required: 'Requerido' })}
+                        className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 rounded-xl py-2.5 px-4 text-sm outline-none transition-all"
+                        placeholder="Pérez"
                       />
+                      {errors.apellido && <p className="text-[10px] text-rose-500">{errors.apellido.message}</p>}
                     </div>
                   </div>
 
+                  {/* Email — readonly on edit */}
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold uppercase tracking-widest text-slate-400 ml-1">Email Profesional</label>
+                    <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Email</label>
                     <div className="relative group">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={18} />
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={16} />
                       <input
-                        {...register('email', { required: true, pattern: /^\S+@\S+$/i })}
-                        className="w-full bg-slate-50 dark:bg-slate-800/50 border border-transparent focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none transition-all"
+                        {...register('email', { required: !isEdit })}
+                        type="email"
+                        readOnly={isEdit}
+                        className={`w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl py-2.5 pl-9 pr-4 text-sm outline-none transition-all ${isEdit ? 'opacity-60 cursor-not-allowed' : 'focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900'}`}
                         placeholder="juan@clinica.com"
                       />
                     </div>
+                    {isEdit && <p className="text-[10px] text-slate-400">El email no puede modificarse</p>}
                   </div>
 
+                  {/* Roles */}
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold uppercase tracking-widest text-slate-400 ml-1">Rol en la Clínica</label>
+                    <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Roles</label>
                     <div className="relative group">
-                      <Shield className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={18} />
+                      <Shield className="absolute left-3 top-3 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={16} />
                       <select
                         multiple
                         {...register('rolIds', { required: 'Seleccione al menos un rol' })}
-                        className="w-full bg-slate-50 dark:bg-slate-800/50 border border-transparent focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none transition-all h-24 ring-offset-white dark:ring-offset-slate-950 focus:ring-2 focus:ring-blue-500/20"
+                        className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 rounded-xl py-2.5 pl-9 pr-4 text-sm outline-none transition-all h-24"
                       >
                         {roles.map((rol: any) => (
-                          <option key={rol.id} value={rol.id} className="py-1">{rol.nombre}</option>
+                          <option key={rol.id} value={rol.id}>{rol.nombre}</option>
                         ))}
                       </select>
                     </div>
-                    {errors.rolIds && <p className="text-[10px] text-rose-500 ml-1">{errors.rolIds.message}</p>}
-                    <p className="text-[10px] text-slate-400 ml-1">Mantén presionado Ctrl (Cmd) para seleccionar múltiples</p>
+                    {errors.rolIds && <p className="text-[10px] text-rose-500">{String(errors.rolIds.message)}</p>}
+                    <p className="text-[10px] text-slate-400">Ctrl/Cmd + click para seleccionar múltiples</p>
                   </div>
 
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold uppercase tracking-widest text-slate-400 ml-1">Contraseña Temporal</label>
-                    <div className="relative group">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={18} />
-                      <input
-                        type="password"
-                        {...register('password', { required: true, minLength: 6 })}
-                        className="w-full bg-slate-50 dark:bg-slate-800/50 border border-transparent focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none transition-all"
-                        placeholder="••••••••"
-                      />
+                  {/* Password — only on create */}
+                  {!isEdit && (
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Contraseña Temporal</label>
+                      <div className="relative group">
+                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={16} />
+                        <input
+                          type="password"
+                          {...register('password', { required: 'Requerido', minLength: { value: 6, message: 'Mínimo 6 caracteres' } })}
+                          className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 rounded-xl py-2.5 pl-9 pr-4 text-sm outline-none transition-all"
+                          placeholder="••••••••"
+                        />
+                      </div>
+                      {errors.password && <p className="text-[10px] text-rose-500">{errors.password.message}</p>}
                     </div>
-                  </div>
+                  )}
 
-                  <div className="pt-4 flex gap-3">
+                  {/* Actions */}
+                  <div className="pt-2 flex gap-3">
                     <button
                       type="button"
                       onClick={onClose}
-                      className="flex-1 px-6 py-3 rounded-xl font-bold text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+                      className="flex-1 px-6 py-3 rounded-xl font-bold text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all border border-slate-200 dark:border-slate-700"
                     >
                       Cancelar
                     </button>
                     <button
                       type="submit"
-                      disabled={isCreating}
-                      className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm py-3 px-6 rounded-xl shadow-lg shadow-blue-500/25 transition-all flex items-center justify-center gap-2"
+                      disabled={isPending}
+                      className="flex-[2] bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-bold text-sm py-3 px-6 rounded-xl shadow-lg shadow-blue-500/20 transition-all flex items-center justify-center gap-2"
                     >
-                      {isCreating ? <Loader2 className="animate-spin" size={18} /> : 'Crear Usuario'}
+                      {isPending
+                        ? <><Loader2 className="animate-spin" size={16} /> Guardando...</>
+                        : isEdit ? 'Guardar Cambios' : 'Crear Usuario'
+                      }
                     </button>
                   </div>
                 </form>

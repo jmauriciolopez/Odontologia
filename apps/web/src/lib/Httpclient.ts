@@ -1,6 +1,6 @@
 // src/shared/api/HttpClient.ts
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002/api/v1';
 
 export interface RequestOptions extends RequestInit {
     params?: Record<string, any>;
@@ -11,7 +11,12 @@ class HttpClient {
     private onUnauthorized?: () => void;
 
     constructor(baseUrl: string) {
-        this.baseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+        // Normalize: strip trailing slash, ensure /api/v1 suffix
+        let url = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+        if (!url.endsWith('/api/v1')) {
+            url = `${url}/api/v1`;
+        }
+        this.baseUrl = url;
     }
 
     setUnauthorizedCallback(callback: () => void) {
@@ -22,12 +27,8 @@ class HttpClient {
         const { params, ...customConfig } = options;
 
         // 1. URL Construction with Query Params
-        const cleanBaseUrl = this.baseUrl.endsWith('/api/v1') 
-            ? this.baseUrl 
-            : `${this.baseUrl}/api/v1`;
-        
         const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-        const fullURL = `${cleanBaseUrl}${cleanEndpoint}`;
+        const fullURL = `${this.baseUrl}${cleanEndpoint}`;
         const url = new URL(fullURL);
 
         if (params) {
@@ -56,7 +57,6 @@ class HttpClient {
         const config: RequestInit = {
             ...customConfig,
             headers,
-            credentials: 'include', // Necesario para enviar cookies HttpOnly
             cache: 'no-store',
         };
 
@@ -74,7 +74,11 @@ class HttpClient {
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.message || 'Error en la petición');
+            const msg = errorData.message || errorData.data?.message || `Error ${response.status}`;
+            const error = new Error(Array.isArray(msg) ? msg.join(', ') : String(msg));
+            (error as any).status = response.status;
+            (error as any).data = errorData;
+            throw error;
         }
 
         if (response.status === 204) return {} as T;
