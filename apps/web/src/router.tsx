@@ -15,6 +15,7 @@ import { AjustesPage } from './features/usuarios/pages/ajustes-page';
 import { NomenclaturaPage } from './features/usuarios/pages/nomenclatura-page';
 import { RemindersPage } from './features/reminders/pages/reminders-page';
 import { TratamientosPage } from './features/tratamientos/pages/tratamientos-page';
+import { ObrasSocialesPage } from './features/obras-sociales/pages/obras-sociales-page';
 import { useAuth } from './context/auth-context';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -91,6 +92,10 @@ export const router = createBrowserRouter([
       {
         path: 'tratamientos',
         element: <TratamientosPage />,
+      },
+      {
+        path: 'obras-sociales',
+        element: <ObrasSocialesPage />,
       },
       {
         path: 'ajustes',

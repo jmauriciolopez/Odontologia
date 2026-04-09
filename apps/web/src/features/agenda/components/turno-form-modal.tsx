@@ -1,270 +1,259 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useProfesionales, useConsultorios, useAgendaActions } from '../hooks/use-turnos';
-import { usePacientes } from '../../pacientes/hooks/use-pacientes';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { X, Save, Trash2, AlertCircle, Loader2 } from 'lucide-react';
+import { format, addMinutes, parseISO } from 'date-fns';
 import { Turno, CreateTurnoDto } from '../types';
-import { X, Calendar, Clock, User, Home, Search, AlertCircle } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { format } from 'date-fns';
+import { useAgendaActions, useProfesionales, useConsultorios } from '../hooks/use-turnos';
+import { useDisponibilidad } from '../hooks/use-disponibilidad';
 import { cn } from '@/lib/utils';
-import { toast } from 'sonner';
 
 interface TurnoFormModalProps {
-  turno?: Turno; // If provided, we are editing
+  turno?: Turno;
   initialDate?: Date;
   onClose: () => void;
 }
 
+const ESTADOS = ['programado', 'confirmado', 'atendido', 'cancelado', 'ausente'] as const;
+
 export const TurnoFormModal: React.FC<TurnoFormModalProps> = ({ turno, initialDate, onClose }) => {
+  const isEdit = !!turno;
+  const { createTurno, isCreating, updateTurno, isUpdating, deleteTurno, isDeleting } = useAgendaActions();
   const { data: profesionales = [] } = useProfesionales();
-  const { data: consultorios = [] } = useConsultorios();
-  const { createTurno, updateTurno, isCreating, isUpdating, deleteTurno, isDeleting } = useAgendaActions();
+  const { data: consultorios  = [] } = useConsultorios();
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const { data: patients = [] } = usePacientes({ query: searchTerm });
-  const [selectedPatientId, setSelectedPatientId] = useState(turno?.pacienteId || '');
+  const defaultStart = initialDate ?? (turno ? parseISO(turno.fechaInicio) : new Date());
+  const defaultEnd   = turno ? parseISO(turno.fechaFin) : addMinutes(defaultStart, 30);
 
-  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<CreateTurnoDto>({
-    defaultValues: {
-      pacienteId: turno?.pacienteId || '',
-      profesionalId: turno?.profesionalId || '',
-      consultorioId: turno?.consultorioId || '',
-      fechaInicio: turno ? format(new Date(turno.fechaInicio), "yyyy-MM-dd'T'HH:mm") : (initialDate ? format(initialDate, "yyyy-MM-dd'T'HH:mm") : format(new Date(), "yyyy-MM-dd'T'HH:mm")),
-      fechaFin: turno ? format(new Date(turno.fechaFin), "yyyy-MM-dd'T'HH:mm") : (initialDate ? format(new Date(initialDate.getTime() + 30 * 60000), "yyyy-MM-dd'T'HH:mm") : format(new Date(new Date().getTime() + 30 * 60000), "yyyy-MM-dd'T'HH:mm")),
-      motivo: turno?.motivo || '',
-      estado: turno?.estado || 'programado'
-    }
+  const [form, setForm] = useState({
+    pacienteId:    turno?.pacienteId    ?? '',
+    profesionalId: turno?.profesionalId ?? '',
+    consultorioId: turno?.consultorioId ?? '',
+    fechaInicio:   format(defaultStart, "yyyy-MM-dd'T'HH:mm"),
+    fechaFin:      format(defaultEnd,   "yyyy-MM-dd'T'HH:mm"),
+    motivo:        turno?.motivo        ?? '',
+    estado:        turno?.estado        ?? 'programado',
   });
 
-  const onFormSubmit = async (data: CreateTurnoDto) => {
-    try {
-      if (turno) {
-        await updateTurno({ id: turno.id, data });
-        toast.success('Turno actualizado');
-      } else {
-        await createTurno(data);
-        toast.success('Turno creado correctamente');
-      }
-      onClose();
-    } catch (error: any) {
-      toast.error(error.message || 'Error al guardar el turno');
+  const { disponibilidad } = useDisponibilidad({
+    fechaInicio:   form.fechaInicio,
+    fechaFin:      form.fechaFin,
+    profesionalId: form.profesionalId,
+    consultorioId: form.consultorioId,
+  });
+
+  const set = (key: string, value: string) => setForm(f => ({ ...f, [key]: value }));
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const dto: CreateTurnoDto = {
+      pacienteId:    form.pacienteId,
+      profesionalId: form.profesionalId,
+      consultorioId: form.consultorioId,
+      fechaInicio:   new Date(form.fechaInicio).toISOString(),
+      fechaFin:      new Date(form.fechaFin).toISOString(),
+      motivo:        form.motivo || undefined,
+      estado:        form.estado,
+    };
+    if (isEdit) {
+      await updateTurno({ id: turno.id, data: dto });
+    } else {
+      await createTurno(dto);
     }
+    onClose();
   };
 
   const handleDelete = async () => {
     if (!turno) return;
-    toast('¿Eliminar este turno?', {
-      action: {
-        label: 'Eliminar',
-        onClick: async () => {
-          await deleteTurno(turno.id);
-          toast.success('Turno eliminado');
-          onClose();
-        },
-      },
-      cancel: { label: 'Cancelar', onClick: () => {} },
-    });
+    await deleteTurno(turno.id);
+    onClose();
   };
+
+  const isBusy = isCreating || isUpdating || isDeleting;
+  const hasConflict = disponibilidad && !disponibilidad.disponible && !isEdit;
+
+  const inputCls = cn(
+    'w-full px-4 py-2.5 rounded-xl border text-sm font-medium transition-colors outline-none',
+    'focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20'
+  );
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Backdrop */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
-        className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
       />
 
       <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/20 dark:border-slate-800"
+        exit={{ opacity: 0, scale: 0.95, y: 10 }}
+        className="relative w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden"
+        style={{ background: 'var(--card-bg)', border: '1px solid var(--sb-border)' }}
       >
         {/* Header */}
-        <div className="px-8 pt-8 pb-6 bg-gradient-to-br from-blue-600 to-indigo-700 text-white relative">
-          <button
-            onClick={onClose}
-            className="absolute top-6 right-6 p-2 hover:bg-white/20 rounded-full transition-colors"
-          >
-            <X size={20} />
+        <div className="flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'var(--sb-border)' }}>
+          <h2 className="text-base font-bold" style={{ color: 'var(--sb-text)' }}>
+            {isEdit ? 'Editar Turno' : 'Nuevo Turno'}
+          </h2>
+          <button onClick={onClose} className="p-2 rounded-xl hover:opacity-70 transition-opacity" style={{ color: 'var(--sb-text-muted)' }}>
+            <X size={18} />
           </button>
-
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-white/20 rounded-xl backdrop-blur-md">
-              <Calendar size={20} />
-            </div>
-            <h2 className="text-2xl font-bold tracking-tight">
-              {turno ? 'Editar Turno' : 'Agendar Nuevo Turno'}
-            </h2>
-          </div>
-          <p className="text-white/70 text-sm font-medium"> Completa los datos para coordinar la atención clínica</p>
         </div>
 
-        <form onSubmit={handleSubmit(onFormSubmit)} className="p-8 space-y-6 max-h-[calc(100vh-16rem)] overflow-y-auto custom-scrollbar">
-
-          {/* Patient Selection */}
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-              <Search size={14} /> Paciente
+        <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4">
+          {/* Paciente ID */}
+          <div>
+            <label className="text-xs font-bold uppercase tracking-widest mb-1.5 block" style={{ color: 'var(--sb-text-muted)' }}>
+              ID Paciente
             </label>
-            <div className="relative group">
-              <input
-                type="text"
-                placeholder="Buscar por nombre o documento..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border-2 border-transparent focus:border-blue-500 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-slate-900 transition-all text-slate-900 dark:text-white outline-none"
-              />
-              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400">
-                 <Search size={16} />
-              </div>
-
-              {searchTerm && patients.length > 0 && !selectedPatientId && (
-                <div className="absolute z-10 w-full mt-2 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xl overflow-hidden max-h-48 overflow-y-auto">
-                  {patients.map(p => (
-                    <button
-                      key={p.id}
-                      type="button"
-                      onClick={() => {
-                        setSelectedPatientId(p.id);
-                        setValue('pacienteId', p.id);
-                        setSearchTerm(`${p.nombre} ${p.apellido}`);
-                      }}
-                      className="w-full px-4 py-3 text-left hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors border-b last:border-0 border-slate-100 dark:border-slate-700 flex flex-col"
-                    >
-                      <span className="font-bold text-slate-900 dark:text-white text-sm">{p.nombre} {p.apellido}</span>
-                      <span className="text-xs text-slate-500 dark:text-slate-400">Doc: {p.documento}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-            {selectedPatientId && (
-              <div className="flex items-center justify-between px-4 py-2 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded-xl text-xs font-bold border border-emerald-200/50 dark:border-emerald-500/20">
-                <span>✓ Paciente Seleccionado</span>
-                <button type="button" onClick={() => { setSelectedPatientId(''); setSearchTerm(''); setValue('pacienteId', ''); }} className="hover:underline">Cambiar</button>
-              </div>
-            )}
-            <input type="hidden" {...register('pacienteId', { required: true })} />
+            <input
+              required
+              value={form.pacienteId}
+              onChange={e => set('pacienteId', e.target.value)}
+              placeholder="UUID del paciente"
+              className={inputCls}
+              style={{ background: 'var(--sb-active-bg)', borderColor: 'var(--sb-border)', color: 'var(--sb-text)' }}
+            />
           </div>
 
-          {/* Dates Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                <Clock size={14} /> Inicio
+          {/* Profesional */}
+          <div>
+            <label className="text-xs font-bold uppercase tracking-widest mb-1.5 block" style={{ color: 'var(--sb-text-muted)' }}>
+              Profesional
+            </label>
+            <select
+              required
+              value={form.profesionalId}
+              onChange={e => set('profesionalId', e.target.value)}
+              className={inputCls}
+              style={{ background: 'var(--sb-active-bg)', borderColor: 'var(--sb-border)', color: 'var(--sb-text)' }}
+            >
+              <option value="">Seleccionar profesional</option>
+              {profesionales.map(p => (
+                <option key={p.id} value={p.id}>{p.usuario.nombre} {p.usuario.apellido}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Consultorio */}
+          <div>
+            <label className="text-xs font-bold uppercase tracking-widest mb-1.5 block" style={{ color: 'var(--sb-text-muted)' }}>
+              Consultorio
+            </label>
+            <select
+              required
+              value={form.consultorioId}
+              onChange={e => set('consultorioId', e.target.value)}
+              className={inputCls}
+              style={{ background: 'var(--sb-active-bg)', borderColor: 'var(--sb-border)', color: 'var(--sb-text)' }}
+            >
+              <option value="">Seleccionar consultorio</option>
+              {consultorios.map(c => (
+                <option key={c.id} value={c.id}>{c.nombre}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Fecha/hora */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-xs font-bold uppercase tracking-widest mb-1.5 block" style={{ color: 'var(--sb-text-muted)' }}>
+                Inicio
               </label>
               <input
-                type="datetime-local"
-                {...register('fechaInicio', { required: true })}
-                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border-2 border-transparent focus:border-blue-500 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-slate-900 transition-all text-slate-900 dark:text-white outline-none"
+                required type="datetime-local"
+                value={form.fechaInicio}
+                onChange={e => set('fechaInicio', e.target.value)}
+                className={inputCls}
+                style={{ background: 'var(--sb-active-bg)', borderColor: 'var(--sb-border)', color: 'var(--sb-text)' }}
               />
             </div>
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                <Clock size={14} /> Fin
+            <div>
+              <label className="text-xs font-bold uppercase tracking-widest mb-1.5 block" style={{ color: 'var(--sb-text-muted)' }}>
+                Fin
               </label>
               <input
-                type="datetime-local"
-                {...register('fechaFin', { required: true })}
-                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border-2 border-transparent focus:border-blue-500 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-slate-900 transition-all text-slate-900 dark:text-white outline-none"
+                required type="datetime-local"
+                value={form.fechaFin}
+                onChange={e => set('fechaFin', e.target.value)}
+                className={inputCls}
+                style={{ background: 'var(--sb-active-bg)', borderColor: 'var(--sb-border)', color: 'var(--sb-text)' }}
               />
             </div>
           </div>
 
-          {/* Profesional and Consultorio Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                <User size={14} /> Profesional
+          {/* Estado (edit only) */}
+          {isEdit && (
+            <div>
+              <label className="text-xs font-bold uppercase tracking-widest mb-1.5 block" style={{ color: 'var(--sb-text-muted)' }}>
+                Estado
               </label>
               <select
-                {...register('profesionalId', { required: true })}
-                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border-2 border-transparent focus:border-blue-500 transition-all text-slate-900 dark:text-white outline-none appearance-none"
+                value={form.estado}
+                onChange={e => set('estado', e.target.value)}
+                className={inputCls}
+                style={{ background: 'var(--sb-active-bg)', borderColor: 'var(--sb-border)', color: 'var(--sb-text)' }}
               >
-                <option value="">Seleccionar...</option>
-                {profesionales.map(p => <option key={p.id} value={p.id}>{p.usuario.nombre} {p.usuario.apellido}</option>)}
+                {ESTADOS.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
             </div>
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                <Home size={14} /> Consultorio
-              </label>
-              <select
-                {...register('consultorioId', { required: true })}
-                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border-2 border-transparent focus:border-blue-500 transition-all text-slate-900 dark:text-white outline-none appearance-none"
-              >
-                <option value="">Seleccionar...</option>
-                {consultorios.map(c => <option key={c.id} value={c.id}>{c.nombre}</option>)}
-              </select>
-            </div>
+          )}
+
+          {/* Motivo */}
+          <div>
+            <label className="text-xs font-bold uppercase tracking-widest mb-1.5 block" style={{ color: 'var(--sb-text-muted)' }}>
+              Motivo (opcional)
+            </label>
+            <input
+              value={form.motivo}
+              onChange={e => set('motivo', e.target.value)}
+              placeholder="Motivo de la consulta"
+              className={inputCls}
+              style={{ background: 'var(--sb-active-bg)', borderColor: 'var(--sb-border)', color: 'var(--sb-text)' }}
+            />
           </div>
 
-          {/* Motivo and Estado */}
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Estado</label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                {['programado', 'confirmado', 'atendido', 'cancelado'].map(est => (
-                  <label
-                    key={est}
-                    className={cn(
-                      "flex items-center justify-center p-3 rounded-xl border-2 cursor-pointer transition-all text-[11px] font-bold uppercase tracking-tighter",
-                      watch('estado') === est
-                        ? "border-blue-500 bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400"
-                        : "border-slate-100 dark:border-slate-800 text-slate-400 hover:border-slate-200"
-                    )}
-                  >
-                    <input type="radio" value={est} {...register('estado')} className="hidden" />
-                    {est}
-                  </label>
-                ))}
-              </div>
+          {/* Conflict warning */}
+          {hasConflict && (
+            <div className="flex items-start gap-2 p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium">
+              <AlertCircle size={15} className="shrink-0 mt-0.5" />
+              Conflicto de horario detectado para este profesional o consultorio.
             </div>
-
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                Motivo / Notas
-              </label>
-              <textarea
-                {...register('motivo')}
-                placeholder="Indica el motivo de la consulta..."
-                rows={3}
-                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border-2 border-transparent focus:border-blue-500 transition-all text-slate-900 dark:text-white outline-none resize-none"
-              />
-            </div>
-          </div>
+          )}
 
           {/* Actions */}
-          <div className="pt-6 flex flex-col-reverse sm:flex-row gap-3">
-            {turno && (
+          <div className="flex items-center justify-between gap-3 pt-2">
+            {isEdit && (
               <button
                 type="button"
                 onClick={handleDelete}
-                disabled={isDeleting}
-                className="flex-1 sm:flex-none px-6 py-3.5 text-rose-600 dark:text-rose-400 font-bold text-sm bg-rose-50 dark:bg-rose-500/10 rounded-2xl border border-rose-100 dark:border-rose-500/20 hover:bg-rose-100 transition-colors"
+                disabled={isBusy}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-rose-600 border border-rose-500/30 hover:bg-rose-500/10 transition-colors disabled:opacity-50"
               >
+                {isDeleting ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
                 Eliminar
               </button>
             )}
-
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 px-6 py-3.5 text-slate-600 dark:text-slate-400 font-bold text-sm bg-slate-100 dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 hover:bg-slate-200 transition-colors"
-            >
-              Cancelar
-            </button>
-
-            <button
-              type="submit"
-              disabled={isCreating || isUpdating}
-              className="flex-[2] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3.5 px-6 rounded-2xl shadow-xl shadow-blue-500/20 disabled:grayscale transition-all active:scale-95"
-            >
-              {isCreating || isUpdating ? 'Guardando...' : (turno ? 'Guardar Cambios' : 'Agendar Turno')}
-            </button>
+            <div className="flex items-center gap-2 ml-auto">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2.5 rounded-xl text-xs font-bold transition-colors"
+                style={{ color: 'var(--sb-text-muted)', background: 'var(--sb-active-bg)' }}
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                disabled={isBusy || !!hasConflict}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/25 transition-all disabled:opacity-50"
+              >
+                {(isCreating || isUpdating) ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
+                {isEdit ? 'Guardar Cambios' : 'Crear Turno'}
+              </button>
+            </div>
           </div>
         </form>
       </motion.div>

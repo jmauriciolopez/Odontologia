@@ -19,7 +19,7 @@ export class PresupuestosService {
 
   async create(dto: CreatePresupuestoDto): Promise<Presupuesto> {
     const { items, ...presupuestoData } = dto;
-    
+
     let total = 0;
     const itemEntities = items.map(item => {
       const subtotal = (Number(item.precioUnitario) * Number(item.cantidad)) - Number(item.descuento || 0);
@@ -77,22 +77,22 @@ export class PresupuestosService {
   async registerPago(dto: RegisterPagoDto): Promise<Pago> {
     const presupuesto = await this.findOne(dto.presupuestoId);
 
-    const nuevoTotalPagado = Number(presupuesto.totalPagado) + Number(dto.monto);
+    // Recalculate from actual pagos to avoid stale cache
+    const pagosExistentes = await this.pagoRepository.find({ where: { presupuestoId: dto.presupuestoId } });
+    const totalYaPagado = pagosExistentes.reduce((sum, p) => sum + Number(p.monto), 0);
+    const nuevoTotalPagado = totalYaPagado + Number(dto.monto);
+
     if (nuevoTotalPagado > Number(presupuesto.total)) {
-      throw new BadRequestException('El monto del pago supera el total del presupuesto');
+      throw new BadRequestException(
+        `El monto supera el saldo pendiente. Pendiente: ${Number(presupuesto.total) - totalYaPagado}`
+      );
     }
 
     const pago = this.pagoRepository.create(dto);
     const savedPago = await this.pagoRepository.save(pago);
 
     presupuesto.totalPagado = nuevoTotalPagado;
-    
-    if (nuevoTotalPagado === Number(presupuesto.total)) {
-      presupuesto.estado = 'pagado';
-    } else {
-      presupuesto.estado = 'pagado_parcial';
-    }
-
+    presupuesto.estado = nuevoTotalPagado >= Number(presupuesto.total) ? 'pagado' : 'pagado_parcial';
     await this.presupuestoRepository.save(presupuesto);
 
     return savedPago;
@@ -100,7 +100,7 @@ export class PresupuestosService {
 
   async iniciarTratamiento(id: string): Promise<Presupuesto> {
     const presupuesto = await this.findOne(id);
-    
+
     if (presupuesto.estado !== 'pendiente') {
       throw new BadRequestException('Solo se pueden iniciar tratamientos de presupuestos pendientes');
     }

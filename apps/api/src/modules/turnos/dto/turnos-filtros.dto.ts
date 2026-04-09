@@ -5,6 +5,14 @@ export class TurnoFiltrosDto {
   @IsOptional()
   fecha?: string;
 
+  @IsDateString()
+  @IsOptional()
+  desde?: string;
+
+  @IsDateString()
+  @IsOptional()
+  hasta?: string;
+
   @IsUUID()
   @IsOptional()
   profesionalId?: string;

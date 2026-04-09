@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'framer-motion';
 import { Presupuesto } from '../types';
 import { CheckCircle2, Clock, AlertCircle, FileText, ArrowRight, User, Play } from 'lucide-react';
@@ -60,9 +60,9 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
         return {
           icon: FileText,
           label: 'Pendiente',
-          bg: 'bg-slate-50 dark:bg-slate-800',
-          text: 'text-slate-600 dark:text-slate-400',
-          border: 'border-slate-200 dark:border-slate-700'
+          bg: 'bg-[var(--sb-active-bg)]',
+          text: 'text-[var(--sb-text-muted)]',
+          border: 'border-[var(--sb-border)]'
         };
     }
   };
@@ -72,19 +72,29 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
   };
 
   return (
-    <div className="premium-card p-0 overflow-hidden bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 shadow-sm rounded-3xl">
-      <div className="overflow-x-auto">
+    <div
+      className="rounded-3xl overflow-hidden"
+      style={{
+        background: 'var(--card-bg)',
+        border:     '1px solid var(--card-border)',
+        boxShadow:  'var(--card-shadow)',
+        backdropFilter: 'blur(var(--card-blur, 0px))',
+      }}
+    >      <div className="overflow-x-auto">
         <table className="w-full border-collapse text-left">
-          <thead className="bg-slate-50/50 dark:bg-slate-800/30 border-b border-slate-100 dark:border-slate-800">
+          <thead
+            className="border-b"
+            style={{ background: 'var(--sb-active-bg)', borderColor: 'var(--sb-border)' }}
+          >
             <tr>
-              <th className="p-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Presupuesto</th>
-              <th className="p-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Paciente</th>
-              <th className="p-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Total</th>
-              <th className="p-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Estado</th>
+              <th className="p-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--sb-text-muted)]">Presupuesto</th>
+              <th className="p-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--sb-text-muted)]">Paciente</th>
+              <th className="p-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--sb-text-muted)]">Total</th>
+              <th className="p-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--sb-text-muted)]">Estado</th>
               <th className="p-5"></th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50">
+          <tbody className="divide-y divide-[var(--sb-border)]/50">
             {presupuestos.map((p, i) => {
               const status = getStatusConfig(p.estado);
               return (
@@ -93,16 +103,17 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
                   initial={{ opacity: 0, x: -5 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.05 }}
-                  className="group hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors"
+                  className="group transition-colors"
                 >
                   <td className="p-5">
                     <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-blue-500 transition-colors">
+                      <div className="h-10 w-10 rounded-xl flex items-center justify-center transition-colors group-hover:text-blue-500"
+                        style={{ background: 'var(--sb-active-bg)', color: 'var(--sb-text-muted)' }}>
                         <FileText size={20} />
                       </div>
                       <div className="flex flex-col">
-                        <span className="font-bold text-slate-900 dark:text-white">#{p.folio || p.id.slice(0, 8).toUpperCase()}</span>
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">
+                        <span className="font-bold text-[var(--sb-text)]">#{p.folio || p.id.slice(0, 8).toUpperCase()}</span>
+                        <span className="text-[10px] font-bold text-[var(--sb-text-muted)] uppercase tracking-wide">
                           {new Date(p.fechaPresupuesto).toLocaleDateString([], { day: '2-digit', month: 'short', year: 'numeric' })}
                         </span>
                       </div>
@@ -113,13 +124,13 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
                       <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400">
                         <User size={14} />
                       </div>
-                      <span className="font-semibold text-sm text-slate-700 dark:text-slate-300">
+                      <span className="font-semibold text-sm text-[var(--sb-text)]">
                         {p.paciente ? `${p.paciente.apellido}, ${p.paciente.nombre}` : 'Paciente Clínica'}
                       </span>
                     </div>
                   </td>
                   <td className="p-5">
-                    <span className="font-black text-slate-900 dark:text-white tracking-tight">
+                    <span className="font-black text-[var(--sb-text)] tracking-tight">
                       {formatCurrency(p.total)}
                     </span>
                   </td>
@@ -148,7 +159,8 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
                     )}
                     <button
                       onClick={() => onSelect(p)}
-                      className="inline-flex items-center gap-2 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-blue-500 text-slate-600 dark:text-slate-300 px-4 py-2 rounded-xl text-xs font-bold transition-all hover:text-blue-600 group/btn"
+                      className="inline-flex items-center gap-2 border-2 border-[var(--sb-border)] hover:border-blue-500 px-4 py-2 rounded-xl text-xs font-bold transition-all hover:text-blue-600 group/btn"
+                      style={{ background: 'var(--sb-active-bg)', color: 'var(--sb-text-muted)' }}
                     >
                       Gestionar
                       <ArrowRight size={14} className="transition-transform group-hover/btn:translate-x-0.5" />
@@ -162,10 +174,11 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
 
         {presupuestos.length === 0 && (
           <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
-             <div className="h-20 w-20 rounded-full bg-slate-50 dark:bg-slate-800/40 flex items-center justify-center mb-6">
-                <FileText className="text-slate-200" size={40} />
+             <div className="h-20 w-20 rounded-full flex items-center justify-center mb-6"
+               style={{ background: 'var(--sb-active-bg)' }}>
+                <FileText size={40} style={{ color: 'var(--sb-border)' }} />
              </div>
-             <h3 className="font-bold text-slate-900 dark:text-white mb-1">Sin Registros</h3>
+             <h3 className="font-bold text-[var(--sb-text)] mb-1">Sin Registros</h3>
              <p className="text-slate-500 text-sm max-w-[280px]">
                No hay presupuestos generados aún. Comience creando uno nuevo para sus pacientes.
              </p>

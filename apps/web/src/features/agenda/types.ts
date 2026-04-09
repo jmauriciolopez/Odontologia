@@ -40,6 +40,8 @@ export interface UpdateTurnoDto extends Partial<CreateTurnoDto> {}
 
 export interface TurnosFiltros {
   fecha?: string;
+  desde?: string;
+  hasta?: string;
   profesionalId?: string;
   pacienteId?: string;
   estado?: string;

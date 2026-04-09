@@ -41,12 +41,26 @@ export const useEvolucionMutations = () => {
   const queryClient = useQueryClient();
 
   const createEvolucion = useMutation({
-    mutationFn: ({ fichaId, data }: { fichaId: string; data: any }) => 
+    mutationFn: ({ fichaId, data }: { fichaId: string; data: any }) =>
       pacientesApi.addEvolucion(fichaId, data),
     onSuccess: (_, { fichaId }) => {
-      queryClient.invalidateQueries({ queryKey: ['paciente'] }); 
+      queryClient.invalidateQueries({ queryKey: ['paciente'] });
     },
   });
 
   return { createEvolucion };
+};
+
+export const useAntecedenteMutations = () => {
+  const queryClient = useQueryClient();
+
+  const createAntecedente = useMutation({
+    mutationFn: (data: { fichaId: string; tipo: string; descripcion: string }) =>
+      pacientesApi.addAntecedente(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['paciente'] });
+    },
+  });
+
+  return { createAntecedente };
 };

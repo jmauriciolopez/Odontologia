@@ -58,7 +58,9 @@ export interface EvolucionClinica {
   id: string;
   descripcion: string;
   categoria?: string;
-  fechaRegistro: string;
+  fecha?: string | Date;
+  fechaRegistro?: string | Date;
+  createdAt?: string | Date;
 }
 
 export interface CreatePacienteDto {

@@ -1,13 +1,15 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Usuario } from './entities/usuario.entity';
 import { Rol } from './entities/rol.entity';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import * as bcrypt from 'bcryptjs';
-
 import { UsuarioRol } from './entities/usuario-rol.entity';
+import { Profesional } from '../profesionales/entities/profesional.entity';
+
+const ODONTOLOGO_ROLE = 'PROFESIONAL';
 
 @Injectable()
 export class UsuariosService {
@@ -18,7 +20,27 @@ export class UsuariosService {
     private readonly rolesRepository: Repository<Rol>,
     @InjectRepository(UsuarioRol)
     private readonly usuarioRolesRepository: Repository<UsuarioRol>,
+    @InjectRepository(Profesional)
+    private readonly profesionalesRepository: Repository<Profesional>,
   ) { }
+
+  private async ensureProfesional(usuarioId: string): Promise<void> {
+    const exists = await this.profesionalesRepository.findOne({ where: { usuarioId } });
+    if (!exists) {
+      await this.profesionalesRepository.save(
+        this.profesionalesRepository.create({ usuarioId })
+      );
+    }
+  }
+
+  private async removeProfesionalIfNeeded(usuarioId: string, rolIds: string[]): Promise<void> {
+    const roles = await this.rolesRepository.find({ where: { id: In(rolIds) } });
+    const hasOdontologo = roles.some(r => r.nombre.toUpperCase() === ODONTOLOGO_ROLE);
+    if (!hasOdontologo) {
+      const profesional = await this.profesionalesRepository.findOne({ where: { usuarioId } });
+      if (profesional) await this.profesionalesRepository.remove(profesional);
+    }
+  }
 
   async findAllRoles(): Promise<Rol[]> {
     return await this.rolesRepository.find();
@@ -49,6 +71,11 @@ export class UsuariosService {
         })
       );
       await this.usuarioRolesRepository.save(userRoles);
+
+      // Auto-create profesional if ODONTOLOGO role is assigned
+      const assignedRoles = await this.rolesRepository.find({ where: { id: In(rolIds) } });
+      const isOdontologo = assignedRoles.some(r => r.nombre.toUpperCase() === ODONTOLOGO_ROLE);
+      if (isOdontologo) await this.ensureProfesional(savedUser.id);
     }
 
     return await this.findOne(savedUser.id);
@@ -99,6 +126,15 @@ export class UsuariosService {
           this.usuarioRolesRepository.create({ usuarioId: id, rolId })
         );
         await this.usuarioRolesRepository.save(userRoles);
+      }
+
+      // Sync profesional record based on updated roles
+      const assignedRoles = await this.rolesRepository.find({ where: { id: In(dto.rolIds) } });
+      const isOdontologo = assignedRoles.some(r => r.nombre.toUpperCase() === ODONTOLOGO_ROLE);
+      if (isOdontologo) {
+        await this.ensureProfesional(id);
+      } else {
+        await this.removeProfesionalIfNeeded(id, dto.rolIds);
       }
     }
 

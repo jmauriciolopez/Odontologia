@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import {
@@ -117,7 +117,7 @@ export const ConsultoriosPage: React.FC = () => {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight uppercase">
+          <h1 className="text-3xl font-black text-[var(--sb-text)] tracking-tight uppercase">
             Consultorios & Sedes
           </h1>
           <p className="text-slate-400 font-bold text-[10px] uppercase tracking-[0.2em] mt-1">
@@ -127,26 +127,27 @@ export const ConsultoriosPage: React.FC = () => {
 
         <div className="flex items-center gap-2">
           <div className="relative group mr-2">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={16} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--sb-text-muted)] group-focus-within:text-primary transition-colors" size={16} />
             <input
               type="text"
               placeholder="Buscar por nombre..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="bg-slate-100 dark:bg-slate-800 border-none rounded-xl py-2.5 pl-10 pr-4 text-xs font-bold outline-none w-64 focus:ring-2 focus:ring-primary/20 transition-all"
+              className="input-premium py-2.5 pl-10 pr-4 text-xs font-bold w-64"
             />
           </div>
 
-          <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl mr-2">
+          <div className="flex p-1 rounded-xl mr-2"
+            style={{ background: 'var(--sb-active-bg)' }}>
             <button
               onClick={() => setViewMode('grid')}
-              className={cn("p-2 rounded-lg transition-all", viewMode === 'grid' ? "bg-white dark:bg-slate-700 shadow-sm text-primary" : "text-slate-400")}
+              className={cn("p-2 rounded-lg transition-all", viewMode === 'grid' ? "shadow-sm text-primary" : "opacity-50")}
             >
               <LayoutGrid size={18} />
             </button>
             <button
               onClick={() => setViewMode('list')}
-              className={cn("p-2 rounded-lg transition-all", viewMode === 'list' ? "bg-white dark:bg-slate-700 shadow-sm text-primary" : "text-slate-400")}
+              className={cn("p-2 rounded-lg transition-all", viewMode === 'list' ? "shadow-sm text-primary" : "opacity-50")}
             >
               <ListIcon size={18} />
             </button>
@@ -164,7 +165,8 @@ export const ConsultoriosPage: React.FC = () => {
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[1, 2, 3, 4].map(i => (
-            <div key={i} className="h-48 rounded-3xl bg-slate-100 dark:bg-slate-800 animate-pulse" />
+            <div key={i} className="h-48 rounded-3xl animate-pulse opacity-20"
+              style={{ background: 'var(--sb-active-bg)' }} />
           ))}
         </div>
       ) : (
@@ -183,7 +185,7 @@ export const ConsultoriosPage: React.FC = () => {
                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button
                         onClick={() => handleOpenEdit(c)}
-                        className="p-2 text-slate-400 hover:text-primary transition-colors"
+                        className="p-2 text-[var(--sb-text-muted)] hover:text-primary transition-colors"
                       >
                         <MoreVertical size={18} />
                       </button>
@@ -197,7 +199,7 @@ export const ConsultoriosPage: React.FC = () => {
                             cancel: { label: 'Cancelar', onClick: () => {} },
                           });
                         }}
-                        className="p-2 text-slate-300 hover:text-rose-500 transition-colors"
+                        className="p-2 text-[var(--sb-border)] hover:text-rose-500 transition-colors"
                       >
                         <Trash2 size={18} />
                       </button>
@@ -206,27 +208,28 @@ export const ConsultoriosPage: React.FC = () => {
 
                   <div className="space-y-4">
                     <div>
-                      <h3 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                      <h3 className="text-lg font-black text-[var(--sb-text)] uppercase tracking-tight">
                         {c.nombre}
                       </h3>
                       <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest mt-1">
                         {c.activo ? (
                           <span className="flex items-center gap-1 text-emerald-500"><CheckCircle2 size={12} /> Operativo</span>
                         ) : (
-                          <span className="flex items-center gap-1 text-slate-400"><XCircle size={12} /> Inactivo</span>
+                          <span className="flex items-center gap-1 text-[var(--sb-text-muted)]"><XCircle size={12} /> Inactivo</span>
                         )}
                       </div>
                     </div>
 
                     <div className="pt-4 border-t border-slate-50 dark:border-white/5 space-y-4">
-                      <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-widest">
+                      <div className="flex items-center justify-between text-[11px] font-bold text-[var(--sb-text-muted)] uppercase tracking-widest">
                          <span className="flex items-center gap-2"><span className="text-primary text-lg">💺</span> {c.numeroSillones || 1} Sillones</span>
-                         {c.piso && <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded-md text-[9px]">Piso {c.piso}</span>}
+                         {c.piso && <span className="px-2 py-0.5 rounded-md text-[9px]"
+                           style={{ background: 'var(--sb-active-bg)', color: 'var(--sb-text-muted)' }}>Piso {c.piso}</span>}
                       </div>
 
                       <div className="space-y-1">
                         {c.horario && (
-                          <div className="flex items-center gap-2 text-[11px] font-bold text-slate-900 dark:text-slate-300">
+                          <div className="flex items-center gap-2 text-[11px] font-bold text-[var(--sb-text)] dark:text-slate-300">
                             <span className="text-slate-400">🕒</span> {c.horario}
                           </div>
                         )}
@@ -251,7 +254,7 @@ export const ConsultoriosPage: React.FC = () => {
 
                       <div className="space-y-2">
                          {c.direccion && (
-                          <p className="text-[11px] font-medium text-slate-500 flex items-center gap-2">
+                          <p className="text-[11px] font-medium text-[var(--sb-text-muted)] flex items-center gap-2">
                              <MapPin size={12} className="text-slate-300" />
                              {c.direccion}
                           </p>
@@ -259,7 +262,7 @@ export const ConsultoriosPage: React.FC = () => {
 
                         <div className="flex flex-wrap gap-4 pt-1">
                           {c.telefono && (
-                            <p className="text-[11px] font-medium text-slate-500 flex items-center gap-2">
+                            <p className="text-[11px] font-medium text-[var(--sb-text-muted)] flex items-center gap-2">
                                <span className="text-slate-300 text-xs text-xs">📞</span>
                                {c.telefono}
                             </p>
@@ -281,8 +284,8 @@ export const ConsultoriosPage: React.FC = () => {
             ))}
           </div>
           {filteredConsultorios.length === 0 && (
-            <div className="medical-card p-20 text-center border-dashed border-slate-200">
-               <MapPin size={48} className="mx-auto text-slate-200 mb-4" />
+            <div className="medical-card p-20 text-center border-dashed border-[var(--sb-border)]">
+               <MapPin size={48} className="mx-auto text-[var(--sb-border)] mb-4" />
                <p className="text-slate-500 font-bold uppercase tracking-widest text-[11px]">
                 {searchTerm ? 'No se encontraron sedes' : 'No hay sedes registradas'}
                </p>
@@ -309,12 +312,13 @@ export const ConsultoriosPage: React.FC = () => {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-3xl bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl p-10 overflow-hidden"
+              className="relative w-full max-w-3xl rounded-[2.5rem] shadow-2xl p-10 overflow-hidden"
+            style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', color: 'var(--sb-text)' }}
             >
-              <h2 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2">
+              <h2 className="text-2xl font-black text-[var(--sb-text)] uppercase tracking-tight mb-2">
                 {editingId ? 'Editar Sede' : 'Nueva Sede'}
               </h2>
-              <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-8">
+              <p className="text-xs text-[var(--sb-text-muted)] font-bold uppercase tracking-widest mb-8">
                 {editingId ? 'Modifique los detalles de la clínica o espacio' : 'Cree una nueva sede para su organización'}
               </p>
 
@@ -323,7 +327,7 @@ export const ConsultoriosPage: React.FC = () => {
                   {/* Fila 1 - Info Principal */}
                   <div className="space-y-6">
                     <div>
-                      <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3 ml-1">Nombre / Identificador</label>
+                      <label className="block text-[10px] font-black uppercase tracking-widest text-[var(--sb-text-muted)] mb-3 ml-1">Nombre / Identificador</label>
                       <input
                         type="text"
                         autoFocus
@@ -331,40 +335,40 @@ export const ConsultoriosPage: React.FC = () => {
                         value={formData.nombre}
                         onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
                         placeholder="Ej: Clínica Central / Consultorio Norte"
-                        className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl p-4 text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-primary transition-all outline-none"
+                        className="input-premium p-4 text-sm font-bold"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3 ml-1">Dirección Postale</label>
+                      <label className="block text-[10px] font-black uppercase tracking-widest text-[var(--sb-text-muted)] mb-3 ml-1">Dirección Postale</label>
                       <input
                         type="text"
                         value={formData.direccion}
                         onChange={(e) => setFormData({ ...formData, direccion: e.target.value })}
                         placeholder="Av. Salud 123..."
-                        className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl p-4 text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-primary transition-all outline-none"
+                        className="input-premium p-4 text-sm font-bold"
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3 ml-1">Piso / Nivel</label>
+                        <label className="block text-[10px] font-black uppercase tracking-widest text-[var(--sb-text-muted)] mb-3 ml-1">Piso / Nivel</label>
                         <input
                           type="text"
                           value={formData.piso}
                           onChange={(e) => setFormData({ ...formData, piso: e.target.value })}
                           placeholder="PB / 1ro"
-                          className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl p-4 text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-primary transition-all outline-none"
+                          className="input-premium p-4 text-sm font-bold"
                         />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3 ml-1">Sillones</label>
+                        <label className="block text-[10px] font-black uppercase tracking-widest text-[var(--sb-text-muted)] mb-3 ml-1">Sillones</label>
                         <input
                           type="number"
                           min="1"
                           value={formData.numeroSillones}
                           onChange={(e) => setFormData({ ...formData, numeroSillones: parseInt(e.target.value) || 1 })}
-                          className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl p-4 text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-primary transition-all outline-none"
+                          className="input-premium p-4 text-sm font-bold"
                         />
                       </div>
                     </div>
@@ -373,8 +377,9 @@ export const ConsultoriosPage: React.FC = () => {
                   {/* Fila 2 - Atención y Contacto */}
                   <div className="space-y-6">
                     <div>
-                      <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3 ml-1">Días de Atención</label>
-                      <div className="flex justify-between bg-slate-50 dark:bg-slate-800 p-2 rounded-2xl">
+                      <label className="block text-[10px] font-black uppercase tracking-widest text-[var(--sb-text-muted)] mb-3 ml-1">Días de Atención</label>
+                      <div className="flex justify-between p-2 rounded-2xl"
+                        style={{ background: 'var(--sb-active-bg)' }}>
                         {diasSemana.map(day => (
                           <button
                             key={day.value}
@@ -384,7 +389,7 @@ export const ConsultoriosPage: React.FC = () => {
                               "h-10 w-10 rounded-xl font-black text-xs transition-all",
                               formData.diasAtencion.includes(day.value)
                                 ? "bg-primary text-white shadow-lg shadow-primary/20"
-                                : "text-slate-400 hover:bg-white dark:hover:bg-slate-700"
+                                : "opacity-50 hover:opacity-80"
                             )}
                           >
                             {day.label}
@@ -394,35 +399,35 @@ export const ConsultoriosPage: React.FC = () => {
                     </div>
 
                     <div>
-                      <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3 ml-1">Horario Operativo</label>
+                      <label className="block text-[10px] font-black uppercase tracking-widest text-[var(--sb-text-muted)] mb-3 ml-1">Horario Operativo</label>
                       <input
                         type="text"
                         value={formData.horario}
                         onChange={(e) => setFormData({ ...formData, horario: e.target.value })}
                         placeholder="Ej: 08:30 - 13:00, 14:00 - 20:00"
-                        className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl p-4 text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-primary transition-all outline-none"
+                        className="input-premium p-4 text-sm font-bold"
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3 ml-1">Teléfono</label>
+                        <label className="block text-[10px] font-black uppercase tracking-widest text-[var(--sb-text-muted)] mb-3 ml-1">Teléfono</label>
                         <input
                           type="text"
                           value={formData.telefono}
                           onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
                           placeholder="+54 11..."
-                          className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl p-4 text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-primary transition-all outline-none"
+                          className="input-premium p-4 text-sm font-bold"
                         />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3 ml-1">WhatsApp</label>
+                        <label className="block text-[10px] font-black uppercase tracking-widest text-[var(--sb-text-muted)] mb-3 ml-1">WhatsApp</label>
                         <input
                           type="text"
                           value={formData.whatsapp}
                           onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
                           placeholder="+54 11..."
-                          className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl p-4 text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-primary transition-all outline-none"
+                          className="input-premium p-4 text-sm font-bold"
                         />
                       </div>
                     </div>
@@ -435,18 +440,18 @@ export const ConsultoriosPage: React.FC = () => {
                         onChange={(e) => setFormData({ ...formData, activo: e.target.checked })}
                         className="h-5 w-5 rounded border-slate-300 text-primary focus:ring-primary"
                       />
-                      <label htmlFor="activo" className="text-xs font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest cursor-pointer select-none">
+                      <label htmlFor="activo" className="text-xs font-black text-[var(--sb-text-muted)] uppercase tracking-widest cursor-pointer select-none">
                         Sede Habilitada y Visible
                       </label>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex gap-4 pt-8 border-t border-slate-100 dark:border-white/5">
+                <div className="flex gap-4 pt-8 border-t border-[var(--sb-border)] dark:border-white/5">
                   <button
                     type="button"
                     onClick={handleCloseModal}
-                    className="flex-1 py-4 px-6 rounded-2xl font-bold text-xs uppercase tracking-widest text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
+                    className="flex-1 py-4 px-6 rounded-2xl font-bold text-xs uppercase tracking-widest text-[var(--sb-text-muted)] hover:opacity-800 transition-all"
                   >
                     Descartar
                   </button>

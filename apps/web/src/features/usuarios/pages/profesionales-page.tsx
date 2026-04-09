@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import {
@@ -54,7 +54,7 @@ export const ProfesionalesPage: React.FC = () => {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight uppercase">
+          <h1 className="text-3xl font-black text-[var(--sb-text)] tracking-tight uppercase">
             Cuerpo Médico
           </h1>
           <p className="text-slate-400 font-bold text-[10px] uppercase tracking-[0.2em] mt-1">
@@ -64,16 +64,17 @@ export const ProfesionalesPage: React.FC = () => {
 
          <div className="flex items-center gap-2">
             <div className="relative group">
-               <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={16} />
+               <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--sb-text-muted)] group-focus-within:text-blue-500 transition-colors" size={16} />
                <input
                  type="text"
                  placeholder="Buscar por nombre o especialidad..."
                  value={searchTerm}
                  onChange={(e) => setSearchTerm(e.target.value)}
-                 className="bg-slate-100 dark:bg-slate-800 border-none rounded-2xl py-3 pl-10 pr-4 text-xs font-bold outline-none w-64 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                 className="input-premium py-3 pl-10 pr-4 text-xs font-bold w-64"
                />
             </div>
-           <button className="p-3 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400">
+           <button className="p-3 rounded-2xl transition-all"
+             style={{ background: 'var(--sb-active-bg)', border: '1px solid var(--sb-border)', color: 'var(--sb-text-muted)' }}>
               <MoreVertical size={20} />
            </button>
         </div>
@@ -82,7 +83,7 @@ export const ProfesionalesPage: React.FC = () => {
       {isLoading ? (
         <div className="space-y-4">
           {[1, 2, 3].map(i => (
-            <div key={i} className="h-24 rounded-3xl bg-slate-100 dark:bg-slate-800 animate-pulse" />
+            <div key={i} className="h-24 rounded-3xl animate-pulse opacity-20" />
           ))}
         </div>
       ) : (
@@ -90,13 +91,13 @@ export const ProfesionalesPage: React.FC = () => {
            {filteredProfesionales.map((p) => (
              <PremiumCard key={p.id} className="group hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-300">
                <div className="p-6 flex items-center gap-6">
-                <div className="h-16 w-16 rounded-3xl bg-gradient-to-br from-slate-100 to-white dark:from-slate-800 dark:to-slate-900 border border-slate-100 dark:border-slate-700 flex items-center justify-center font-black text-xl text-blue-600 shadow-inner">
+                <div className="h-16 w-16 rounded-3xl bg-gradient-to-br from-slate-100 to-white dark:from-slate-800 dark:to-slate-900 border border-[var(--sb-border)] flex items-center justify-center font-black text-xl text-blue-600 shadow-inner">
                   {p.usuario.nombre[0]}{p.usuario.apellido[0]}
                 </div>
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-tight truncate">
+                    <h3 className="text-base font-bold text-[var(--sb-text)] uppercase tracking-tight truncate">
                       Dr. {p.usuario.nombre} {p.usuario.apellido}
                     </h3>
                     <div className="px-2 py-0.5 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-lg text-[9px] font-black uppercase tracking-widest whitespace-nowrap">
@@ -104,9 +105,9 @@ export const ProfesionalesPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                  <div className="flex items-center gap-4 text-[10px] font-bold text-[var(--sb-text-muted)] uppercase tracking-widest">
                     <span className="flex items-center gap-1.5"><Award size={14}/> MN: {p.matricula || '---'}</span>
-                    <span className="h-1 w-1 rounded-full bg-slate-300" />
+                    <span className="h-1 w-1 rounded-full" style={{ background: 'var(--sb-border)' }} />
                     <span className="flex items-center gap-1.5"><Stethoscope size={14}/> Sede Principal</span>
                   </div>
                 </div>
@@ -122,13 +123,13 @@ export const ProfesionalesPage: React.FC = () => {
                         cancel: { label: 'Cancelar', onClick: () => {} },
                       });
                     }}
-                    className="p-3 text-slate-300 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-2xl transition-all opacity-0 group-hover:opacity-100"
+                    className="p-3 text-[var(--sb-border)] hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-2xl transition-all opacity-0 group-hover:opacity-100"
                    >
                      <Trash2 size={20} />
                    </button>
                    <button
                     onClick={() => handleOpenEdit(p)}
-                    className="p-3 text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 transition-all"
+                    className="p-3 text-[var(--sb-text-muted)] hover:text-blue-600 dark:hover:text-blue-400 transition-all"
                    >
                      <Edit3 size={20} />
                    </button>
@@ -148,8 +149,8 @@ export const ProfesionalesPage: React.FC = () => {
       />
 
       {filteredProfesionales.length === 0 && !isLoading && (
-        <div className="medical-card p-20 text-center border-dashed border-slate-200">
-           <Stethoscope size={48} className="mx-auto text-slate-200 mb-4" />
+        <div className="medical-card p-20 text-center border-dashed border-[var(--sb-border)]">
+           <Stethoscope size={48} className="mx-auto text-[var(--sb-border)] mb-4" />
            <p className="text-slate-500 font-bold uppercase tracking-widest text-[11px]">
             {searchTerm ? 'No se encontraron especialistas' : 'No hay profesionales registrados'}
            </p>
@@ -207,20 +208,21 @@ const EditProfesionalModal: React.FC<EditModalProps> = ({ isOpen, profesional, o
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl p-10 overflow-hidden"
+            className="relative w-full max-w-lg rounded-[2.5rem] shadow-2xl p-10 overflow-hidden"
+            style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', color: 'var(--sb-text)' }}
           >
             <div className="flex items-start justify-between mb-8">
               <div>
-                <h2 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                <h2 className="text-2xl font-black text-[var(--sb-text)] uppercase tracking-tight">
                   Editar Perfil
                 </h2>
-                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">
+                <p className="text-[10px] text-[var(--sb-text-muted)] font-bold uppercase tracking-widest mt-1">
                   Dr. {profesional?.usuario.nombre} {profesional?.usuario.apellido}
                 </p>
               </div>
               <button
                 onClick={onClose}
-                className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
+                className="p-2 hover:opacity-80 rounded-xl transition-colors"
               >
                 <X size={20} className="text-slate-400" />
               </button>
@@ -229,25 +231,25 @@ const EditProfesionalModal: React.FC<EditModalProps> = ({ isOpen, profesional, o
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Especialidad</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[var(--sb-text-muted)] ml-1">Especialidad</label>
                   <input
                     type="text"
                     value={formData.especialidad}
                     onChange={(e) => setFormData({...formData, especialidad: e.target.value})}
                     placeholder="Ej: Ortodoncia, Implantología..."
-                    className="w-full bg-slate-50 dark:bg-slate-800/50 border-2 border-transparent focus:border-blue-500/20 focus:bg-white dark:focus:bg-slate-800 rounded-2xl py-4 px-6 text-sm font-bold transition-all outline-none"
+                    className="input-premium py-4 px-6 text-sm font-bold"
                     required
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Matrícula Nacional/Provincial</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[var(--sb-text-muted)] ml-1">Matrícula Nacional/Provincial</label>
                   <input
                     type="text"
                     value={formData.matricula}
                     onChange={(e) => setFormData({...formData, matricula: e.target.value})}
                     placeholder="Nro. de Matrícula"
-                    className="w-full bg-slate-50 dark:bg-slate-800/50 border-2 border-transparent focus:border-blue-500/20 focus:bg-white dark:focus:bg-slate-800 rounded-2xl py-4 px-6 text-sm font-bold transition-all outline-none"
+                    className="input-premium py-4 px-6 text-sm font-bold"
                     required
                   />
                 </div>
@@ -257,7 +259,7 @@ const EditProfesionalModal: React.FC<EditModalProps> = ({ isOpen, profesional, o
                 <button
                   type="button"
                   onClick={onClose}
-                  className="flex-1 py-4 px-6 rounded-2xl text-[11px] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+                  className="flex-1 py-4 px-6 rounded-2xl text-[11px] font-black uppercase tracking-widest text-[var(--sb-text-muted)] transition-all hover:opacity-80"
                 >
                   Cancelar
                 </button>

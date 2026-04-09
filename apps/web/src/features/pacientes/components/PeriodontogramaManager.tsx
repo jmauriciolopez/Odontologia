@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+﻿import React, { useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Table, 
-  Activity, 
-  Stethoscope, 
-  ChevronRight, 
+import {
+  Table,
+  Activity,
+  Stethoscope,
+  ChevronRight,
   ChevronLeft,
   Droplets,
   Microscope,
@@ -22,10 +22,10 @@ interface PeriodontogramaManagerProps {
   mediciones?: MedicionPeriodontal[];
 }
 
-export const PeriodontogramaManager: React.FC<PeriodontogramaManagerProps> = ({ 
-  fichaId, 
+export const PeriodontogramaManager: React.FC<PeriodontogramaManagerProps> = ({
+  fichaId,
   pacienteId,
-  mediciones = [] 
+  mediciones = []
 }) => {
   const [activeArch, setActiveArch] = useState<'superior' | 'inferior'>('superior');
   const { upsertMedicion } = usePeriodontogramaMutations(pacienteId);
@@ -37,13 +37,15 @@ export const PeriodontogramaManager: React.FC<PeriodontogramaManagerProps> = ({
 
   const getMedicion = (posicion: number) => mediciones.find(m => m.posicionDiente === posicion);
 
+  const debounceRef = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
+
   const handleInputChange = (diente: number, field: string, value: any) => {
-    const existing = getMedicion(diente) || {};
-    upsertMedicion.mutate({
-      fichaId,
-      diente,
-      data: { ...existing, [field]: value }
-    });
+    const key = `${diente}-${field}`;
+    clearTimeout(debounceRef.current[key]);
+    debounceRef.current[key] = setTimeout(() => {
+      const existing = getMedicion(diente) || {};
+      upsertMedicion.mutate({ fichaId, diente, data: { ...existing, [field]: value } });
+    }, 600);
   };
 
   return (
@@ -51,12 +53,12 @@ export const PeriodontogramaManager: React.FC<PeriodontogramaManagerProps> = ({
       {/* Header & Toggle */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-           <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight uppercase">Mapeo Gingival</h3>
-           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-1">Sondaje Periodontal Completo</p>
+           <h3 className="text-xl font-black text-[var(--sb-text)] tracking-tight uppercase">Mapeo Gingival</h3>
+           <p className="text-[10px] font-bold text-[var(--sb-text-muted)] uppercase tracking-widest leading-none mt-1">Sondaje Periodontal Completo</p>
         </div>
 
-        <div className="flex bg-slate-100 dark:bg-slate-800 p-1.5 rounded-2xl items-center gap-1 shadow-inner">
-           <button 
+        <div className="flex bg-[var(--sb-active-bg)] p-1.5 rounded-2xl items-center gap-1 shadow-inner">
+           <button
              onClick={() => setActiveArch('superior')}
              className={cn(
                "px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all",
@@ -65,7 +67,7 @@ export const PeriodontogramaManager: React.FC<PeriodontogramaManagerProps> = ({
            >
              Arcada Superior
            </button>
-           <button 
+           <button
              onClick={() => setActiveArch('inferior')}
              className={cn(
                "px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all",
@@ -78,12 +80,12 @@ export const PeriodontogramaManager: React.FC<PeriodontogramaManagerProps> = ({
       </div>
 
       {/* Periodontal Table */}
-      <div className="medical-card p-0 overflow-hidden bg-white dark:bg-slate-900 shadow-xl shadow-blue-500/5">
+      <div className="medical-card p-0 overflow-hidden bg-[var(--card-bg)] shadow-xl shadow-blue-500/5">
          <div className="overflow-x-auto">
             <table className="w-full text-center border-collapse">
                <thead>
-                  <tr className="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
-                     <th className="px-4 py-6 text-[10px] font-black uppercase tracking-widest text-slate-400 sticky left-0 bg-slate-50 dark:bg-slate-800 z-10 w-32">Parámetro</th>
+                  <tr className="bg-slate-50/50 bg-[var(--sb-active-bg)] border-b border-[var(--sb-border)]">
+                     <th className="px-4 py-6 text-[10px] font-black uppercase tracking-widest text-[var(--sb-text-muted)] sticky left-0 bg-[var(--sb-active-bg)] z-10 w-32">Parámetro</th>
                      {currentTeeth.map(t => (
                         <th key={t} className="px-4 py-6 min-w-[80px]">
                            <div className="h-10 w-10 mx-auto rounded-xl bg-blue-600 text-white flex items-center justify-center font-black text-sm shadow-lg shadow-blue-500/20">
@@ -96,7 +98,7 @@ export const PeriodontogramaManager: React.FC<PeriodontogramaManagerProps> = ({
                <tbody className="divide-y divide-slate-50 dark:divide-slate-800 font-bold text-xs">
                   {/* Recesión Vestibular */}
                   <tr className="group hover:bg-slate-50/30 transition-colors">
-                     <td className="px-4 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 text-left sticky left-0 bg-white dark:bg-slate-900 group-hover:bg-slate-50/30 z-10">Recesión (V)</td>
+                     <td className="px-4 py-4 text-[10px] font-black uppercase tracking-widest text-[var(--sb-text-muted)] text-left sticky left-0 bg-[var(--card-bg)] group-hover:bg-slate-50/30 z-10">Recesión (V)</td>
                      {currentTeeth.map(t => {
                         const m = getMedicion(t);
                         return (
@@ -128,27 +130,27 @@ export const PeriodontogramaManager: React.FC<PeriodontogramaManagerProps> = ({
                   </tr>
                   {/* Sangrado / Placa */}
                   <tr className="group hover:bg-slate-50/30 transition-colors">
-                     <td className="px-4 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 text-left sticky left-0 bg-white dark:bg-slate-900 group-hover:bg-slate-50/30 z-10">Estado</td>
+                     <td className="px-4 py-4 text-[10px] font-black uppercase tracking-widest text-[var(--sb-text-muted)] text-left sticky left-0 bg-[var(--card-bg)] group-hover:bg-slate-50/30 z-10">Estado</td>
                      {currentTeeth.map(t => {
                         const m = getMedicion(t);
                         return (
                            <td key={t} className="px-4 py-4">
                               <div className="flex justify-center gap-2">
-                                 <button 
+                                 <button
                                     onClick={() => handleInputChange(t, 'sangrado', !m?.sangrado)}
                                     className={cn(
                                        "h-8 w-8 rounded-lg flex items-center justify-center transition-all",
-                                       m?.sangrado ? "bg-rose-500 text-white shadow-lg shadow-rose-500/20" : "bg-slate-100 text-slate-300"
+                                       m?.sangrado ? "bg-rose-500 text-white shadow-lg shadow-rose-500/20" : "bg-slate-100 text-[var(--sb-border)]"
                                     )}
                                     title="Sangrado"
                                  >
                                     <Droplets size={14} />
                                  </button>
-                                 <button 
+                                 <button
                                     onClick={() => handleInputChange(t, 'placa', !m?.placa)}
                                     className={cn(
                                        "h-8 w-8 rounded-lg flex items-center justify-center transition-all",
-                                       m?.placa ? "bg-amber-500 text-white shadow-lg shadow-amber-500/20" : "bg-slate-100 text-slate-300"
+                                       m?.placa ? "bg-amber-500 text-white shadow-lg shadow-amber-500/20" : "bg-slate-100 text-[var(--sb-border)]"
                                     )}
                                     title="Placa"
                                  >
@@ -165,15 +167,15 @@ export const PeriodontogramaManager: React.FC<PeriodontogramaManagerProps> = ({
       </div>
 
       {/* Info Card */}
-      <PremiumCard className="p-6 bg-slate-900 border-none">
+      <PremiumCard className="p-6 bg-[var(--card-bg)] border-none">
          <div className="flex items-start gap-4">
             <div className="p-3 bg-blue-500/20 rounded-2xl text-blue-400">
                <Activity size={24} />
             </div>
             <div>
                <h4 className="text-sm font-bold text-white uppercase tracking-tight">Interpretación de Datos</h4>
-               <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
-                  Las mediciones marcadas en <span className="text-rose-400">rojo</span> indican profundidades mayores a 3mm, sugiriendo bolsas periodontales activas. 
+               <p className="text-[11px] text-[var(--sb-text-muted)] mt-1 leading-relaxed">
+                  Las mediciones marcadas en <span className="text-rose-400">rojo</span> indican profundidades mayores a 3mm, sugiriendo bolsas periodontales activas.
                   El control de placa y sangrado es crítico para el éxito del tratamiento.
                </p>
             </div>
@@ -183,22 +185,62 @@ export const PeriodontogramaManager: React.FC<PeriodontogramaManagerProps> = ({
   );
 };
 
-const PerioInput = ({ value, onChange, highlight, variant = 'slate' }: { value?: number, onChange: (v: number) => void, highlight?: boolean, variant?: 'slate' | 'blue' }) => {
-   const isWarning = (value || 0) > 3;
-   
-   return (
-      <input 
-         type="number"
-         min={0}
-         max={15}
-         value={value || 0}
-         onChange={(e) => onChange(parseInt(e.target.value))}
-         className={cn(
-            "w-8 h-8 rounded-lg text-center font-black text-xs outline-none transition-all border-2",
-            highlight ? "border-slate-200 dark:border-slate-700" : "border-transparent",
-            variant === 'blue' ? "bg-blue-500/5 text-blue-600 focus:border-blue-500" : "bg-slate-100 dark:bg-slate-800 text-slate-600 focus:border-slate-400",
-            isWarning && "text-rose-500 bg-rose-50 dark:bg-rose-500/10 border-rose-200"
-         )}
+const PerioInput = ({ value, onChange, highlight, variant = 'slate' }: {
+  value?: number;
+  onChange: (v: number) => void;
+  highlight?: boolean;
+  variant?: 'slate' | 'blue';
+}) => {
+  const [local, setLocal] = useState(value ?? 0);
+
+  // Sync when external value changes (e.g. after save)
+  React.useEffect(() => { setLocal(value ?? 0); }, [value]);
+
+  const isWarning = local > 3;
+
+  const commit = (v: number) => {
+    const clamped = Math.min(15, Math.max(0, v));
+    setLocal(clamped);
+    onChange(clamped);
+  };
+
+  return (
+    <div className="flex flex-col items-center gap-0.5">
+      <button
+        type="button"
+        onClick={() => commit(local + 1)}
+        className="w-6 h-4 flex items-center justify-center text-[var(--sb-text-muted)] hover:text-blue-500 transition-colors leading-none text-[10px] font-black"
+      >
+        ▲
+      </button>
+      <input
+        type="number"
+        min={0}
+        max={15}
+        value={local}
+        onChange={(e) => setLocal(Number(e.target.value))}
+        onBlur={(e) => commit(Number(e.target.value))}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') commit(local);
+          if (e.key === 'ArrowUp') { e.preventDefault(); commit(local + 1); }
+          if (e.key === 'ArrowDown') { e.preventDefault(); commit(local - 1); }
+        }}
+        className={cn(
+          "w-8 h-8 rounded-lg text-center font-black text-xs outline-none transition-all border-2",
+          highlight ? "border-[var(--sb-border)]" : "border-transparent",
+          variant === 'blue'
+            ? "bg-blue-500/5 text-blue-600 focus:border-blue-500"
+            : "bg-[var(--sb-active-bg)] text-[var(--sb-text-muted)] focus:border-slate-400",
+          isWarning && "text-rose-500 bg-rose-50 dark:bg-rose-500/10 border-rose-200"
+        )}
       />
-   );
+      <button
+        type="button"
+        onClick={() => commit(local - 1)}
+        className="w-6 h-4 flex items-center justify-center text-[var(--sb-text-muted)] hover:text-blue-500 transition-colors leading-none text-[10px] font-black"
+      >
+        ▼
+      </button>
+    </div>
+  );
 };

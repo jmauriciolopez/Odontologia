@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { User, ChevronRight, Phone, FileText } from 'lucide-react';
@@ -15,16 +15,16 @@ export const PacientesTable: React.FC<PacientesTableProps> = ({ pacientes, isLoa
 
   if (isLoading) {
     return (
-      <div className="divide-y divide-slate-100 dark:divide-slate-800">
+      <div className="divide-y divide-[var(--sb-border)]">
         {Array.from({ length: 5 }).map((_, i) => (
           <div key={i} className="flex items-center gap-4 px-6 py-4 animate-pulse">
-            <div className="h-10 w-10 rounded-full bg-slate-100 dark:bg-slate-800 shrink-0" />
+            <div className="h-10 w-10 rounded-full bg-[var(--sb-active-bg)] shrink-0" />
             <div className="flex-1 space-y-2">
-              <div className="h-3.5 bg-slate-100 dark:bg-slate-800 rounded w-1/3" />
-              <div className="h-3 bg-slate-100 dark:bg-slate-800 rounded w-1/4" />
+              <div className="h-3.5 bg-[var(--sb-active-bg)] rounded w-1/3" />
+              <div className="h-3 bg-[var(--sb-active-bg)] rounded w-1/4" />
             </div>
-            <div className="h-3 bg-slate-100 dark:bg-slate-800 rounded w-24" />
-            <div className="h-3 bg-slate-100 dark:bg-slate-800 rounded w-28" />
+            <div className="h-3 bg-[var(--sb-active-bg)] rounded w-24" />
+            <div className="h-3 bg-[var(--sb-active-bg)] rounded w-28" />
           </div>
         ))}
       </div>
@@ -34,12 +34,12 @@ export const PacientesTable: React.FC<PacientesTableProps> = ({ pacientes, isLoa
   if (pacientes.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-24 px-6 text-center gap-4">
-        <div className="h-16 w-16 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center">
+        <div className="h-16 w-16 rounded-2xl bg-[var(--sb-active-bg)] flex items-center justify-center">
           <User size={28} className="text-slate-300 dark:text-slate-600" />
         </div>
         <div>
-          <p className="font-bold text-slate-700 dark:text-slate-300">No se encontraron pacientes</p>
-          <p className="text-xs text-slate-400 mt-1">Intentá con otro término o creá un nuevo paciente</p>
+          <p className="font-bold text-[var(--sb-text)]">No se encontraron pacientes</p>
+          <p className="text-xs text-[var(--sb-text-muted)] mt-1">Intentá con otro término o creá un nuevo paciente</p>
         </div>
       </div>
     );
@@ -49,15 +49,15 @@ export const PacientesTable: React.FC<PacientesTableProps> = ({ pacientes, isLoa
     <div className="overflow-x-auto">
       <table className="w-full border-collapse text-left">
         <thead>
-          <tr className="bg-slate-50/60 dark:bg-slate-800/30 border-b border-slate-100 dark:border-slate-800">
-            <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Paciente</th>
-            <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Documento</th>
-            <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Teléfono</th>
-            <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Obra Social</th>
+          <tr className="bg-slate-50/60 bg-[var(--sb-active-bg)] border-b border-[var(--sb-border)]">
+            <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-[var(--sb-text-muted)]">Paciente</th>
+            <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-[var(--sb-text-muted)]">Documento</th>
+            <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-[var(--sb-text-muted)]">Teléfono</th>
+            <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-[var(--sb-text-muted)]">Obra Social</th>
             <th className="px-6 py-4" />
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50">
+        <tbody className="divide-y divide-[var(--sb-border)]/50">
           {pacientes.map((paciente, i) => (
             <motion.tr
               key={paciente.id}
@@ -73,22 +73,22 @@ export const PacientesTable: React.FC<PacientesTableProps> = ({ pacientes, isLoa
                     {paciente.nombre.charAt(0)}{paciente.apellido.charAt(0)}
                   </div>
                   <div className="flex flex-col min-w-0">
-                    <span className="font-bold text-sm text-slate-900 dark:text-white truncate group-hover:text-blue-600 transition-colors">
+                    <span className="font-bold text-sm text-[var(--sb-text)] truncate group-hover:text-blue-600 transition-colors">
                       {paciente.apellido}, {paciente.nombre}
                     </span>
-                    <span className="text-xs text-slate-400 truncate">
+                    <span className="text-xs text-[var(--sb-text-muted)] truncate">
                       {paciente.email || 'Sin email'}
                     </span>
                   </div>
                 </div>
               </td>
               <td className="px-6 py-4">
-                <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                <span className="text-sm font-medium text-[var(--sb-text-muted)]">
                   {paciente.documento || '—'}
                 </span>
               </td>
               <td className="px-6 py-4">
-                <div className="flex items-center gap-1.5 text-sm font-medium text-slate-600 dark:text-slate-400">
+                <div className="flex items-center gap-1.5 text-sm font-medium text-[var(--sb-text-muted)]">
                   {paciente.telefono
                     ? <><Phone size={13} className="text-slate-300" />{paciente.telefono}</>
                     : '—'
@@ -100,7 +100,7 @@ export const PacientesTable: React.FC<PacientesTableProps> = ({ pacientes, isLoa
                   "text-xs font-bold px-2.5 py-1 rounded-full",
                   paciente.obraSocial
                     ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                    : "bg-slate-100 dark:bg-slate-800 text-slate-400"
+                    : "bg-[var(--sb-active-bg)] text-[var(--sb-text-muted)]"
                 )}>
                   {paciente.obraSocial || 'Particular'}
                 </span>
@@ -108,7 +108,7 @@ export const PacientesTable: React.FC<PacientesTableProps> = ({ pacientes, isLoa
               <td className="px-6 py-4 text-right">
                 <button
                   onClick={(e) => { e.stopPropagation(); navigate(`/pacientes/${paciente.id}`); }}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-blue-600 transition-colors group-hover:text-blue-500"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--sb-text-muted)] hover:text-blue-600 transition-colors group-hover:text-blue-500"
                 >
                   <FileText size={14} />
                   Ver Ficha

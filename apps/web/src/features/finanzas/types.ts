@@ -36,12 +36,12 @@ export interface Pago {
 
 export interface CreatePresupuestoDto {
   pacienteId: string;
-  profesionalId: string;
-  descuento?: number;
+  planId?: string;
   items: {
     descripcion: string;
     cantidad: number;
     precioUnitario: number;
+    descuento?: number;
   }[];
 }
 

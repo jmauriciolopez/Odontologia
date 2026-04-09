@@ -70,7 +70,7 @@ export class TurnosService {
   }
 
   async findAll(filtros: TurnoFiltrosDto): Promise<Turno[]> {
-    const { fecha, profesionalId, pacienteId, estado } = filtros;
+    const { fecha, desde, hasta, profesionalId, pacienteId, estado } = filtros;
     const qb = this.turnosRepository.createQueryBuilder('turno')
       .leftJoinAndSelect('turno.paciente', 'paciente')
       .leftJoinAndSelect('turno.profesional', 'profesional')
@@ -79,6 +79,13 @@ export class TurnosService {
 
     if (fecha) {
       qb.andWhere('DATE(turno.fecha_inicio) = :fecha', { fecha });
+    }
+    if (desde && hasta) {
+      qb.andWhere('turno.fecha_inicio BETWEEN :desde AND :hasta', { desde, hasta });
+    } else if (desde) {
+      qb.andWhere('turno.fecha_inicio >= :desde', { desde });
+    } else if (hasta) {
+      qb.andWhere('turno.fecha_inicio <= :hasta', { hasta });
     }
     if (profesionalId) {
       qb.andWhere('turno.profesional_id = :profesionalId', { profesionalId });

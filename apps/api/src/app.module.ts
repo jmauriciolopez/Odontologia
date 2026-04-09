@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 import { typeOrmConfig } from './config/typeorm.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsuariosModule } from './modules/usuarios/usuarios.module';
@@ -15,10 +17,16 @@ import { PresupuestosModule } from './modules/presupuestos/presupuestos.module';
 import { RemindersModule } from './modules/reminders/reminders.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { ConfiguracionModule } from './modules/configuracion/configuracion.module';
+import { ObrasSocialesModule } from './modules/obras-sociales/obras-sociales.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(typeOrmConfig),
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'uploads'),
+      serveRoot: '/uploads',
+      serveStaticOptions: { index: false },
+    }),
     AuthModule,
     UsuariosModule,
     PacientesModule,
@@ -33,6 +41,7 @@ import { ConfiguracionModule } from './modules/configuracion/configuracion.modul
     RemindersModule,
     DashboardModule,
     ConfiguracionModule,
+    ObrasSocialesModule,
   ],
   controllers: [],
   providers: [],

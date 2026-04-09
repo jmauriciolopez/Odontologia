@@ -8,6 +8,7 @@ import { MedicionPeriodontal } from './entities/medicion-periodontal.entity';
 import { CreateFichaClinicaDto } from './dto/create-ficha-clinica.dto';
 import { CreateAntecedenteDto } from './dto/create-antecedente.dto';
 import { CreateEvolucionClinicaDto } from './dto/create-evolucion-clinica.dto';
+import { Profesional } from '../profesionales/entities/profesional.entity';
 
 @Injectable()
 export class FichasClinicasService {
@@ -20,6 +21,8 @@ export class FichasClinicasService {
     private readonly evolucionRepository: Repository<EvolucionClinica>,
     @InjectRepository(MedicionPeriodontal)
     private readonly medicionRepository: Repository<MedicionPeriodontal>,
+    @InjectRepository(Profesional)
+    private readonly profesionalRepository: Repository<Profesional>,
   ) {}
 
   async createFicha(dto: CreateFichaClinicaDto): Promise<FichaClinica> {
@@ -45,8 +48,14 @@ export class FichasClinicasService {
     return await this.antecedenteRepository.save(antecedente);
   }
 
-  async addEvolucion(dto: CreateEvolucionClinicaDto): Promise<EvolucionClinica> {
-    const evolucion = this.evolucionRepository.create(dto);
+  async addEvolucion(dto: CreateEvolucionClinicaDto, userId: string): Promise<EvolucionClinica> {
+    // Resolve profesionalId from the logged-in user if not explicitly provided
+    let profesionalId = dto.profesionalId ?? null;
+    if (!profesionalId) {
+      const profesional = await this.profesionalRepository.findOne({ where: { usuarioId: userId } });
+      if (profesional) profesionalId = profesional.id;
+    }
+    const evolucion = this.evolucionRepository.create({ ...dto, profesionalId });
     return await this.evolucionRepository.save(evolucion);
   }
 

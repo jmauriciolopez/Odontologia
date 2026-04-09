@@ -5,9 +5,10 @@ import { Rol } from './entities/rol.entity';
 import { UsuarioRol } from './entities/usuario-rol.entity';
 import { UsuariosService } from './usuarios.service';
 import { UsuariosController } from './usuarios.controller';
+import { Profesional } from '../profesionales/entities/profesional.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Usuario, Rol, UsuarioRol])],
+  imports: [TypeOrmModule.forFeature([Usuario, Rol, UsuarioRol, Profesional])],
   controllers: [UsuariosController],
   providers: [UsuariosService],
   exports: [UsuariosService],

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Search, 
-  UserPlus, 
-  Plus, 
-  Calendar, 
-  User, 
-  CreditCard, 
+import {
+  Search,
+  UserPlus,
+  Plus,
+  Calendar,
+  User,
+  CreditCard,
   Stethoscope,
   Command,
   ChevronRight,
@@ -55,7 +55,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[15vh] px-4">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -67,18 +67,18 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
             initial={{ opacity: 0, scale: 0.95, y: -20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
-            className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden relative z-10"
+            className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl border border-[var(--sb-border)] overflow-hidden relative z-10"
           >
             {/* Search Input */}
-            <div className="flex items-center gap-4 p-5 border-b border-slate-100 dark:border-slate-800">
+            <div className="flex items-center gap-4 p-5 border-b border-[var(--sb-border)]">
                <div className="h-10 w-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400">
                   <Search size={20} />
                </div>
-               <input 
+               <input
                  autoFocus
                  type="text"
                  placeholder="Escriba un paciente o acción (Ctrl+K)..."
-                 className="flex-1 bg-transparent border-none outline-none text-base font-medium text-slate-800 dark:text-white placeholder:text-slate-300"
+                 className="flex-1 bg-transparent border-none outline-none text-base font-medium text-[var(--sb-text)] placeholder:text-slate-300"
                  value={query}
                  onChange={(e) => setQuery(e.target.value)}
                />
@@ -100,12 +100,12 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
                          >
                             <div className={cn(
                                 "h-10 w-10 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110",
-                                action.color === 'blue' ? "bg-blue-100 text-blue-600" : 
+                                action.color === 'blue' ? "bg-blue-100 text-blue-600" :
                                 action.color === 'emerald' ? "bg-emerald-100 text-emerald-600" : "bg-amber-100 text-amber-600"
                             )}>
                                {action.icon}
                             </div>
-                            <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{action.label}</span>
+                            <span className="text-[11px] font-bold text-[var(--sb-text)]">{action.label}</span>
                          </button>
                        ))}
                     </div>
@@ -122,7 +122,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
                        <button
                          key={p.id}
                          onClick={() => handleSelect(`/pacientes/${p.id}`)}
-                         className="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all group"
+                         className="w-full flex items-center justify-between p-3 rounded-2xl hover:opacity-800/50 transition-all group"
                        >
                           <div className="flex items-center gap-4">
                              <div className="h-10 w-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 font-bold group-hover:bg-blue-100 group-hover:text-blue-600 transition-colors">
@@ -137,7 +137,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
                        </button>
                      ))}
                   </div>
-                  
+
                   {query && pacientes.length === 0 && (
                      <div className="flex flex-col items-center justify-center py-12 gap-4 text-slate-400">
                         <div className="h-16 w-16 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-200">
@@ -153,14 +153,14 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
             </div>
 
             {/* Footer */}
-            <div className="p-4 bg-slate-50 dark:bg-slate-800/30 flex items-center justify-between border-t border-slate-100 dark:border-slate-800/50">
+            <div className="p-4 bg-[var(--sb-active-bg)] flex items-center justify-between border-t border-[var(--sb-border)]/50">
                <div className="flex items-center gap-6">
                   <div className="flex items-center gap-2">
-                     <div className="px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-[9px] font-black">↑↓</div>
+                     <div className="px-1.5 py-0.5 rounded border border-[var(--sb-border)] bg-white dark:bg-slate-800 text-[9px] font-black">↑↓</div>
                      <span className="text-[9px] font-bold text-slate-400 uppercase">Navegar</span>
                   </div>
                   <div className="flex items-center gap-2">
-                     <div className="px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-[9px] font-black">ENTER</div>
+                     <div className="px-1.5 py-0.5 rounded border border-[var(--sb-border)] bg-white dark:bg-slate-800 text-[9px] font-black">ENTER</div>
                      <span className="text-[9px] font-bold text-slate-400 uppercase">Seleccionar</span>
                   </div>
                </div>

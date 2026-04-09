@@ -1,10 +1,11 @@
-import React from 'react';
+﻿import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
 import { X, Loader2, User } from 'lucide-react';
 import * as z from 'zod';
 import { cn } from '@/lib/utils';
+import { useObrasSociales } from '../../obras-sociales/hooks/use-obras-sociales';
 
 const pacienteSchema = z.object({
   nombre:          z.string().min(2, 'Nombre requerido'),
@@ -35,7 +36,7 @@ const Field: React.FC<{
   className?: string;
 }> = ({ label, error, children, className }) => (
   <div className={cn('flex flex-col gap-1.5', className)}>
-    <label className="text-[11px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
+    <label className="text-[11px] font-bold uppercase tracking-widest text-[var(--sb-text-muted)]">
       {label}
     </label>
     {children}
@@ -43,8 +44,7 @@ const Field: React.FC<{
   </div>
 );
 
-const inputCls =
-  'w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 px-4 py-2.5 text-sm font-medium text-slate-900 dark:text-white placeholder-slate-400 outline-none transition-all focus:border-blue-500/50 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-blue-500/10';
+const inputCls = 'input-premium py-2.5 px-4 text-sm font-medium';
 
 export const PacienteForm: React.FC<PacienteFormProps> = ({
   onSubmit,
@@ -52,6 +52,7 @@ export const PacienteForm: React.FC<PacienteFormProps> = ({
   initialData,
   loading,
 }) => {
+  const { data: obrasSociales = [] } = useObrasSociales();
   const {
     register,
     handleSubmit,
@@ -92,26 +93,28 @@ export const PacienteForm: React.FC<PacienteFormProps> = ({
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl"
+        className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-[2rem] shadow-2xl"
+        style={{ background: 'var(--card-bg)' }}
       >
         {/* Header */}
-        <div className="sticky top-0 z-10 flex items-center justify-between px-8 py-6 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900">
+        <div className="sticky top-0 z-10 flex items-center justify-between px-8 py-6 border-b border-[var(--sb-border)]"
+          style={{ background: 'var(--card-bg)' }}>
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-500/20">
               <User size={18} />
             </div>
             <div>
-              <h2 className="text-lg font-black tracking-tight text-slate-900 dark:text-white uppercase">
+              <h2 className="text-lg font-black tracking-tight text-[var(--sb-text)] uppercase">
                 {isEdit ? 'Editar Paciente' : 'Nuevo Paciente'}
               </h2>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--sb-text-muted)]">
                 {isEdit ? 'Modificar datos del registro' : 'Afiliar nuevo paciente al sistema'}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-xl text-[var(--sb-text-muted)] hover:text-slate-600 transition-colors hover:opacity-80"
           >
             <X size={20} />
           </button>
@@ -163,7 +166,12 @@ export const PacienteForm: React.FC<PacienteFormProps> = ({
 
           <div className="grid grid-cols-2 gap-4">
             <Field label="Obra Social">
-              <input {...register('obraSocial')} placeholder="OSDE, Swiss Medical..." className={inputCls} />
+              <select {...register('obraSocial')} className={inputCls}>
+                <option value="">Sin obra social</option>
+                {obrasSociales.filter(o => o.activo).map(o => (
+                  <option key={o.id} value={o.nombre}>{o.nombre}</option>
+                ))}
+              </select>
             </Field>
             <Field label="Nro. Afiliado">
               <input {...register('nroAfiliado')} placeholder="123456789" className={inputCls} />
@@ -171,11 +179,11 @@ export const PacienteForm: React.FC<PacienteFormProps> = ({
           </div>
 
           {/* Actions */}
-          <div className="flex gap-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <div className="flex gap-3 pt-2 border-t border-[var(--sb-border)]">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 rounded-xl border border-slate-200 dark:border-slate-700 py-3 text-sm font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+              className="flex-1 rounded-xl border border-[var(--sb-border)] py-3 text-sm font-bold text-[var(--sb-text-muted)] transition-colors hover:opacity-80"
             >
               Cancelar
             </button>

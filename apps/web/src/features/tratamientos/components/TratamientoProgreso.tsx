@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, Activity, AlertCircle, TrendingUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -24,22 +24,22 @@ export const TratamientoProgreso: React.FC<TratamientoProgresoProps> = ({ plan, 
       {/* Plan Header Info */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 bg-blue-50/50 dark:bg-blue-500/5 rounded-3xl border border-blue-100/50 dark:border-blue-500/10">
         <div>
-          <h3 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tight">{plan.nombre}</h3>
+          <h3 className="text-xl font-bold text-[var(--sb-text)] uppercase tracking-tight">{plan.nombre}</h3>
           <div className="flex items-center gap-4 mt-1">
-            <span className="text-[11px] font-bold text-slate-500 flex items-center gap-1.5 uppercase tracking-wider">
+            <span className="text-[11px] font-bold text-[var(--sb-text-muted)] flex items-center gap-1.5 uppercase tracking-wider">
               <Activity size={14} className="text-blue-500" />
               {plan.items.length} Procedimientos
             </span>
-            <span className="text-[11px] font-bold text-slate-500 flex items-center gap-1.5 uppercase tracking-wider">
+            <span className="text-[11px] font-bold text-[var(--sb-text-muted)] flex items-center gap-1.5 uppercase tracking-wider">
               <TrendingUp size={14} className="text-emerald-500" />
               {progress}% Completado
             </span>
           </div>
         </div>
-        
+
         {/* Large Progress bar inside the info card */}
-        <div className="w-full sm:w-48 h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-          <motion.div 
+        <div className="w-full sm:w-48 h-2 bg-[var(--sb-border)] rounded-full overflow-hidden">
+          <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 1, ease: "circOut" }}
@@ -48,39 +48,46 @@ export const TratamientoProgreso: React.FC<TratamientoProgresoProps> = ({ plan, 
         </div>
       </div>
 
-      {/* Roadmap List */}
-      <div className="space-y-6 relative ml-4 before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-100 dark:before:bg-slate-800">
+      <div className="space-y-6 relative ml-4"
+        style={{ '--tw-before-bg': 'var(--sb-border)' } as any}
+      >
+        <div className="absolute left-[11px] top-2 bottom-2 w-0.5" style={{ background: 'var(--sb-border)' }} />
         {plan.items.map((item) => (
           <div key={item.id} className="relative pl-10">
             <div className={cn(
-              "absolute left-0 top-1.5 h-6 w-6 rounded-full border-2 flex items-center justify-center bg-white dark:bg-slate-900 transition-all z-10",
-              item.estado === 'realizado' 
-                ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 scale-110 shadow-lg shadow-emerald-500/20" 
-                : "border-slate-200 dark:border-slate-700 text-slate-300"
-            )}>
+              "absolute left-0 top-1.5 h-6 w-6 rounded-full border-2 flex items-center justify-center transition-all z-10",
+              item.estado === 'realizado'
+                ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 scale-110 shadow-lg shadow-emerald-500/20"
+                : "border-[var(--sb-border)] text-[var(--sb-border)]"
+            )}
+            style={item.estado !== 'realizado' ? { background: 'var(--card-bg)' } : {}}
+            >
               {item.estado === 'realizado' ? <CheckCircle2 size={14} /> : <div className="h-1.5 w-1.5 rounded-full bg-current" />}
             </div>
-            
-            <div className={cn(
-              "p-4 rounded-2xl border transition-all hover:shadow-medical-hover",
-              item.estado === 'realizado' 
-                ? "bg-white dark:bg-slate-900/40 border-emerald-500/20" 
-                : "bg-white dark:bg-slate-800/40 border-slate-100 dark:border-slate-800"
-            )}>
+
+            <div
+              className="p-4 rounded-2xl border transition-all hover:shadow-medical-hover"
+              style={{
+                background: 'var(--card-bg)',
+                borderColor: item.estado === 'realizado' ? 'rgba(16,185,129,.2)' : 'var(--sb-border)',
+              }}
+            >
               <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <div className={cn(
-                    "h-10 w-10 rounded-xl flex items-center justify-center transition-colors",
-                    item.estado === 'realizado' ? "bg-emerald-500/10 text-emerald-500" : "bg-slate-100 dark:bg-slate-800 text-slate-400"
-                  )}>
+                  <div
+                    className={cn("h-10 w-10 rounded-xl flex items-center justify-center transition-colors",
+                      item.estado === 'realizado' ? "bg-emerald-500/10 text-emerald-500" : ""
+                    )}
+                    style={item.estado !== 'realizado' ? { background: 'var(--sb-active-bg)', color: 'var(--sb-text-muted)' } : {}}
+                  >
                     <Activity size={20} />
                   </div>
                   <div>
-                    <h5 className={cn("text-sm font-bold", item.estado === 'realizado' ? "text-emerald-700 dark:text-emerald-400" : "text-slate-900 dark:text-white")}>
+                    <h5 className={cn("text-sm font-bold", item.estado === 'realizado' ? "text-emerald-700 dark:text-emerald-400" : "text-[var(--sb-text)]")}>
                       {item.tipo}
                     </h5>
                     {item.piezaPosicion && (
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                      <p className="text-[10px] font-bold text-[var(--sb-text-muted)] uppercase tracking-tighter">
                         Pieza: {item.piezaPosicion} {item.cara && `• Cara: ${item.cara}`}
                       </p>
                     )}
@@ -88,7 +95,7 @@ export const TratamientoProgreso: React.FC<TratamientoProgresoProps> = ({ plan, 
                 </div>
 
                 {!isReadOnly && onUpdateEstado && (
-                  <button 
+                  <button
                     onClick={() => {
                       const nextEstado = item.estado === 'pendiente' ? 'realizado' : 'pendiente';
                       onUpdateEstado(item.id, nextEstado);
@@ -97,7 +104,7 @@ export const TratamientoProgreso: React.FC<TratamientoProgresoProps> = ({ plan, 
                       "text-[10px] font-bold px-4 py-2 rounded-xl border transition-all shrink-0",
                       item.estado === 'realizado'
                         ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20"
-                        : "border-slate-200 dark:border-slate-700 text-slate-400 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50"
+                        : "border-[var(--sb-border)] text-[var(--sb-text-muted)] hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50"
                     )}
                   >
                     {item.estado === 'realizado' ? 'COMPLETADO' : 'MARCAR HECHO'}

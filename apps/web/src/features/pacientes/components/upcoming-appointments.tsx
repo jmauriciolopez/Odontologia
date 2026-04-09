@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useTurnos } from '../../agenda/hooks/use-turnos';
 import { Turno } from '../../agenda/types';
 import { format } from 'date-fns';
@@ -17,16 +17,16 @@ export const UpcomingAppointments: React.FC<UpcomingAppointmentsProps> = ({ paci
     .slice(0, 3);
 
   if (isLoading) {
-    return <div className="text-sm text-slate-500">Cargando citas...</div>;
+    return <div className="text-sm text-[var(--sb-text-muted)]">Cargando citas...</div>;
   }
 
   if (upcoming.length === 0) {
-    return <div className="text-sm text-slate-500">No hay citas próximas.</div>;
+    return <div className="text-sm text-[var(--sb-text-muted)]">No hay citas próximas.</div>;
   }
 
   return (
     <div className="space-y-2">
-      <h3 className="text-sm font-medium text-slate-700 mb-1 flex items-center">
+      <h3 className="text-sm font-medium text-[var(--sb-text-muted)] mb-1 flex items-center">
         <CalendarDays className="mr-1 h-4 w-4" /> Próximas citas
       </h3>
       <ul className="space-y-1">

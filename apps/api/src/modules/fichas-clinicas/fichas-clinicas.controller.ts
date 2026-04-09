@@ -8,6 +8,7 @@ import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { Role } from '../../common/constants/roles.constants';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
 
 @Controller('fichas-clinicas')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -26,15 +27,15 @@ export class FichasClinicasController {
   }
 
   @Post('antecedentes')
-  @Roles(Role.ODONTOLOGO)
+  @Roles(Role.ADMIN, Role.ODONTOLOGO)
   addAntecedente(@Body() dto: CreateAntecedenteDto) {
     return this.fichasService.addAntecedente(dto);
   }
 
   @Post('evoluciones')
-  @Roles(Role.ODONTOLOGO)
-  addEvolucion(@Body() dto: CreateEvolucionClinicaDto) {
-    return this.fichasService.addEvolucion(dto);
+  @Roles(Role.ADMIN, Role.ODONTOLOGO)
+  addEvolucion(@Body() dto: CreateEvolucionClinicaDto, @CurrentUser('id') userId: string) {
+    return this.fichasService.addEvolucion(dto, userId);
   }
 
   @Post(':fichaId/mediciones-periodontales/:diente')

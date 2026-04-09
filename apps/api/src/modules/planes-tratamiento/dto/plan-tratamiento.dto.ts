@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsUUID, IsOptional, IsInt, IsDecimal, IsArray, ValidateNested } from 'class-validator';
+import { IsString, IsNotEmpty, IsUUID, IsOptional, IsInt, IsNumber, IsArray, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class PlanTratamientoItemDto {
@@ -14,7 +14,7 @@ export class PlanTratamientoItemDto {
   @IsOptional()
   cara?: string;
 
-  @IsDecimal()
+  @IsNumber()
   @IsNotEmpty()
   precioRef: number;
 }

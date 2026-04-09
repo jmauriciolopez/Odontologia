@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { UserPlus, Search, Filter, Shield, Mail, CheckCircle2, XCircle, Pencil } from 'lucide-react';
 import { useUsuarios } from '../hooks/use-usuarios';
@@ -12,12 +12,20 @@ export const UsuariosPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<Usuario | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [filterActivo, setFilterActivo] = useState<'all' | 'activo' | 'inactivo'>('all');
+  const [showFilters, setShowFilters] = useState(false);
 
-  const filteredUsuarios = usuarios.filter(u =>
-    u.nombre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    u.apellido?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    u.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredUsuarios = usuarios.filter(u => {
+    const matchSearch =
+      u.nombre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      u.apellido?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      u.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchActivo =
+      filterActivo === 'all' ||
+      (filterActivo === 'activo' && u.activo) ||
+      (filterActivo === 'inactivo' && !u.activo);
+    return matchSearch && matchActivo;
+  });
 
   const handleOpenCreate = () => { setEditingUser(null); setIsModalOpen(true); };
   const handleOpenEdit = (user: Usuario) => { setEditingUser(user); setIsModalOpen(true); };
@@ -32,8 +40,8 @@ export const UsuariosPage: React.FC = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="text-4xl font-heading font-bold tracking-tight text-slate-900 dark:text-white">Gestión de Usuarios</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1 font-medium">Controla el acceso y roles de todo tu equipo clínico.</p>
+          <h1 className="text-4xl font-heading font-bold tracking-tight text-[var(--sb-text)]">Gestión de Usuarios</h1>
+          <p className="text-[var(--sb-text-muted)] mt-1 font-medium">Controla el acceso y roles de todo tu equipo clínico.</p>
         </motion.div>
 
         <motion.button
@@ -42,7 +50,7 @@ export const UsuariosPage: React.FC = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => handleOpenCreate()}
-          className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 text-white px-6 py-3 rounded-2xl font-bold shadow-xl shadow-blue-500/20 transition-all"
+          className="flex items-center gap-2 btn-primary px-6 py-3 rounded-2xl"
         >
           <UserPlus size={20} />
           Nuevo Usuario
@@ -57,8 +65,8 @@ export const UsuariosPage: React.FC = () => {
               <Shield size={24} />
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Total Equipo</p>
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-white">{usuarios.length}</h3>
+              <p className="text-xs font-bold uppercase tracking-widest text-[var(--sb-text-muted)]">Total Equipo</p>
+              <h3 className="text-2xl font-bold text-[var(--sb-text)]">{usuarios.length}</h3>
             </div>
           </div>
         </PremiumCard>
@@ -66,56 +74,98 @@ export const UsuariosPage: React.FC = () => {
       </div>
 
       {/* Table Section */}
-      <PremiumCard delay={0.2} className="overflow-hidden p-0 border-none bg-white/40 dark:bg-slate-900/40 backdrop-blur-md">
-        <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white/50 dark:bg-slate-900/50">
+      <PremiumCard delay={0.2} className="overflow-hidden p-0 border-none">
+        <div
+          className="p-6 border-b flex flex-col md:flex-row md:items-center justify-between gap-4"
+          style={{ borderColor: 'var(--sb-border)', background: 'var(--sb-active-bg)' }}
+        >
           <div className="relative group w-full md:w-96">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={18} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--sb-text-muted)] group-focus-within:text-blue-500 transition-colors" size={18} />
             <input
               type="text"
               placeholder="Buscar por nombre or email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-slate-100 dark:bg-slate-800/50 border-transparent focus:bg-white dark:focus:bg-slate-900 border focus:border-blue-500/30 rounded-xl py-2 pl-10 pr-4 text-sm outline-none transition-all"
+              className="w-full input-premium py-2 pl-10 pr-4 text-sm"
             />
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-sm font-semibold">
+          <button
+            onClick={() => setShowFilters(v => !v)}
+            className={cn(
+              'flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all',
+              showFilters
+                ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
+                : 'text-[var(--sb-text-muted)] hover:opacity-80'
+            )}
+            style={showFilters ? {} : { background: 'var(--sb-active-bg)', border: '1px solid var(--sb-border)' }}
+          >
             <Filter size={18} />
             Filtros
           </button>
         </div>
 
+        {/* Filter panel */}
+        {showFilters && (
+          <div className="px-6 pb-4 flex flex-wrap items-center gap-2 border-b" style={{ borderColor: 'var(--sb-border)' }}>
+            <span className="text-[10px] font-black uppercase tracking-widest text-[var(--sb-text-muted)] mr-2">Estado:</span>
+            {(['all', 'activo', 'inactivo'] as const).map(f => (
+              <button
+                key={f}
+                onClick={() => setFilterActivo(f)}
+                className={cn(
+                  'px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all',
+                  filterActivo === f
+                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
+                    : 'text-[var(--sb-text-muted)] border border-[var(--sb-border)] hover:border-blue-400'
+                )}
+                style={filterActivo !== f ? { background: 'var(--sb-active-bg)' } : {}}
+              >
+                {f === 'all' ? 'Todos' : f}
+              </button>
+            ))}
+            {filterActivo !== 'all' && (
+              <button
+                onClick={() => setFilterActivo('all')}
+                className="text-[10px] font-bold text-rose-500 hover:text-rose-600 ml-2"
+              >
+                Limpiar
+              </button>
+            )}
+          </div>
+        )}
+
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="bg-slate-50/50 dark:bg-slate-800/30 text-left">
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-400">Usuario</th>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-400">Roles</th>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-400">Estado</th>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-400 text-right">Acciones</th>
+              <tr className="text-left" style={{ background: 'var(--sb-active-bg)' }}>
+                <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-[var(--sb-text-muted)]">Usuario</th>
+                <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-[var(--sb-text-muted)]">Roles</th>
+                <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-[var(--sb-text-muted)]">Estado</th>
+                <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-[var(--sb-text-muted)] text-right">Acciones</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+            <tbody className="divide-y" style={{ borderColor: 'var(--sb-border)' }}>
               {isLoading ? (
                 Array.from({ length: 3 }).map((_, i) => (
                   <tr key={i} className="animate-pulse">
                     <td colSpan={4} className="px-6 py-8">
-                      <div className="h-4 bg-slate-100 dark:bg-slate-800 rounded w-full" />
+                      <div className="h-4 rounded w-full opacity-20" />
                     </td>
                   </tr>
                 ))
               ) : filteredUsuarios.length > 0 ? (
                 filteredUsuarios.map((user) => (
-                  <tr key={user.id} className="group hover:bg-slate-50/50 dark:hover:bg-slate-400/5 transition-colors">
+                  <tr key={user.id} className="group transition-colors">
                     <td className="px-6 py-5">
                       <div className="flex items-center gap-3">
                         <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center font-bold text-blue-600 text-sm">
                           {user.nombre?.charAt(0)}
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-sm font-bold text-slate-900 dark:text-white leading-none">
+                          <span className="text-sm font-bold text-[var(--sb-text)] leading-none">
                             {user.nombre} {user.apellido}
                           </span>
-                          <span className="text-xs text-slate-500 flex items-center gap-1 mt-1">
+                          <span className="text-xs text-[var(--sb-text-muted)] flex items-center gap-1 mt-1">
                             <Mail size={12} /> {user.email}
                           </span>
                         </div>
@@ -123,8 +173,8 @@ export const UsuariosPage: React.FC = () => {
                     </td>
                     <td className="px-6 py-5">
                       <div className="flex flex-wrap gap-1.5">
-                        {user.usuarioRoles.map((ur) => (
-                          <span key={ur.id} className="px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-500/10 text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider border border-blue-100 dark:border-blue-500/20">
+                        {user.usuarioRoles.map((ur, idx) => (
+                          <span key={ur.id ?? `${user.id}-role-${idx}`} className="px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-500/10 text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider border border-blue-100 dark:border-blue-500/20">
                             {ur.rol?.nombre}
                           </span>
                         ))}
@@ -136,7 +186,8 @@ export const UsuariosPage: React.FC = () => {
                           <CheckCircle2 size={14} /> Activo
                         </span>
                       ) : (
-                        <span className="flex items-center gap-1.5 text-xs font-bold text-slate-400 bg-slate-50 dark:bg-slate-800 px-2.5 py-1 rounded-full w-fit">
+                        <span className="flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full w-fit opacity-60"
+                          style={{ background: 'var(--sb-active-bg)', color: 'var(--sb-text-muted)' }}>
                           <XCircle size={14} /> Inactivo
                         </span>
                       )}
@@ -144,7 +195,7 @@ export const UsuariosPage: React.FC = () => {
                     <td className="px-6 py-5 text-right">
                       <button
                         onClick={() => handleOpenEdit(user)}
-                        className="p-2 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-all"
+                        className="p-2 rounded-lg text-[var(--sb-text-muted)] hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-all"
                         title="Editar usuario"
                       >
                         <Pencil size={16} />
@@ -154,7 +205,7 @@ export const UsuariosPage: React.FC = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={4} className="px-6 py-20 text-center text-slate-500 dark:text-slate-400">
+                  <td colSpan={4} className="px-6 py-20 text-center text-[var(--sb-text-muted)]">
                     No se encontraron usuarios que coincidan con la búsqueda.
                   </td>
                 </tr>

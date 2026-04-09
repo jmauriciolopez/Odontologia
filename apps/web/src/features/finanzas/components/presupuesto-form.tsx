@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Plus, Trash2, DollarSign, List, User, Calendar } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -45,7 +45,7 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
     });
   };
 
-  const inputClasses = "w-full bg-slate-50 dark:bg-slate-800/50 border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 dark:text-white outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/5 transition-all placeholder:text-slate-400";
+  const inputClasses = "input-premium text-sm font-semibold";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md bg-slate-900/40">
@@ -53,7 +53,8 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl shadow-blue-900/20 overflow-hidden border border-slate-200/60 dark:border-slate-800"
+        className="w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden"
+        style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', color: 'var(--sb-text)' }}
       >
         <div className="p-8">
           <div className="flex items-center justify-between mb-8">
@@ -62,13 +63,13 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
                 <Plus size={24} />
               </div>
               <div>
-                <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Nuevo Presupuesto</h2>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">DETALLES CLÍNICOS Y COSTOS</p>
+                <h2 className="text-2xl font-bold tracking-tight text-[var(--sb-text)]">Nuevo Presupuesto</h2>
+                <p className="text-xs font-bold text-[var(--sb-text-muted)] uppercase tracking-widest">DETALLES CLÍNICOS Y COSTOS</p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="h-10 w-10 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-rose-500 transition-all"
+              className="h-10 w-10 flex items-center justify-center rounded-full hover:opacity-80 text-[var(--sb-text-muted)] hover:text-rose-500 transition-all"
             >
               <X size={20} />
             </button>
@@ -78,7 +79,7 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
             {/* Header info */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-[11px] font-black uppercase tracking-wider text-slate-400 ml-1 flex items-center gap-2">
+                <label className="text-[11px] font-black uppercase tracking-wider text-[var(--sb-text-muted)] ml-1 flex items-center gap-2">
                   <User size={12} />
                   Paciente
                 </label>
@@ -98,11 +99,11 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
                 )}
               </div>
               <div className="space-y-2">
-                <label className="text-[11px] font-black uppercase tracking-wider text-slate-400 ml-1 flex items-center gap-2">
+                <label className="text-[11px] font-black uppercase tracking-wider text-[var(--sb-text-muted)] ml-1 flex items-center gap-2">
                   <Calendar size={12} />
                   Fecha de Emisión
                 </label>
-                <div className={cn(inputClasses, "bg-slate-100 items-center flex text-slate-500")}>
+                <div className={cn(inputClasses, "bg-slate-100 items-center flex text-[var(--sb-text-muted)]")}>
                   {new Date().toLocaleDateString()}
                 </div>
               </div>
@@ -111,7 +112,7 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
             {/* Items section */}
             <div className="space-y-4">
               <div className="flex items-center justify-between ml-1">
-                <label className="text-[11px] font-black uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                <label className="text-[11px] font-black uppercase tracking-wider text-[var(--sb-text-muted)] flex items-center gap-2">
                   <List size={12} />
                   Procedimientos y Tratamientos
                 </label>
@@ -154,7 +155,7 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
                         />
                       </div>
                       <div className="relative w-32">
-                        <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+                        <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--sb-text-muted)]" size={14} />
                         <input
                           type="number"
                           className={cn(inputClasses, "pl-8 text-right")}
@@ -168,7 +169,7 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
                         type="button"
                         onClick={() => removeItem(index)}
                         disabled={items.length === 1}
-                        className="p-2.5 rounded-xl text-slate-300 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all opacity-0 group-hover:opacity-100 disabled:opacity-0"
+                        className="p-2.5 rounded-xl text-[var(--sb-border)] hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all opacity-0 group-hover:opacity-100 disabled:opacity-0"
                       >
                         <Trash2 size={18} />
                       </button>
@@ -179,17 +180,18 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
             </div>
 
             {/* Total Display */}
-            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-3xl p-6 border-2 border-dashed border-slate-200 dark:border-slate-700">
+            <div className="rounded-3xl p-6 border-2 border-dashed border-[var(--sb-border)]"
+              style={{ background: 'var(--sb-active-bg)' }}>
                <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="h-10 w-10 rounded-xl bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400">
                        <DollarSign size={20} />
                     </div>
-                    <span className="font-bold text-slate-900 dark:text-white">Resumen Mensual</span>
+                    <span className="font-bold text-[var(--sb-text)]">Resumen Mensual</span>
                   </div>
                   <div className="flex flex-col items-end">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Total a Facturar</span>
-                    <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-[var(--sb-text-muted)]">Total a Facturar</span>
+                    <span className="text-3xl font-black text-[var(--sb-text)] tracking-tighter">
                        ${total.toLocaleString()}
                     </span>
                   </div>
@@ -201,7 +203,8 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-slate-300 text-slate-600 dark:text-slate-300 py-3.5 rounded-2xl font-bold transition-all"
+                className="flex-1 py-3.5 rounded-2xl font-bold transition-all hover:opacity-80"
+                style={{ background: 'var(--sb-active-bg)', border: '2px solid var(--sb-border)', color: 'var(--sb-text-muted)' }}
               >
                 Cancelar
               </button>

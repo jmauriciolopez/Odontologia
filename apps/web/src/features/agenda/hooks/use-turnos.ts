@@ -3,10 +3,18 @@ import { agendaApi } from '../api/agenda-api';
 import { TurnosFiltros, CreateTurnoDto, UpdateTurnoDto } from '../types';
 
 export const useTurnos = (filtros?: TurnosFiltros) => {
+  // Serialize filtros to stable primitives so React Query caches correctly
+  const fecha         = filtros?.fecha;
+  const desde         = filtros?.desde;
+  const hasta         = filtros?.hasta;
+  const profesionalId = filtros?.profesionalId;
+  const pacienteId    = filtros?.pacienteId;
+  const estado        = filtros?.estado;
+
   return useQuery({
-    queryKey: ['turnos', filtros],
+    queryKey: ['turnos', fecha, desde, hasta, profesionalId, pacienteId, estado],
     queryFn: () => agendaApi.findAll(filtros),
-    refetchInterval: 10000, // 10 seconds polling for 'realtime' feel without high overhead
+    refetchInterval: 10000,
   });
 };
 
@@ -35,7 +43,7 @@ export const useAgendaActions = () => {
   });
 
   const updateTurno = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: UpdateTurnoDto }) => 
+    mutationFn: ({ id, data }: { id: string; data: UpdateTurnoDto }) =>
       agendaApi.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['turnos'] });
@@ -49,8 +57,8 @@ export const useAgendaActions = () => {
     },
   });
 
-  return { 
-    createTurno: createTurno.mutateAsync, 
+  return {
+    createTurno: createTurno.mutateAsync,
     isCreating: createTurno.isPending,
     updateTurno: updateTurno.mutateAsync,
     isUpdating: updateTurno.isPending,

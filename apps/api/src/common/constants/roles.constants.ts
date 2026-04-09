@@ -1,6 +1,6 @@
 export enum Role {
-  ADMIN = 'ADMIN',
-  ODONTOLOGO = 'ODONTOLOGO',
-  RECEPCIONISTA = 'RECEPCIONISTA',
-  ASISTENTE = 'ASISTENTE',
+  ADMIN = 'admin',
+  ODONTOLOGO = 'profesional',
+  RECEPCIONISTA = 'recepcionista',
+  ASISTENTE = 'asistente',
 }

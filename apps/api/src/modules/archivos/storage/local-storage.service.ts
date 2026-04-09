@@ -22,9 +22,9 @@ export class LocalStorageService implements IStorageService {
 
     const fileName = `${uuidv4()}-${file.originalname}`;
     const filePath = path.join(targetFolder, fileName);
-    
+
     fs.writeFileSync(filePath, file.buffer);
-    
+
     return path.join(folder, fileName).replace(/\\/g, '/');
   }
 
@@ -36,7 +36,7 @@ export class LocalStorageService implements IStorageService {
   }
 
   getUrl(filePath: string): string {
-    // Para desarrollo, asumiendo que exponemos la carpeta uploads como estática
-    return `/uploads/${filePath}`;
+    const apiBase = process.env.API_URL || `http://localhost:${process.env.PORT || 3002}`;
+    return `${apiBase}/uploads/${filePath}`;
   }
 }

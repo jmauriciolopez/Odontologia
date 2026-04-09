@@ -22,6 +22,10 @@ export const pacientesApi = {
     return httpClient.post(`fichas-clinicas/evoluciones`, { fichaId, ...data });
   },
 
+  addAntecedente: async (data: { fichaId: string; tipo: string; descripcion: string }): Promise<any> => {
+    return httpClient.post('fichas-clinicas/antecedentes', data);
+  },
+
   getFichaByPacienteId: async (pacienteId: string): Promise<any> => {
     return httpClient.get(`fichas-clinicas/paciente/${pacienteId}`);
   },

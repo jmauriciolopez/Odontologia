@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Activity,
@@ -54,22 +54,23 @@ export const TratamientosPage: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <h1 className="text-4xl font-heading font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-3">
+          <h1 className="text-4xl font-heading font-bold tracking-tight text-[var(--sb-text)] flex items-center gap-3">
             <Activity className="text-blue-600" size={32} />
             Progreso de Tratamientos
           </h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-2 font-medium max-w-2xl">
+          <p className="text-[var(--sb-text-muted)] mt-2 font-medium max-w-2xl">
             Visualiza la evolución clínica de tus pacientes y gestiona los hitos de cada plan de tratamiento de forma independiente.
           </p>
         </motion.div>
 
-        <div className="flex items-center gap-4 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md p-2 rounded-2xl border border-slate-200/50 dark:border-slate-800/50 shadow-medical">
-          <div className="px-4 py-2 text-center border-r border-slate-200 dark:border-slate-800">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Activos</p>
+        <div className="flex items-center gap-4 p-2 rounded-2xl border border-[var(--sb-border)] shadow-medical"
+          style={{ background: 'var(--card-bg)' }}>
+          <div className="px-4 py-2 text-center border-r border-[var(--sb-border)]">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--sb-text-muted)]">Activos</p>
             <p className="text-xl font-bold text-blue-600">{activePlanes.length}</p>
           </div>
           <div className="px-4 py-2 text-center">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Promedio</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--sb-text-muted)]">Promedio</p>
             <p className="text-xl font-bold text-emerald-500">
               {activePlanes.length > 0
                 ? Math.round(activePlanes.reduce((acc: number, p: PlanTratamiento) => acc + calculateProgress(p), 0) / activePlanes.length)
@@ -82,21 +83,21 @@ export const TratamientosPage: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* List Section */}
         <div className={cn("col-span-1 lg:col-span-12 transition-all duration-500 ease-in-out", selectedPlanId && "lg:col-span-5 hidden lg:block")}>
-          <PremiumCard className="h-full flex flex-col p-0 border-none bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl">
-            <div className="p-6 border-b border-slate-100/50 dark:border-slate-800/50 flex items-center gap-4">
+          <PremiumCard className="h-full flex flex-col p-0 border-none">
+            <div className="p-6 border-b border-[var(--sb-border)] flex items-center gap-4">
               <div className="relative flex-1 group">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={18} />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--sb-text-muted)] group-focus-within:text-blue-500 transition-colors" size={18} />
                 <input
                   type="text"
                   placeholder="Buscar por plan, paciente o profesional..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full bg-white/50 dark:bg-slate-800/50 border-transparent focus:bg-white dark:focus:bg-slate-900 border focus:border-blue-500/30 rounded-xl py-2.5 pl-10 pr-10 text-sm outline-none transition-all shadow-sm"
+                  className="input-premium py-2.5 pl-10 pr-10 text-sm"
                 />
                 {searchTerm && (
                   <button
                     onClick={() => setSearchTerm('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--sb-border)] hover:text-slate-500 transition-colors"
                   >
                     <X size={16} />
                   </button>
@@ -105,7 +106,8 @@ export const TratamientosPage: React.FC = () => {
               {searchTerm && (
                 <button
                   onClick={() => setSearchTerm('')}
-                  className="p-2.5 rounded-xl bg-white/50 dark:bg-slate-800/50 text-blue-500 border border-blue-200/50 dark:border-blue-800/50 transition-all"
+                  className="p-2.5 rounded-xl text-blue-500 border border-blue-200/50 dark:border-blue-800/50 transition-all"
+                  style={{ background: 'var(--sb-active-bg)' }}
                   title="Limpiar búsqueda"
                 >
                   <X size={18} />
@@ -132,13 +134,13 @@ export const TratamientosPage: React.FC = () => {
                       >
                         <div className="flex items-start justify-between mb-4">
                           <div className="space-y-1">
-                            <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors leading-none">
+                            <h3 className="text-base font-bold text-[var(--sb-text)] group-hover:text-blue-600 transition-colors leading-none">
                               {plan.nombre}
                             </h3>
-                            <p className="text-xs font-bold text-slate-600 dark:text-slate-300">
+                            <p className="text-xs font-bold text-[var(--sb-text-muted)]">
                               🛒 {plan.paciente?.nombre} {plan.paciente?.apellido}
                             </p>
-                            <p className="text-[11px] font-medium text-slate-400 flex items-center gap-1.5 pt-1">
+                            <p className="text-[11px] font-medium text-[var(--sb-text-muted)] flex items-center gap-1.5 pt-1">
                               <Stethoscope size={12} className="text-slate-300" />
                               Dr. {plan.profesional?.usuario.nombre} {plan.profesional?.usuario.apellido}
                             </p>
@@ -152,7 +154,7 @@ export const TratamientosPage: React.FC = () => {
                         </div>
 
                         {/* Progress Bar Mini */}
-                        <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                        <div className="h-1.5 w-full rounded-full overflow-hidden" style={{ background: 'var(--sb-active-bg)' }}>
                           <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: `${progress}%` }}
@@ -164,7 +166,7 @@ export const TratamientosPage: React.FC = () => {
                         </div>
 
                         <div className="flex items-center justify-between mt-4">
-                          <span className="text-[11px] text-slate-400 flex items-center gap-1">
+                          <span className="text-[11px] text-[var(--sb-text-muted)] flex items-center gap-1">
                             <Clock size={12} /> Actualizado {new Date(plan.updatedAt).toLocaleDateString()}
                           </span>
                           <span className={cn(
@@ -178,10 +180,10 @@ export const TratamientosPage: React.FC = () => {
                     );
                   })
                 ) : (
-                  <div className="medical-card p-20 text-center mx-6 my-10 border-dashed border-slate-200 dark:border-slate-800 shadow-none">
-                    <Activity size={48} className="mx-auto text-slate-200 dark:text-slate-800 mb-4" />
-                    <p className="text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest text-[11px]">No se encontraron planes</p>
-                    <p className="text-slate-400 dark:text-slate-500 text-xs mt-2">Intenta con otro término de búsqueda (paciente, profesional o plan).</p>
+                  <div className="medical-card p-20 text-center mx-6 my-10 border-dashed border-[var(--sb-border)] shadow-none">
+                    <Activity size={48} className="mx-auto text-[var(--sb-border)] dark:text-slate-800 mb-4" />
+                    <p className="text-[var(--sb-text-muted)] font-bold uppercase tracking-widest text-[11px]">No se encontraron planes</p>
+                    <p className="text-[var(--sb-text-muted)] text-xs mt-2">Intenta con otro término de búsqueda (paciente, profesional o plan).</p>
                   </div>
                 )}
               </AnimatePresence>
@@ -198,8 +200,8 @@ export const TratamientosPage: React.FC = () => {
               exit={{ opacity: 0, x: 20 }}
               className="col-span-1 lg:col-span-7"
             >
-              <PremiumCard className="h-full flex flex-col p-0 border-none bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl shadow-medical">
-                <div className="p-8 border-b border-slate-100 dark:border-slate-800">
+              <PremiumCard className="h-full flex flex-col p-0 border-none shadow-medical">
+                <div className="p-8 border-b border-[var(--sb-border)]">
                   <div className="flex justify-between items-start mb-6">
                     <div>
                       <button
@@ -208,13 +210,13 @@ export const TratamientosPage: React.FC = () => {
                       >
                         <ChevronRight size={16} className="rotate-180" /> Volver
                       </button>
-                      <h2 className="text-2xl font-bold text-slate-900 dark:text-white uppercase tracking-tight">{selectedPlan.nombre}</h2>
+                      <h2 className="text-2xl font-bold text-[var(--sb-text)] uppercase tracking-tight">{selectedPlan.nombre}</h2>
                       <div className="flex items-center gap-4 mt-2">
-                         <span className="text-sm font-medium text-slate-500 flex items-center gap-1.5">
+                         <span className="text-sm font-medium text-[var(--sb-text-muted)] flex items-center gap-1.5">
                            <Activity size={14} className="text-blue-500" />
                            {selectedPlan.items.length} Procedimientos
                          </span>
-                         <span className="text-sm font-medium text-slate-500 flex items-center gap-1.5">
+                         <span className="text-sm font-medium text-[var(--sb-text-muted)] flex items-center gap-1.5">
                            <TrendingUp size={14} className="text-emerald-500" />
                            {calculateProgress(selectedPlan)}% Completado
                          </span>
@@ -224,7 +226,7 @@ export const TratamientosPage: React.FC = () => {
 
                   {/* Large Progress Indicator */}
                   <div className="relative pt-1">
-                    <div className="overflow-hidden h-3 mb-4 text-xs flex rounded-full bg-slate-100 dark:bg-slate-800">
+                    <div className="overflow-hidden h-3 mb-4 text-xs flex rounded-full" style={{ background: 'var(--sb-active-bg)' }}>
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${calculateProgress(selectedPlan)}%` }}
@@ -236,7 +238,7 @@ export const TratamientosPage: React.FC = () => {
                 </div>
 
                 <div className="flex-1 p-8 overflow-y-auto max-h-[calc(100vh-450px)] custom-scrollbar">
-                  <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6 py-2 border-b border-slate-50 dark:border-slate-800">Hoja de Ruta Clínica</h4>
+                  <h4 className="text-xs font-bold uppercase tracking-widest text-[var(--sb-text-muted)] mb-6 py-2 border-b border-slate-50 dark:border-slate-800">Hoja de Ruta Clínica</h4>
 
                   <TratamientoProgreso
                     plan={selectedPlan}
@@ -253,7 +255,7 @@ export const TratamientosPage: React.FC = () => {
             <div className="h-24 w-24 rounded-full bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center mx-auto mb-6 text-blue-500 shadow-glass">
               <Stethoscope size={40} />
             </div>
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tight">Detalle del Tratamiento</h3>
+            <h3 className="text-xl font-bold text-[var(--sb-text)] uppercase tracking-tight">Detalle del Tratamiento</h3>
             <p className="text-slate-500 mt-2">Selecciona un plan de la lista para ver el desglose<br />clínico y gestionar su progreso.</p>
           </div>
         )}

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useForm } from 'react-hook-form';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, User, Mail, Shield, Lock, Loader2 } from 'lucide-react';
@@ -90,19 +90,22 @@ export const UsuarioFormModal: React.FC<UsuarioFormModalProps> = ({ isOpen, onCl
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               className="w-full max-w-lg pointer-events-auto"
             >
-              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl rounded-3xl overflow-hidden max-h-[calc(100vh-4rem)] flex flex-col">
+              <div
+                className="rounded-3xl overflow-hidden max-h-[calc(100vh-4rem)] flex flex-col"
+                style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', color: 'var(--sb-text)' }}
+              >
 
                 {/* Header */}
-                <div className="px-8 py-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between shrink-0">
+                <div className="px-8 py-6 border-b border-[var(--sb-border)] flex items-center justify-between shrink-0">
                   <div>
-                    <h2 className="text-xl font-black tracking-tight text-slate-900 dark:text-white uppercase">
+                    <h2 className="text-xl font-black tracking-tight text-[var(--sb-text)] uppercase">
                       {isEdit ? 'Editar Usuario' : 'Nuevo Usuario'}
                     </h2>
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+                    <p className="text-xs font-bold text-[var(--sb-text-muted)] uppercase tracking-widest mt-0.5">
                       {isEdit ? `Modificando: ${editingUser.email}` : 'Registrar nuevo miembro del equipo'}
                     </p>
                   </div>
-                  <button onClick={onClose} className="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 transition-colors">
+                  <button onClick={onClose} className="p-2 rounded-xl hover:opacity-80 text-[var(--sb-text-muted)] transition-colors">
                     <X size={20} />
                   </button>
                 </div>
@@ -112,22 +115,22 @@ export const UsuarioFormModal: React.FC<UsuarioFormModalProps> = ({ isOpen, onCl
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Nombre</label>
+                      <label className="text-[11px] font-bold uppercase tracking-widest text-[var(--sb-text-muted)]">Nombre</label>
                       <div className="relative group">
-                        <User className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={16} />
+                        <User className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--sb-text-muted)] group-focus-within:text-blue-500 transition-colors" size={16} />
                         <input
                           {...register('nombre', { required: 'Requerido' })}
-                          className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 rounded-xl py-2.5 pl-9 pr-4 text-sm outline-none transition-all"
+                          className="input-premium py-2.5 pl-9 pr-4 text-sm"
                           placeholder="Juan"
                         />
                       </div>
                       {errors.nombre && <p className="text-[10px] text-rose-500">{errors.nombre.message}</p>}
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Apellido</label>
+                      <label className="text-[11px] font-bold uppercase tracking-widest text-[var(--sb-text-muted)]">Apellido</label>
                       <input
                         {...register('apellido', { required: 'Requerido' })}
-                        className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 rounded-xl py-2.5 px-4 text-sm outline-none transition-all"
+                        className="input-premium py-2.5 px-4 text-sm"
                         placeholder="Pérez"
                       />
                       {errors.apellido && <p className="text-[10px] text-rose-500">{errors.apellido.message}</p>}
@@ -136,29 +139,29 @@ export const UsuarioFormModal: React.FC<UsuarioFormModalProps> = ({ isOpen, onCl
 
                   {/* Email — readonly on edit */}
                   <div className="space-y-1.5">
-                    <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Email</label>
+                    <label className="text-[11px] font-bold uppercase tracking-widest text-[var(--sb-text-muted)]">Email</label>
                     <div className="relative group">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={16} />
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--sb-text-muted)] group-focus-within:text-blue-500 transition-colors" size={16} />
                       <input
                         {...register('email', { required: !isEdit })}
                         type="email"
                         readOnly={isEdit}
-                        className={`w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl py-2.5 pl-9 pr-4 text-sm outline-none transition-all ${isEdit ? 'opacity-60 cursor-not-allowed' : 'focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900'}`}
+                        className={`input-premium py-2.5 pl-9 pr-4 text-sm ${isEdit ? 'opacity-60 cursor-not-allowed' : ''}`}
                         placeholder="juan@clinica.com"
                       />
                     </div>
-                    {isEdit && <p className="text-[10px] text-slate-400">El email no puede modificarse</p>}
+                    {isEdit && <p className="text-[10px] text-[var(--sb-text-muted)]">El email no puede modificarse</p>}
                   </div>
 
                   {/* Roles */}
                   <div className="space-y-1.5">
-                    <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Roles</label>
+                    <label className="text-[11px] font-bold uppercase tracking-widest text-[var(--sb-text-muted)]">Roles</label>
                     <div className="relative group">
-                      <Shield className="absolute left-3 top-3 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={16} />
+                      <Shield className="absolute left-3 top-3 text-[var(--sb-text-muted)] group-focus-within:text-blue-500 transition-colors" size={16} />
                       <select
                         multiple
                         {...register('rolIds', { required: 'Seleccione al menos un rol' })}
-                        className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 rounded-xl py-2.5 pl-9 pr-4 text-sm outline-none transition-all h-24"
+                        className="input-premium py-2.5 pl-9 pr-4 text-sm h-24"
                       >
                         {roles.map((rol: any) => (
                           <option key={rol.id} value={rol.id}>{rol.nombre}</option>
@@ -166,19 +169,19 @@ export const UsuarioFormModal: React.FC<UsuarioFormModalProps> = ({ isOpen, onCl
                       </select>
                     </div>
                     {errors.rolIds && <p className="text-[10px] text-rose-500">{String(errors.rolIds.message)}</p>}
-                    <p className="text-[10px] text-slate-400">Ctrl/Cmd + click para seleccionar múltiples</p>
+                    <p className="text-[10px] text-[var(--sb-text-muted)]">Ctrl/Cmd + click para seleccionar múltiples</p>
                   </div>
 
                   {/* Password — only on create */}
                   {!isEdit && (
                     <div className="space-y-1.5">
-                      <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Contraseña Temporal</label>
+                      <label className="text-[11px] font-bold uppercase tracking-widest text-[var(--sb-text-muted)]">Contraseña Temporal</label>
                       <div className="relative group">
-                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={16} />
+                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--sb-text-muted)] group-focus-within:text-blue-500 transition-colors" size={16} />
                         <input
                           type="password"
                           {...register('password', { required: 'Requerido', minLength: { value: 6, message: 'Mínimo 6 caracteres' } })}
-                          className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 rounded-xl py-2.5 pl-9 pr-4 text-sm outline-none transition-all"
+                          className="input-premium py-2.5 pl-9 pr-4 text-sm"
                           placeholder="••••••••"
                         />
                       </div>
@@ -191,7 +194,7 @@ export const UsuarioFormModal: React.FC<UsuarioFormModalProps> = ({ isOpen, onCl
                     <button
                       type="button"
                       onClick={onClose}
-                      className="flex-1 px-6 py-3 rounded-xl font-bold text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all border border-slate-200 dark:border-slate-700"
+                      className="flex-1 px-6 py-3 rounded-xl font-bold text-sm text-[var(--sb-text-muted)] transition-all hover:opacity-80 border border-[var(--sb-border)]"
                     >
                       Cancelar
                     </button>

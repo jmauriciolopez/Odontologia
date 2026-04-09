@@ -11,8 +11,8 @@ export class EvolucionClinica extends BaseEntity {
   @JoinColumn({ name: 'ficha_id' })
   ficha: FichaClinica;
 
-  @Column({ name: 'profesional_id' })
-  profesionalId: string;
+  @Column({ name: 'profesional_id', type: 'uuid', nullable: true })
+  profesionalId: string | null;
 
   @Column({ type: 'text' })
   descripcion: string;

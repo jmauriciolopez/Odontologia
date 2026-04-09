@@ -40,27 +40,27 @@ export const EvolucionClinicaList: React.FC<EvolucionClinicaListProps> = ({ evol
 
       <div className="flex flex-col gap-4">
         {evoluciones.length > 0 ? evoluciones.map((ev, index) => (
-          <div key={ev.id} className="flex gap-4" style={{ 
-            paddingBottom: '1rem', 
-            borderLeft: '2px solid var(--border)', 
+          <div key={ev.id} className="flex gap-4" style={{
+            paddingBottom: '1rem',
+            borderLeft: '2px solid var(--border)',
             paddingLeft: '1.5rem',
             position: 'relative',
             marginLeft: '0.5rem'
           }}>
-            <div style={{ 
-              position: 'absolute', 
-              left: '-9px', 
-              top: '0', 
-              width: '16px', 
-              height: '16px', 
-              borderRadius: '50%', 
+            <div style={{
+              position: 'absolute',
+              left: '-9px',
+              top: '0',
+              width: '16px',
+              height: '16px',
+              borderRadius: '50%',
               background: 'var(--primary)',
               border: '4px solid var(--bg-surface)'
             }} />
             <div className="flex flex-col gap-1 w-100">
               <div className="flex justify-between items-center">
                 <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--primary)' }}>
-                  {new Date(ev.fechaRegistro).toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}
+                  {new Date(ev.fecha || ev.fechaRegistro || ev.createdAt || '').toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}
                 </span>
                 <span className="text-muted" style={{ fontSize: '0.75rem' }}># {evoluciones.length - index}</span>
               </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Eye, EyeOff, Lock, Mail, Loader2, Activity, Shield, Stethoscope } from 'lucide-react';
 import { useLogin } from '../hooks/use-login';
@@ -69,7 +69,7 @@ export const LoginPage: React.FC = () => {
                 sin fricciones.
               </span>
             </h1>
-            <p className="max-w-sm text-base font-medium leading-relaxed text-slate-400">
+            <p className="max-w-sm text-base font-medium leading-relaxed text-[var(--sb-text-muted)]">
               Centraliza fichas, turnos, odontogramas y finanzas en un solo sistema diseñado para clínicas modernas.
             </p>
           </div>
@@ -84,10 +84,10 @@ export const LoginPage: React.FC = () => {
                 transition={{ delay: 0.4 + i * 0.1 }}
                 className="flex items-center gap-3"
               >
-                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-800 border border-slate-700">
+                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[var(--sb-active-bg)] border border-[var(--sb-border)]">
                   <Icon size={15} className="text-blue-400" />
                 </div>
-                <span className="text-sm font-medium text-slate-300">{label}</span>
+                <span className="text-sm font-medium text-slate-400">{label}</span>
               </motion.div>
             ))}
           </div>
@@ -98,7 +98,7 @@ export const LoginPage: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
-          className="relative z-10 text-xs font-medium text-slate-600"
+          className="relative z-10 text-xs font-medium text-[var(--sb-text-muted)]"
         >
           © 2026 Antigravity Labs · Todos los derechos reservados
         </motion.p>
@@ -127,24 +127,24 @@ export const LoginPage: React.FC = () => {
           </div>
 
           {/* Card */}
-          <div className="rounded-3xl border border-slate-800 bg-slate-900/80 p-8 shadow-2xl shadow-black/40 backdrop-blur-xl">
+          <div className="rounded-3xl border border-[var(--sb-border)] bg-slate-900/80 p-8 shadow-2xl shadow-black/40 backdrop-blur-xl">
 
             <div className="mb-8 space-y-1">
               <h2 className="text-2xl font-black tracking-tight text-white">Bienvenido de vuelta</h2>
-              <p className="text-sm font-medium text-slate-500">Ingresá tus credenciales para continuar</p>
+              <p className="text-sm font-medium text-[var(--sb-text-muted)]">Ingresá tus credenciales para continuar</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
 
               {/* Email */}
               <div className="space-y-1.5">
-                <label className="text-[11px] font-bold uppercase tracking-widest text-slate-500">
+                <label className="text-[11px] font-bold uppercase tracking-widest text-[var(--sb-text-muted)]">
                   Correo electrónico
                 </label>
                 <div className="group relative">
                   <Mail
                     size={16}
-                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600 transition-colors group-focus-within:text-blue-400"
+                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--sb-text-muted)] transition-colors group-focus-within:text-blue-400"
                   />
                   <input
                     type="email"
@@ -152,20 +152,20 @@ export const LoginPage: React.FC = () => {
                     onChange={e => setEmail(e.target.value)}
                     required
                     placeholder="admin@clinica.com"
-                    className="w-full rounded-xl border border-slate-800 bg-slate-800/60 py-3 pl-10 pr-4 text-sm font-medium text-white placeholder-slate-600 outline-none transition-all focus:border-blue-500/50 focus:bg-slate-800 focus:ring-2 focus:ring-blue-500/10"
+                    className="w-full rounded-xl border border-[var(--sb-border)] bg-slate-800/60 py-3 pl-10 pr-4 text-sm font-medium text-white placeholder-slate-600 outline-none transition-all focus:border-blue-500/50 focus:bg-slate-800 focus:ring-2 focus:ring-blue-500/10"
                   />
                 </div>
               </div>
 
               {/* Password */}
               <div className="space-y-1.5">
-                <label className="text-[11px] font-bold uppercase tracking-widest text-slate-500">
+                <label className="text-[11px] font-bold uppercase tracking-widest text-[var(--sb-text-muted)]">
                   Contraseña
                 </label>
                 <div className="group relative">
                   <Lock
                     size={16}
-                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600 transition-colors group-focus-within:text-blue-400"
+                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--sb-text-muted)] transition-colors group-focus-within:text-blue-400"
                   />
                   <input
                     type={showPassword ? 'text' : 'password'}
@@ -173,12 +173,12 @@ export const LoginPage: React.FC = () => {
                     onChange={e => setPassword(e.target.value)}
                     required
                     placeholder="••••••••"
-                    className="w-full rounded-xl border border-slate-800 bg-slate-800/60 py-3 pl-10 pr-12 text-sm font-medium text-white placeholder-slate-600 outline-none transition-all focus:border-blue-500/50 focus:bg-slate-800 focus:ring-2 focus:ring-blue-500/10"
+                    className="w-full rounded-xl border border-[var(--sb-border)] bg-slate-800/60 py-3 pl-10 pr-12 text-sm font-medium text-white placeholder-slate-600 outline-none transition-all focus:border-blue-500/50 focus:bg-slate-800 focus:ring-2 focus:ring-blue-500/10"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(v => !v)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-600 transition-colors hover:text-slate-300"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[var(--sb-text-muted)] transition-colors hover:text-slate-300"
                   >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
@@ -218,11 +218,11 @@ export const LoginPage: React.FC = () => {
 
             {/* Demo shortcut — only on localhost */}
             {typeof window !== 'undefined' && window.location.hostname === 'localhost' && (
-              <div className="mt-6 border-t border-slate-800 pt-5">
+              <div className="mt-6 border-t border-[var(--sb-border)] pt-5">
                 <button
                   type="button"
                   onClick={() => { setEmail('admin@odontologia.com'); setPassword('Admin123!'); }}
-                  className="w-full rounded-xl border border-slate-800 bg-slate-800/40 py-2.5 text-[11px] font-bold uppercase tracking-widest text-slate-500 transition-all hover:border-slate-700 hover:bg-slate-800 hover:text-slate-300"
+                  className="w-full rounded-xl border border-[var(--sb-border)] bg-slate-800/40 py-2.5 text-[11px] font-bold uppercase tracking-widest text-[var(--sb-text-muted)] transition-all hover:border-slate-700 hover:bg-slate-800 hover:text-slate-300"
                 >
                   🚀 Cargar credenciales demo
                 </button>
@@ -231,7 +231,7 @@ export const LoginPage: React.FC = () => {
           </div>
 
           {/* Status indicator */}
-          <div className="mt-6 flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-widest text-slate-600">
+          <div className="mt-6 flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[var(--sb-text-muted)]">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
             Sistema operativo · Todos los servicios activos
           </div>

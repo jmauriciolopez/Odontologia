@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { usePacientes, usePacienteMutations } from '../hooks/use-pacientes';
 import { PacientesTable } from '../components/pacientes-table';
 import { PacienteForm } from '../components/paciente-form';
@@ -30,7 +30,7 @@ export const PacientesPage: React.FC = () => {
            initial={{ opacity: 0, x: -20 }}
            animate={{ opacity: 1, x: 0 }}
         >
-          <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
+          <h1 className="text-4xl font-black text-[var(--sb-text)] tracking-tight flex items-center gap-3">
              <Users className="text-blue-600" size={32} />
              Gestión de Pacientes
           </h1>
@@ -38,7 +38,7 @@ export const PacientesPage: React.FC = () => {
         </motion.div>
 
         <button
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-blue-500/20 transition-all active:scale-95"
+          className="flex items-center gap-2 btn-primary px-6 py-3 rounded-2xl"
           onClick={() => setShowModal(true)}
         >
           <UserPlus size={20} />
@@ -48,15 +48,16 @@ export const PacientesPage: React.FC = () => {
 
       <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
         <div className="relative w-full md:max-w-md group">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={20} />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--sb-text-muted)] group-focus-within:text-blue-500 transition-colors" size={20} />
           <input
-            className="w-full bg-white dark:bg-slate-900 border-2 border-transparent focus:border-blue-500/20 py-3 pl-12 pr-4 rounded-2xl outline-none shadow-sm text-sm font-medium transition-all"
+            className="input-premium py-3 pl-12 pr-4 rounded-2xl text-sm font-medium w-full"
             placeholder="Buscar por nombre, documento o teléfono..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div className="px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-500">
+        <div className="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest"
+          style={{ background: 'var(--sb-active-bg)', color: 'var(--sb-text-muted)' }}>
           {pacientes.length} Registros Encontrados
         </div>
       </div>
