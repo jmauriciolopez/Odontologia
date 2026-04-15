@@ -186,7 +186,7 @@ export const PacienteDetallePage: React.FC = () => {
                 >
                   <div className="p-1.5 space-y-0.5">
                     <button
-                      onClick={() => { navigate('/agenda'); setShowMoreMenu(false); }}
+                      onClick={() => { navigate(`/agenda?pacienteId=${id}`); setShowMoreMenu(false); }}
                       className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-left transition-colors hover:bg-[var(--sb-active-bg)]"
                       style={{ color: 'var(--sb-text)' }}
                     >
@@ -340,7 +340,7 @@ export const PacienteDetallePage: React.FC = () => {
                       )) : (
                         <div className="text-center py-6">
                           <p className="text-[10px] font-bold text-[var(--sb-border)] uppercase tracking-widest">No hay turnos agendados</p>
-                          <button onClick={() => navigate('/agenda')} className="mt-4 text-xs font-bold text-blue-600 hover:underline">Ir a la Agenda ⮕</button>
+                          <button onClick={() => navigate(`/agenda?pacienteId=${id}`)} className="mt-4 text-xs font-bold text-blue-600 hover:underline">Ir a la Agenda ⮕</button>
                         </div>
                       )}
                     </div>

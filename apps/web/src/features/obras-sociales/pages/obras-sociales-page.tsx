@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Building2, Plus, Pencil, Trash2, X, Save, Loader2, DollarSign, Search, ChevronRight, Tag } from 'lucide-react';
+import { Building2, Plus, Pencil, Trash2, X, Save, Loader2, DollarSign, Search, ChevronRight, Tag, Copy } from 'lucide-react';
 import { toast } from 'sonner';
 import { useObrasSociales, useObraSocialDetalle, useObrasSocialesMutations } from '../hooks/use-obras-sociales';
+import { useQueryClient } from '@tanstack/react-query';
 import { ObraSocial, ObraSocialPrestacion } from '../types';
 import { httpClient } from '../../../lib/Httpclient';
 import { cn } from '@/lib/utils';
@@ -227,15 +228,98 @@ const PreciosModal: React.FC<{
   );
 };
 
+// ── Modal clonar obra social ────────────────────────────────
+const ClonarModal: React.FC<{
+  origen: ObraSocial;
+  onClose: () => void;
+  onSave: (data: any) => Promise<void>;
+  loading: boolean;
+}> = ({ origen, onClose, onSave, loading }) => {
+  const [form, setForm] = useState({
+    nombre: `${origen.nombre} (copia)`,
+    codigo: '',
+    descripcion: origen.descripcion ?? '',
+  });
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={onClose} />
+      <motion.div initial={{ opacity: 0, scale: 0.95, y: 16 }} animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 16 }}
+        className="relative w-full max-w-md rounded-3xl shadow-2xl overflow-hidden"
+        style={{ background: 'var(--card-bg)', border: '1px solid var(--sb-border)', color: 'var(--sb-text)' }}>
+        <div className="flex items-center justify-between px-7 py-5 border-b border-[var(--sb-border)]">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-indigo-100 dark:bg-indigo-500/10 text-indigo-600">
+              <Copy size={16} />
+            </div>
+            <div>
+              <h2 className="font-black text-base uppercase tracking-tight">Clonar Obra Social</h2>
+              <p className="text-[11px] text-[var(--sb-text-muted)] font-medium">Copia precios de: {origen.nombre}</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:opacity-70 text-[var(--sb-text-muted)]">
+            <X size={18} />
+          </button>
+        </div>
+        <form onSubmit={async e => { e.preventDefault(); await onSave(form); }} className="p-7 space-y-4">
+          <div className="p-3 rounded-2xl text-[11px] font-medium bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-300">
+            Se creará una nueva obra social con todos los precios de <strong>{origen.nombre}</strong>. Podés modificarlos después.
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-black uppercase tracking-widest text-[var(--sb-text-muted)]">Nombre *</label>
+            <input required autoFocus value={form.nombre} onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))}
+              className={inputCls} />
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-black uppercase tracking-widest text-[var(--sb-text-muted)]">Código</label>
+            <input value={form.codigo} onChange={e => setForm(f => ({ ...f, codigo: e.target.value }))}
+              placeholder="Ej: OSDE-002" className={inputCls} />
+          </div>
+          <div className="flex gap-3 pt-2">
+            <button type="button" onClick={onClose}
+              className="flex-1 py-2.5 rounded-xl border border-[var(--sb-border)] text-sm font-bold text-[var(--sb-text-muted)] hover:opacity-80">
+              Cancelar
+            </button>
+            <button type="submit" disabled={loading}
+              className="flex-[2] flex items-center justify-center gap-2 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold shadow-lg shadow-indigo-500/20 disabled:opacity-60">
+              {loading ? <><Loader2 size={14} className="animate-spin" /> Clonando...</> : <><Copy size={14} /> Clonar</>}
+            </button>
+          </div>
+        </form>
+      </motion.div>
+    </div>
+  );
+};
+
 // ── Página principal ────────────────────────────────────────
 export const ObrasSocialesPage: React.FC = () => {
   const { data: obrasSociales = [], isLoading } = useObrasSociales();
   const { create, update, remove } = useObrasSocialesMutations();
+  const qc = useQueryClient();
 
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState<ObraSocial | null>(null);
   const [preciosFor, setPreciosFor] = useState<ObraSocial | null>(null);
+  const [clonarFrom, setClonarFrom] = useState<ObraSocial | null>(null);
   const [search, setSearch] = useState('');
+
+  const [clonarLoading, setClonarLoading] = useState(false);
+
+  const handleClonar = async (data: any) => {
+    setClonarLoading(true);
+    try {
+      await httpClient.post(`obras-sociales/${clonarFrom!.id}/clonar`, data);
+      toast.success('Obra social clonada correctamente');
+      setClonarFrom(null);
+      qc.invalidateQueries({ queryKey: ['obras-sociales'] });
+    } catch (e: any) {
+      toast.error(e.message || 'Error al clonar');
+    } finally {
+      setClonarLoading(false);
+    }
+  };
 
   const filtered = obrasSociales.filter(os =>
     !search || os.nombre.toLowerCase().includes(search.toLowerCase()) ||
@@ -406,6 +490,13 @@ export const ObrasSocialesPage: React.FC = () => {
                           <Pencil size={15} />
                         </button>
                         <button
+                          onClick={() => setClonarFrom(os)}
+                          className="p-2 rounded-lg text-[var(--sb-text-muted)] hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 transition-all"
+                          title="Clonar"
+                        >
+                          <Copy size={15} />
+                        </button>
+                        <button
                           onClick={() => handleDelete(os)}
                           className="p-2 rounded-lg text-[var(--sb-text-muted)] hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all"
                           title="Eliminar"
@@ -436,6 +527,14 @@ export const ObrasSocialesPage: React.FC = () => {
           <PreciosModal
             obraSocial={preciosFor}
             onClose={() => setPreciosFor(null)}
+          />
+        )}
+        {clonarFrom && (
+          <ClonarModal
+            origen={clonarFrom}
+            onClose={() => setClonarFrom(null)}
+            onSave={handleClonar}
+            loading={clonarLoading}
           />
         )}
       </AnimatePresence>

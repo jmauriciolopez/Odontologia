@@ -4,6 +4,7 @@ import {
   TurnosFiltros,
   DisponibilidadResponse,
   CreateTurnoDto,
+  CreateTurnosRecurrentesDto,
   UpdateTurnoDto,
   Profesional,
   Consultorio
@@ -20,6 +21,10 @@ export const agendaApi = {
 
   create: async (data: CreateTurnoDto): Promise<Turno> => {
     return httpClient.post<Turno>('turnos', data);
+  },
+
+  createRecurrentes: async (data: CreateTurnosRecurrentesDto): Promise<Turno[]> => {
+    return httpClient.post<Turno[]>('turnos/recurrentes', data);
   },
 
   update: async (id: string, data: UpdateTurnoDto): Promise<Turno> => {

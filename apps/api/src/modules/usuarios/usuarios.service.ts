@@ -110,6 +110,12 @@ export class UsuariosService {
     });
   }
 
+  async changePassword(id: string, newPassword: string): Promise<void> {
+    const usuario = await this.findOne(id);
+    usuario.passwordHash = await bcrypt.hash(newPassword, 10);
+    await this.usuariosRepository.save(usuario);
+  }
+
   async update(id: string, dto: UpdateUsuarioDto): Promise<Usuario> {
     const usuario = await this.findOne(id);
 

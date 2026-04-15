@@ -1,11 +1,13 @@
 ﻿import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { UserPlus, Search, Filter, Shield, Mail, CheckCircle2, XCircle, Pencil } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { UserPlus, Search, Filter, Shield, Mail, CheckCircle2, XCircle, Pencil, KeyRound, X, Loader2, Eye, EyeOff } from 'lucide-react';
 import { useUsuarios } from '../hooks/use-usuarios';
 import { UsuarioFormModal } from '../components/usuario-form-modal';
 import { PremiumCard } from '@/components/ui/premium-card';
 import { cn } from '@/lib/utils';
 import { Usuario } from '../types';
+import { httpClient } from '@/lib/Httpclient';
+import { toast } from 'sonner';
 
 export const UsuariosPage: React.FC = () => {
   const { usuarios, isLoading } = useUsuarios();
@@ -30,6 +32,31 @@ export const UsuariosPage: React.FC = () => {
   const handleOpenCreate = () => { setEditingUser(null); setIsModalOpen(true); };
   const handleOpenEdit = (user: Usuario) => { setEditingUser(user); setIsModalOpen(true); };
   const handleClose = () => { setIsModalOpen(false); setEditingUser(null); };
+
+  // Cambio de clave
+  const [pwModal, setPwModal] = useState<{ open: boolean; user: Usuario | null }>({ open: false, user: null });
+  const [newPassword, setNewPassword] = useState('');
+  const [savingPw, setSavingPw] = useState(false);
+
+  const [showPw, setShowPw] = useState(false);
+
+  const handleOpenPw = (user: Usuario) => { setPwModal({ open: true, user }); setNewPassword(''); setShowPw(false); };
+  const handleClosePw = () => { setPwModal({ open: false, user: null }); setNewPassword(''); };
+
+  const handleSavePw = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!pwModal.user) return;
+    setSavingPw(true);
+    try {
+      await httpClient.patch(`usuarios/${pwModal.user.id}/password`, { password: newPassword });
+      toast.success('Contraseña actualizada');
+      handleClosePw();
+    } catch (err: any) {
+      toast.error(err.message || 'Error al cambiar la contraseña');
+    } finally {
+      setSavingPw(false);
+    }
+  };
 
   return (
     <div className="space-y-8 pb-10">
@@ -193,13 +220,22 @@ export const UsuariosPage: React.FC = () => {
                       )}
                     </td>
                     <td className="px-6 py-5 text-right">
-                      <button
-                        onClick={() => handleOpenEdit(user)}
-                        className="p-2 rounded-lg text-[var(--sb-text-muted)] hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-all"
-                        title="Editar usuario"
-                      >
-                        <Pencil size={16} />
-                      </button>
+                      <div className="flex items-center justify-end gap-1">
+                        <button
+                          onClick={() => handleOpenEdit(user)}
+                          className="p-2 rounded-lg text-[var(--sb-text-muted)] hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-all"
+                          title="Editar usuario"
+                        >
+                          <Pencil size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleOpenPw(user)}
+                          className="p-2 rounded-lg text-[var(--sb-text-muted)] hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-500/10 transition-all"
+                          title="Cambiar contraseña"
+                        >
+                          <KeyRound size={16} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -216,6 +252,79 @@ export const UsuariosPage: React.FC = () => {
       </PremiumCard>
 
       <UsuarioFormModal isOpen={isModalOpen} onClose={handleClose} editingUser={editingUser} />
+
+      {/* Modal cambio de contraseña */}
+      <AnimatePresence>
+        {pwModal.open && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={handleClosePw}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-sm rounded-3xl shadow-2xl overflow-hidden"
+              style={{ background: 'var(--card-bg)', border: '1px solid var(--sb-border)', color: 'var(--sb-text)' }}
+            >
+              <div className="flex items-center justify-between px-8 py-6 border-b border-[var(--sb-border)]">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-xl bg-amber-100 dark:bg-amber-500/10 text-amber-600">
+                    <KeyRound size={18} />
+                  </div>
+                  <div>
+                    <h2 className="text-base font-black uppercase tracking-tight">Cambiar Contraseña</h2>
+                    <p className="text-[11px] text-[var(--sb-text-muted)] font-medium">
+                      {pwModal.user?.nombre} {pwModal.user?.apellido}
+                    </p>
+                  </div>
+                </div>
+                <button onClick={handleClosePw} className="p-2 rounded-xl text-[var(--sb-text-muted)] hover:opacity-80">
+                  <X size={18} />
+                </button>
+              </div>
+              <form onSubmit={handleSavePw} className="p-8 space-y-5">
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-black uppercase tracking-widest text-[var(--sb-text-muted)]">
+                    Nueva Contraseña
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showPw ? 'text' : 'password'}
+                      required
+                      minLength={6}
+                      autoFocus
+                      value={newPassword}
+                      onChange={e => setNewPassword(e.target.value)}
+                      placeholder="Mínimo 6 caracteres"
+                      className="input-premium text-sm pr-11"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPw(v => !v)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--sb-text-muted)] hover:text-[var(--sb-text)] transition-colors"
+                      tabIndex={-1}
+                    >
+                      {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
+                </div>
+                <div className="flex gap-3 pt-2">
+                  <button type="button" onClick={handleClosePw}
+                    className="flex-1 py-3 rounded-xl border border-[var(--sb-border)] text-sm font-bold text-[var(--sb-text-muted)] hover:opacity-80">
+                    Cancelar
+                  </button>
+                  <button type="submit" disabled={savingPw || newPassword.length < 6}
+                    className="flex-[2] flex items-center justify-center gap-2 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-white text-sm font-bold disabled:opacity-60 transition-all">
+                    {savingPw ? <Loader2 size={15} className="animate-spin" /> : <KeyRound size={15} />}
+                    Actualizar Contraseña
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

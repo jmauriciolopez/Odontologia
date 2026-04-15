@@ -28,7 +28,7 @@ export const AppLayout: React.FC = () => {
 
   return (
     <div
-      className="flex min-h-screen font-sans transition-colors duration-300"
+      className="flex h-screen overflow-hidden font-sans transition-colors duration-300"
       style={{ background: 'var(--card-bg)', color: 'var(--sb-text)' }}
     >
       {/* Mobile sidebar overlay */}
@@ -63,14 +63,15 @@ export const AppLayout: React.FC = () => {
           onMenuClick={() => setIsMobileSidebarOpen(true)}
         />
 
-        <div className="p-8 overflow-y-auto flex-1">
+        <div className="relative flex-1 min-h-0 overflow-hidden">
           <AnimatePresence>
             <motion.div
               key={location.pathname}
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: 'easeInOut' }}
+              className="absolute inset-0 flex flex-col min-h-0 overflow-y-auto p-8"
             >
               <Outlet />
             </motion.div>

@@ -1,4 +1,4 @@
-﻿import React, { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, ContactShadows, PerspectiveCamera } from '@react-three/drei';
 import { Tooth3D } from './Tooth3D';
@@ -8,12 +8,14 @@ interface Odontograma3DProps {
   piezas: PiezaDental[];
   onPiezaSelect?: (pieza: PiezaDental) => void;
   selectedPiezaId?: string;
+  sistemaDental?: string;
 }
 
 export const Odontograma3D: React.FC<Odontograma3DProps> = ({
   piezas,
   onPiezaSelect,
-  selectedPiezaId
+  selectedPiezaId,
+  sistemaDental,
 }) => {
   const superior = [18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 28];
   const inferior = [48, 47, 46, 45, 44, 43, 42, 41, 31, 32, 33, 34, 35, 36, 37, 38];
@@ -34,6 +36,7 @@ export const Odontograma3D: React.FC<Odontograma3DProps> = ({
                 <Tooth3D
                   key={p}
                   posicion={p}
+                  sistemaDental={sistemaDental}
                   caras={pieza.caras}
                   position={[(i - 7.5) * 1.5, 0, 0]}
                   isSelected={pieza.id === selectedPiezaId}
@@ -50,6 +53,7 @@ export const Odontograma3D: React.FC<Odontograma3DProps> = ({
                 <Tooth3D
                   key={p}
                   posicion={p}
+                  sistemaDental={sistemaDental}
                   caras={pieza.caras}
                   position={[(i - 7.5) * 1.5, 0, 0]}
                   isSelected={pieza.id === selectedPiezaId}

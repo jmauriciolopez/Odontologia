@@ -19,6 +19,10 @@ export class TurnoFiltrosDto {
 
   @IsUUID()
   @IsOptional()
+  consultorioId?: string;
+
+  @IsUUID()
+  @IsOptional()
   pacienteId?: string;
 
   @IsString()

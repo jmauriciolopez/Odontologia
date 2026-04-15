@@ -31,6 +31,12 @@ export class ObrasSocialesController {
   @Roles(Role.ADMIN)
   remove(@Param('id', ParseUUIDPipe) id: string) { return this.service.remove(id); }
 
+  @Post(':id/clonar')
+  @Roles(Role.ADMIN)
+  clonar(@Param('id', ParseUUIDPipe) id: string, @Body() dto: CreateObraSocialDto) {
+    return this.service.clonar(id, dto);
+  }
+
   // Precios por obra social
   @Get(':id/prestaciones')
   getPrestaciones(@Param('id', ParseUUIDPipe) id: string) {

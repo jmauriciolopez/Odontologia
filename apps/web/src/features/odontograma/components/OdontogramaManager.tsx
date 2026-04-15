@@ -1,11 +1,13 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useOdontograma, useOdontogramaMutations } from '../hooks/use-odontograma';
+import { useConfiguracionClinica } from '../hooks/use-configuracion-clinica';
 import { OdontogramaView } from './odontograma-view';
 import { Odontograma3D } from './Odontograma3D';
 import { PiezaDental } from '../types';
 import { Info, Activity, Stethoscope, Loader2, Box, LayoutGrid, Plus as PlusIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { etiquetaPieza, tituloSistemaDental, normalizarSistemaDental } from '@/lib/dental-numbering';
 
 interface OdontogramaManagerProps {
   fichaId: string;
@@ -14,12 +16,42 @@ interface OdontogramaManagerProps {
 
 export const OdontogramaManager: React.FC<OdontogramaManagerProps> = ({ fichaId, isReadOnly = false }) => {
   const { data: piezas = [], isLoading } = useOdontograma(fichaId);
+  const { data: clinicaCfg } = useConfiguracionClinica();
+  const sistemaDental = clinicaCfg?.sistemaDental;
   const { updatePieza, addProcedimiento } = useOdontogramaMutations(fichaId);
   const [selectedPiezaId, setSelectedPiezaId] = useState<string | null>(null);
   const [show3D, setShow3D] = useState(false);
 
   // Derivamos la pieza seleccionada de la data para mantener reactividad tras mutaciones
   const selectedPieza = piezas.find(p => p.id === selectedPiezaId) || null;
+
+  const handleMarkAusente = async () => {
+    if (isReadOnly || !selectedPieza) return;
+    await updatePieza.mutateAsync({
+      piezaId: selectedPieza.id,
+      caras: {
+        vestibular: 'ausente',
+        lingual: 'ausente',
+        oclusal: 'ausente',
+        distal: 'ausente',
+        mesial: 'ausente',
+      }
+    });
+  };
+
+  const handleMarkSano = async () => {
+    if (isReadOnly || !selectedPieza) return;
+    await updatePieza.mutateAsync({
+      piezaId: selectedPieza.id,
+      caras: {
+        vestibular: 'sano',
+        lingual: 'sano',
+        oclusal: 'sano',
+        distal: 'sano',
+        mesial: 'sano',
+      }
+    });
+  };
 
   const handleUpdateCara = async (cara: string, estado: string) => {
     if (isReadOnly || !selectedPieza) return;
@@ -30,11 +62,12 @@ export const OdontogramaManager: React.FC<OdontogramaManagerProps> = ({ fichaId,
   };
 
   const states = [
-    { id: 'sano', label: 'Sano', color: '#fff', bg: 'bg-white' },
-    { id: 'caries', label: 'Caries', color: '#ef4444', bg: 'bg-rose-500' },
-    { id: 'restauracion', label: 'Restauración', color: '#10b981', bg: 'bg-emerald-500' },
+    { id: 'sano', label: 'Sano', color: '#f1f5f9', bg: 'bg-slate-100' },
+    { id: 'caries', label: 'Patología / pendiente', color: '#FF0000', bg: 'bg-red-600' },
+    { id: 'temporal', label: 'Temporal / preventivo', color: '#008000', bg: 'bg-green-700' },
+    { id: 'restauracion', label: 'Realizado / definitivo', color: '#0000FF', bg: 'bg-blue-700' },
+    { id: 'corona', label: 'Corona', color: '#0000FF', bg: 'bg-blue-700' },
     { id: 'ausente', label: 'Ausente', color: '#cbd5e1', bg: 'bg-slate-300' },
-    { id: 'corona', label: 'Corona', color: '#f59e0b', bg: 'bg-amber-500' },
   ];
 
   if (isLoading) return (
@@ -46,13 +79,18 @@ export const OdontogramaManager: React.FC<OdontogramaManagerProps> = ({ fichaId,
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-8">
       {/* Visualización Principal */}
-      <div className="medical-card p-4 md:p-8 bg-white/50 backdrop-blur-sm shadow-medical overflow-hidden">
+      <div className="medical-card p-4 md:p-8 bg-white/50 backdrop-blur-sm shadow-medical overflow-x-auto">
         <div className="flex items-center justify-between mb-6">
            <div className="flex items-center gap-2">
               <div className="p-2 bg-primary/10 rounded-lg text-primary">
                 <Stethoscope size={18} />
               </div>
-              <h3 className="font-bold text-[var(--sb-text)]">Mapa Dental Interactivo</h3>
+              <div className="flex flex-col gap-0.5">
+                <h3 className="font-bold text-[var(--sb-text)]">Mapa Dental Interactivo</h3>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--sb-text-muted)]">
+                  Numeración: {tituloSistemaDental(sistemaDental)}
+                </span>
+              </div>
            </div>
 
            <div className="flex items-center gap-4">
@@ -86,12 +124,14 @@ export const OdontogramaManager: React.FC<OdontogramaManagerProps> = ({ fichaId,
             piezas={piezas}
             onPiezaSelect={(p) => setSelectedPiezaId(p.id)}
             selectedPiezaId={selectedPiezaId || undefined}
+            sistemaDental={sistemaDental}
           />
         ) : (
           <OdontogramaView
             piezas={piezas}
             onPiezaSelect={(p) => setSelectedPiezaId(p.id)}
             selectedPiezaId={selectedPiezaId || undefined}
+            sistemaDental={sistemaDental}
           />
         )}
       </div>
@@ -109,15 +149,42 @@ export const OdontogramaManager: React.FC<OdontogramaManagerProps> = ({ fichaId,
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 rounded-2xl bg-primary text-white flex items-center justify-center text-xl font-bold shadow-lg shadow-primary/30">
-                    {selectedPieza.posicion}
+                  <div className="min-h-12 min-w-12 px-1 rounded-2xl bg-primary text-white flex items-center justify-center text-lg font-bold shadow-lg shadow-primary/30">
+                    {etiquetaPieza(selectedPieza.posicion, sistemaDental)}
                   </div>
                   <div>
-                    <h3 className="font-extrabold text-[var(--sb-text)] tracking-tight">Pieza {selectedPieza.posicion}</h3>
-                    <p className="text-[10px] text-[var(--sb-text-muted)] font-bold uppercase tracking-widest leading-none">Gestión Clínica Activa</p>
+                    <h3 className="font-extrabold text-[var(--sb-text)] tracking-tight">
+                      Pieza {etiquetaPieza(selectedPieza.posicion, sistemaDental)}
+                    </h3>
+                    <p className="text-[10px] text-[var(--sb-text-muted)] font-bold uppercase tracking-widest leading-none">
+                      {normalizarSistemaDental(sistemaDental) !== 'FDI'
+                        ? `Referencia FDI ${selectedPieza.posicion}`
+                        : 'Gestión clínica activa'}
+                    </p>
                   </div>
                 </div>
               </div>
+
+              {/* Acciones rápidas */}
+              {!isReadOnly && (
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleMarkAusente}
+                    disabled={updatePieza.isPending}
+                    className="flex-1 py-2 rounded-xl text-xs font-bold transition-all active:scale-95 disabled:opacity-50 border"
+                    style={{ background: 'var(--card-bg)', borderColor: 'var(--sb-border)', color: 'var(--sb-text-muted)' }}
+                  >
+                    🚫 Marcar Ausente
+                  </button>
+                  <button
+                    onClick={handleMarkSano}
+                    disabled={updatePieza.isPending}
+                    className="flex-1 py-2 rounded-xl text-xs font-bold transition-all active:scale-95 disabled:opacity-50 border border-emerald-200 text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10 dark:border-emerald-500/20"
+                  >
+                    ✓ Marcar Sano
+                  </button>
+                </div>
+              )}
 
               {/* Hallazgos por Cara */}
               <div className="space-y-4">
@@ -133,13 +200,13 @@ export const OdontogramaManager: React.FC<OdontogramaManagerProps> = ({ fichaId,
                         <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--sb-text-muted)]">{cara}</label>
                         <div className={cn(
                           "h-1.5 w-1.5 rounded-full",
-                          states.find(s => s.id === (selectedPieza.caras as any)[cara])?.bg || 'bg-slate-200'
+                          states.find(s => s.id === (selectedPieza.caras as any)?.[cara])?.bg || 'bg-slate-200'
                         )} />
                       </div>
                       <select
                         disabled={isReadOnly || updatePieza.isPending}
                         className="input-clinical py-2.5 text-xs font-bold border-[var(--sb-border)] hover:border-primary/30 focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all outline-none"
-                        value={(selectedPieza.caras as any)[cara]}
+                        value={(selectedPieza.caras as any)?.[cara] ?? 'sano'}
                         onChange={(e) => handleUpdateCara(cara, e.target.value)}
                       >
                         {states.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}

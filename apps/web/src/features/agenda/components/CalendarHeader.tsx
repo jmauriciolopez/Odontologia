@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { format, addDays, subDays, startOfWeek, endOfWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { ChevronLeft, ChevronRight, Users, Home, Plus } from 'lucide-react';
@@ -99,8 +99,9 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
         )}
 
         <button
+          type="button"
           onClick={onNewTurno}
-          className="flex items-center gap-2 btn-primary px-5 py-2.5 rounded-xl text-sm"
+          className="relative z-10 flex items-center gap-2 btn-primary px-5 py-2.5 rounded-xl text-sm"
         >
           <Plus size={18} />
           <span className="hidden sm:inline">Nuevo Turno</span>

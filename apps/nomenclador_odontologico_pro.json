@@ -1,0 +1,1217 @@
+[
+  {
+    "codigo": "101",
+    "nombre": "Consulta odontológica",
+    "categoria": "Diagnóstico",
+    "subcategoria": "Consulta",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "102",
+    "nombre": "Consulta con ficha clínica / plan de tratamiento",
+    "categoria": "Diagnóstico",
+    "subcategoria": "Consulta",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "103",
+    "nombre": "Interconsulta odontológica",
+    "categoria": "Diagnóstico",
+    "subcategoria": "Consulta",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "104",
+    "nombre": "Consulta de urgencia",
+    "categoria": "Diagnóstico",
+    "subcategoria": "Urgencia",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "105",
+    "nombre": "Certificado bucodental",
+    "categoria": "Diagnóstico",
+    "subcategoria": "Certificación",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "501",
+    "nombre": "Tartrectomía y profilaxis",
+    "categoria": "Preventiva",
+    "subcategoria": "Higiene",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "502",
+    "nombre": "Aplicación tópica de flúor",
+    "categoria": "Preventiva",
+    "subcategoria": "Fluoración",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "503",
+    "nombre": "Sellador de surcos, fosas y fisuras por pieza",
+    "categoria": "Preventiva",
+    "subcategoria": "Selladores",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "504",
+    "nombre": "Detección y control de placa bacteriana",
+    "categoria": "Preventiva",
+    "subcategoria": "Prevención",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "505",
+    "nombre": "Enseñanza de técnica de cepillado",
+    "categoria": "Preventiva",
+    "subcategoria": "Educación",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "506",
+    "nombre": "Cariostáticos por pieza",
+    "categoria": "Preventiva",
+    "subcategoria": "Prevención",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "507",
+    "nombre": "Consulta preventiva periódica",
+    "categoria": "Preventiva",
+    "subcategoria": "Control",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "508",
+    "nombre": "Topicación con flúor postoperatoria",
+    "categoria": "Preventiva",
+    "subcategoria": "Fluoración",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "201",
+    "nombre": "Obturación con amalgama simple",
+    "categoria": "Operatoria",
+    "subcategoria": "Amalgama",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "202",
+    "nombre": "Obturación con amalgama compuesta",
+    "categoria": "Operatoria",
+    "subcategoria": "Amalgama",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "203",
+    "nombre": "Obturación con ionómero vítreo",
+    "categoria": "Operatoria",
+    "subcategoria": "Ionómero",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "204",
+    "nombre": "Restauración simple por pieza",
+    "categoria": "Operatoria",
+    "subcategoria": "Restauración",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "205",
+    "nombre": "Restauración compuesta por pieza",
+    "categoria": "Operatoria",
+    "subcategoria": "Restauración",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "206",
+    "nombre": "Reconstrucción coronaria",
+    "categoria": "Operatoria",
+    "subcategoria": "Reconstrucción",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "207",
+    "nombre": "Incrustación estética indirecta",
+    "categoria": "Operatoria",
+    "subcategoria": "Incrustación",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "208",
+    "nombre": "Recubrimiento pulpar directo",
+    "categoria": "Operatoria",
+    "subcategoria": "Pulpa",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "209",
+    "nombre": "Recubrimiento pulpar indirecto",
+    "categoria": "Operatoria",
+    "subcategoria": "Pulpa",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "210",
+    "nombre": "Restauración provisoria",
+    "categoria": "Operatoria",
+    "subcategoria": "Provisorio",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "211",
+    "nombre": "Restauración con resina simple anterior",
+    "categoria": "Operatoria",
+    "subcategoria": "Resina",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "212",
+    "nombre": "Restauración con resina compuesta anterior",
+    "categoria": "Operatoria",
+    "subcategoria": "Resina",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "213",
+    "nombre": "Restauración con resina simple posterior",
+    "categoria": "Operatoria",
+    "subcategoria": "Resina",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "214",
+    "nombre": "Restauración con resina compuesta posterior",
+    "categoria": "Operatoria",
+    "subcategoria": "Resina",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "215",
+    "nombre": "Restauración composite anterior simple",
+    "categoria": "Operatoria",
+    "subcategoria": "Composite",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "216",
+    "nombre": "Restauración composite anterior compuesta",
+    "categoria": "Operatoria",
+    "subcategoria": "Composite",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "217",
+    "nombre": "Restauración composite posterior simple",
+    "categoria": "Operatoria",
+    "subcategoria": "Composite",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "218",
+    "nombre": "Restauración composite posterior compuesta",
+    "categoria": "Operatoria",
+    "subcategoria": "Composite",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "219",
+    "nombre": "Reparación de restauración existente",
+    "categoria": "Operatoria",
+    "subcategoria": "Reparación",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "220",
+    "nombre": "Ajuste oclusal post-restauración",
+    "categoria": "Operatoria",
+    "subcategoria": "Ajuste",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "301",
+    "nombre": "Endodoncia unirradicular",
+    "categoria": "Endodoncia",
+    "subcategoria": "Tratamiento",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "302",
+    "nombre": "Endodoncia multirradicular",
+    "categoria": "Endodoncia",
+    "subcategoria": "Tratamiento",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "303",
+    "nombre": "Endodoncia birradicular",
+    "categoria": "Endodoncia",
+    "subcategoria": "Tratamiento",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "304",
+    "nombre": "Necropulpectomía",
+    "categoria": "Endodoncia",
+    "subcategoria": "Tratamiento",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "305",
+    "nombre": "Biopulpectomía parcial",
+    "categoria": "Endodoncia",
+    "subcategoria": "Tratamiento",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "306",
+    "nombre": "Reendodoncia unirradicular",
+    "categoria": "Endodoncia",
+    "subcategoria": "Retratamiento",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "307",
+    "nombre": "Reendodoncia multirradicular",
+    "categoria": "Endodoncia",
+    "subcategoria": "Retratamiento",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "308",
+    "nombre": "Apexificación",
+    "categoria": "Endodoncia",
+    "subcategoria": "Tratamiento",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "309",
+    "nombre": "Pulpotomía de urgencia",
+    "categoria": "Endodoncia",
+    "subcategoria": "Urgencia",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "310",
+    "nombre": "Medicación intraconducto",
+    "categoria": "Endodoncia",
+    "subcategoria": "Complementario",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "311",
+    "nombre": "Sellado provisorio de acceso endodóntico",
+    "categoria": "Endodoncia",
+    "subcategoria": "Complementario",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "801",
+    "nombre": "Diagnóstico periodontal",
+    "categoria": "Periodoncia",
+    "subcategoria": "Diagnóstico",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "802",
+    "nombre": "Tratamiento de gingivitis",
+    "categoria": "Periodoncia",
+    "subcategoria": "Tratamiento",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "803",
+    "nombre": "Tratamiento de periodontitis leve/moderada",
+    "categoria": "Periodoncia",
+    "subcategoria": "Tratamiento",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "804",
+    "nombre": "Raspaje y alisado radicular por cuadrante",
+    "categoria": "Periodoncia",
+    "subcategoria": "Raspaje",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "805",
+    "nombre": "Gingivectomía por sector",
+    "categoria": "Periodoncia",
+    "subcategoria": "Cirugía periodontal",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "806",
+    "nombre": "Colgajo periodontal por sector",
+    "categoria": "Periodoncia",
+    "subcategoria": "Cirugía periodontal",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "807",
+    "nombre": "Mantenimiento periodontal",
+    "categoria": "Periodoncia",
+    "subcategoria": "Mantenimiento",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "808",
+    "nombre": "Ferulización provisoria",
+    "categoria": "Periodoncia",
+    "subcategoria": "Ferulización",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "809",
+    "nombre": "Control post-tratamiento periodontal",
+    "categoria": "Periodoncia",
+    "subcategoria": "Control",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "90101",
+    "nombre": "Radiografía periapical",
+    "categoria": "Radiología",
+    "subcategoria": "Intraoral",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "90102",
+    "nombre": "Radiografía bite-wing",
+    "categoria": "Radiología",
+    "subcategoria": "Intraoral",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "90103",
+    "nombre": "Radiografía oclusal",
+    "categoria": "Radiología",
+    "subcategoria": "Intraoral",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "90204",
+    "nombre": "Radiografía panorámica",
+    "categoria": "Radiología",
+    "subcategoria": "Extraoral",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "90205",
+    "nombre": "Telerradiografía lateral",
+    "categoria": "Radiología",
+    "subcategoria": "Extraoral",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "90206",
+    "nombre": "Telerradiografía frontal",
+    "categoria": "Radiología",
+    "subcategoria": "Extraoral",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "90207",
+    "nombre": "Serie periapical completa",
+    "categoria": "Radiología",
+    "subcategoria": "Serie",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "1001",
+    "nombre": "Extracción dentaria simple",
+    "categoria": "Cirugía",
+    "subcategoria": "Exodoncia",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "1002",
+    "nombre": "Extracción múltiple en un acto",
+    "categoria": "Cirugía",
+    "subcategoria": "Exodoncia",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "1003",
+    "nombre": "Extracción de raíz residual",
+    "categoria": "Cirugía",
+    "subcategoria": "Exodoncia",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "1004",
+    "nombre": "Extracción de diente retenido mucoso",
+    "categoria": "Cirugía",
+    "subcategoria": "Retenidos",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "1005",
+    "nombre": "Extracción de diente retenido óseo",
+    "categoria": "Cirugía",
+    "subcategoria": "Retenidos",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "1006",
+    "nombre": "Alveoloplastía por sector",
+    "categoria": "Cirugía",
+    "subcategoria": "Alveolar",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "1007",
+    "nombre": "Regularización de reborde alveolar",
+    "categoria": "Cirugía",
+    "subcategoria": "Alveolar",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "1008",
+    "nombre": "Incisión y drenaje de absceso",
+    "categoria": "Cirugía",
+    "subcategoria": "Urgencia",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "1009",
+    "nombre": "Extracción con retención ósea",
+    "categoria": "Cirugía",
+    "subcategoria": "Retenidos",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "1010",
+    "nombre": "Extracción de tercer molar erupcionado",
+    "categoria": "Cirugía",
+    "subcategoria": "Molares",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "1011",
+    "nombre": "Extracción de tercer molar retenido",
+    "categoria": "Cirugía",
+    "subcategoria": "Molares",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "1012",
+    "nombre": "Apicectomía",
+    "categoria": "Cirugía",
+    "subcategoria": "Periapical",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "1013",
+    "nombre": "Quistectomía odontógena menor",
+    "categoria": "Cirugía",
+    "subcategoria": "Quistes",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "1014",
+    "nombre": "Sutura de herida bucal",
+    "categoria": "Cirugía",
+    "subcategoria": "Suturas",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "1015",
+    "nombre": "Hemostasia post-exodoncia",
+    "categoria": "Cirugía",
+    "subcategoria": "Urgencia",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "1016",
+    "nombre": "Exéresis de hiperplasia fibrosa",
+    "categoria": "Cirugía",
+    "subcategoria": "Tejidos blandos",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "1045",
+    "nombre": "Frenectomía",
+    "categoria": "Cirugía",
+    "subcategoria": "Tejidos blandos",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "40201",
+    "nombre": "Prótesis parcial acrílica hasta 4 dientes",
+    "categoria": "Prótesis",
+    "subcategoria": "Removible",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "40202",
+    "nombre": "Prótesis parcial acrílica más de 4 dientes",
+    "categoria": "Prótesis",
+    "subcategoria": "Removible",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "40203",
+    "nombre": "Prótesis parcial metálica",
+    "categoria": "Prótesis",
+    "subcategoria": "Removible",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "40204",
+    "nombre": "Compostura de prótesis removible",
+    "categoria": "Prótesis",
+    "subcategoria": "Reparación",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "40205",
+    "nombre": "Rebase de prótesis removible",
+    "categoria": "Prótesis",
+    "subcategoria": "Reparación",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "40301",
+    "nombre": "Prótesis completa superior",
+    "categoria": "Prótesis",
+    "subcategoria": "Completa",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "40302",
+    "nombre": "Prótesis completa inferior",
+    "categoria": "Prótesis",
+    "subcategoria": "Completa",
+    "origen": "NON",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "40303",
+    "nombre": "Corona provisoria",
+    "categoria": "Prótesis",
+    "subcategoria": "Fija",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "40304",
+    "nombre": "Corona metálica colada",
+    "categoria": "Prótesis",
+    "subcategoria": "Fija",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "40305",
+    "nombre": "Corona metal porcelana",
+    "categoria": "Prótesis",
+    "subcategoria": "Fija",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "40306",
+    "nombre": "Corona cerámica libre de metal",
+    "categoria": "Prótesis",
+    "subcategoria": "Fija",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "40307",
+    "nombre": "Perno muñón colado",
+    "categoria": "Prótesis",
+    "subcategoria": "Fija",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "40308",
+    "nombre": "Perno prefabricado + reconstrucción",
+    "categoria": "Prótesis",
+    "subcategoria": "Fija",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "40309",
+    "nombre": "Puente fijo por unidad",
+    "categoria": "Prótesis",
+    "subcategoria": "Fija",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "601",
+    "nombre": "Consulta diagnóstica ortodóncica",
+    "categoria": "Ortodoncia",
+    "subcategoria": "Diagnóstico",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "602",
+    "nombre": "Estudio cefalométrico y plan ortodóncico",
+    "categoria": "Ortodoncia",
+    "subcategoria": "Diagnóstico",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "603",
+    "nombre": "Colocación de aparatología fija por arcada",
+    "categoria": "Ortodoncia",
+    "subcategoria": "Aparatología fija",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "604",
+    "nombre": "Control mensual de ortodoncia",
+    "categoria": "Ortodoncia",
+    "subcategoria": "Control",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "605",
+    "nombre": "Retenedor removible",
+    "categoria": "Ortodoncia",
+    "subcategoria": "Retención",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "606",
+    "nombre": "Retenedor fijo",
+    "categoria": "Ortodoncia",
+    "subcategoria": "Retención",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "607",
+    "nombre": "Activación de aparato removible",
+    "categoria": "Ortodoncia",
+    "subcategoria": "Control",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "608",
+    "nombre": "Aparato funcional ortopédico",
+    "categoria": "Ortodoncia",
+    "subcategoria": "Ortopedia",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "609",
+    "nombre": "Separadores ortodóncicos",
+    "categoria": "Ortodoncia",
+    "subcategoria": "Complementario",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "610",
+    "nombre": "Reposición de bracket o banda",
+    "categoria": "Ortodoncia",
+    "subcategoria": "Reparación",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "701",
+    "nombre": "Consulta odontopediátrica",
+    "categoria": "Odontopediatría",
+    "subcategoria": "Consulta",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "702",
+    "nombre": "Mantenedor de espacio fijo",
+    "categoria": "Odontopediatría",
+    "subcategoria": "Aparatología",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "703",
+    "nombre": "Mantenedor de espacio removible",
+    "categoria": "Odontopediatría",
+    "subcategoria": "Aparatología",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "704",
+    "nombre": "Pulpotomía en pieza temporaria",
+    "categoria": "Odontopediatría",
+    "subcategoria": "Pulpar",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "705",
+    "nombre": "Pulpectomía en pieza temporaria",
+    "categoria": "Odontopediatría",
+    "subcategoria": "Pulpar",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "706",
+    "nombre": "Corona pediátrica preformada",
+    "categoria": "Odontopediatría",
+    "subcategoria": "Restauración",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "707",
+    "nombre": "Sellador en molar permanente joven",
+    "categoria": "Odontopediatría",
+    "subcategoria": "Prevención",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "708",
+    "nombre": "Topicación con flúor en niño",
+    "categoria": "Odontopediatría",
+    "subcategoria": "Prevención",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "IMP001",
+    "nombre": "Consulta de implantología",
+    "categoria": "Implantología",
+    "subcategoria": "Consulta",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "IMP002",
+    "nombre": "Planificación implantológica",
+    "categoria": "Implantología",
+    "subcategoria": "Planificación",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "IMP003",
+    "nombre": "Colocación de implante unitario",
+    "categoria": "Implantología",
+    "subcategoria": "Implante",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "IMP004",
+    "nombre": "Segunda fase quirúrgica de implante",
+    "categoria": "Implantología",
+    "subcategoria": "Implante",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "IMP005",
+    "nombre": "Pilar de cicatrización",
+    "categoria": "Implantología",
+    "subcategoria": "Aditamento",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "IMP006",
+    "nombre": "Corona sobre implante",
+    "categoria": "Implantología",
+    "subcategoria": "Prótesis sobre implante",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "IMP007",
+    "nombre": "Carga inmediata sobre implante",
+    "categoria": "Implantología",
+    "subcategoria": "Prótesis sobre implante",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "IMP008",
+    "nombre": "Regeneración ósea guiada menor",
+    "categoria": "Implantología",
+    "subcategoria": "Regeneración",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "ATM001",
+    "nombre": "Consulta por disfunción temporomandibular",
+    "categoria": "ATM y Oclusión",
+    "subcategoria": "Consulta",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "ATM002",
+    "nombre": "Placa de relajación / estabilización",
+    "categoria": "ATM y Oclusión",
+    "subcategoria": "Placa",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "ATM003",
+    "nombre": "Control de placa de relajación",
+    "categoria": "ATM y Oclusión",
+    "subcategoria": "Control",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "ATM004",
+    "nombre": "Ajuste oclusal selectivo",
+    "categoria": "ATM y Oclusión",
+    "subcategoria": "Ajuste",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "EST001",
+    "nombre": "Diseño de sonrisa digital",
+    "categoria": "Estética",
+    "subcategoria": "Diseño digital",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "EST002",
+    "nombre": "Mockup estético en consultorio",
+    "categoria": "Estética",
+    "subcategoria": "Mockup",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "EST003",
+    "nombre": "Blanqueamiento dental en consultorio",
+    "categoria": "Estética",
+    "subcategoria": "Blanqueamiento",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "EST004",
+    "nombre": "Blanqueamiento ambulatorio",
+    "categoria": "Estética",
+    "subcategoria": "Blanqueamiento",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "EST005",
+    "nombre": "Carilla directa de resina",
+    "categoria": "Estética",
+    "subcategoria": "Carillas",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "EST006",
+    "nombre": "Carilla cerámica",
+    "categoria": "Estética",
+    "subcategoria": "Carillas",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "EST007",
+    "nombre": "Contorneado estético gingival",
+    "categoria": "Estética",
+    "subcategoria": "Gingival",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "EST008",
+    "nombre": "Cierre de diastema con resina",
+    "categoria": "Estética",
+    "subcategoria": "Resina estética",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "EST009",
+    "nombre": "Recontorneado estético dentario",
+    "categoria": "Estética",
+    "subcategoria": "Contorneado",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "EST010",
+    "nombre": "Fotografía clínica estética",
+    "categoria": "Estética",
+    "subcategoria": "Registro",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "RH001",
+    "nombre": "Planificación rehabilitación oral",
+    "categoria": "Rehabilitación",
+    "subcategoria": "Planificación",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "RH002",
+    "nombre": "Montaje en articulador",
+    "categoria": "Rehabilitación",
+    "subcategoria": "Laboratorio",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "RH003",
+    "nombre": "Encerado diagnóstico",
+    "categoria": "Rehabilitación",
+    "subcategoria": "Diagnóstico",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  },
+  {
+    "codigo": "RH004",
+    "nombre": "Prueba estética funcional",
+    "categoria": "Rehabilitación",
+    "subcategoria": "Prueba",
+    "origen": "CATALOGO",
+    "facturable": true,
+    "activo": true
+  }
+]

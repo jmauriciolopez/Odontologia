@@ -361,7 +361,7 @@
   /* ── Inputs ── */
   .input-clinical {
     @apply w-full rounded-xl py-3 px-4 outline-none transition-all;
-    background: var(--sb-active-bg);
+    background: var(--card-bg);
     border:     1px solid var(--sb-border);
     color:      var(--sb-text);
   }

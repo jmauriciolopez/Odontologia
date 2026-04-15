@@ -21,19 +21,17 @@ export const TratamientosPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
 
-  const activePlanes = planes.filter((p: PlanTratamiento) => p.estado === 'activo');
+  const activePlanes = planes.filter((p: PlanTratamiento) => p.estado !== 'cancelado');
 
   const filteredPlanes = React.useMemo(() => {
     if (!searchTerm.trim()) return activePlanes;
     const term = searchTerm.toLowerCase();
     return activePlanes.filter((p: PlanTratamiento) => {
-      const planNombre = p.nombre.toLowerCase();
-      const profesionalNombre = `${p.profesional?.usuario.nombre || ''} ${p.profesional?.usuario.apellido || ''}`.toLowerCase();
-      const pacienteNombre = `${p.paciente?.nombre || ''} ${p.paciente?.apellido || ''}`.toLowerCase();
       return (
-        planNombre.includes(term) ||
-        profesionalNombre.includes(term) ||
-        pacienteNombre.includes(term)
+        p.nombre?.toLowerCase().includes(term) ||
+        `${p.profesional?.usuario?.nombre || ''} ${p.profesional?.usuario?.apellido || ''}`.toLowerCase().includes(term) ||
+        `${p.paciente?.nombre || ''} ${p.paciente?.apellido || ''}`.toLowerCase().includes(term) ||
+        p.items?.some(it => it.tipo?.toLowerCase().includes(term))
       );
     });
   }, [activePlanes, searchTerm]);

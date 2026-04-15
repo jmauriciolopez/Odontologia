@@ -2,9 +2,11 @@ import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { RoundedBox, Text } from '@react-three/drei';
 import * as THREE from 'three';
+import { etiquetaPieza } from '@/lib/dental-numbering';
 
 interface Tooth3DProps {
   posicion: number;
+  sistemaDental?: string;
   caras: {
     vestibular?: string;
     lingual?: string;
@@ -18,7 +20,8 @@ interface Tooth3DProps {
 }
 
 export const Tooth3D: React.FC<Tooth3DProps> = ({ 
-  posicion, 
+  posicion,
+  sistemaDental,
   caras, 
   isSelected, 
   onSelect,
@@ -28,10 +31,11 @@ export const Tooth3D: React.FC<Tooth3DProps> = ({
 
   const getFaceColor = (estado?: string) => {
     switch (estado) {
-      case 'caries': return '#ef4444';
-      case 'restauracion': return '#10b981';
+      case 'caries': return '#FF0000';
+      case 'restauracion': return '#0000FF';
+      case 'temporal': return '#008000';
+      case 'corona': return '#0000FF';
       case 'ausente': return 'transparent';
-      case 'corona': return '#f59e0b';
       default: return '#ffffff';
     }
   };
@@ -72,7 +76,7 @@ export const Tooth3D: React.FC<Tooth3DProps> = ({
         anchorX="center"
         anchorY="middle"
       >
-        {posicion}
+        {etiquetaPieza(posicion, sistemaDental)}
       </Text>
     </group>
   );

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useTurnos, useProfesionales, useConsultorios } from '../hooks/use-turnos';
 import { CalendarHeader } from '../components/CalendarHeader';
 import { CalendarGrid } from '../components/CalendarGrid';
@@ -10,13 +11,24 @@ import { format, startOfWeek, endOfWeek } from 'date-fns';
 import { cn } from '@/lib/utils';
 
 export const AgendaPage: React.FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [pacientePrefillId, setPacientePrefillId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const pid = searchParams.get('pacienteId');
+    if (pid) {
+      setPacientePrefillId(pid);
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
+
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView]               = useState<'day' | 'week'>('week');
   const [profesionalId, setProfesionalId] = useState('');
   const [consultorioId, setConsultorioId] = useState('');
   const [showFilters, setShowFilters]     = useState(false);
   const [modalState, setModalState] = useState<{
-    show: boolean; turno?: Turno; initialDate?: Date;
+    show: boolean; turno?: Turno; initialDate?: Date; initialPacienteId?: string;
   }>({ show: false });
 
   // Calculate range for week view
@@ -28,6 +40,7 @@ export const AgendaPage: React.FC = () => {
     desde: view === 'week' ? format(weekStart, 'yyyy-MM-dd') : undefined,
     hasta: view === 'week' ? format(weekEnd, 'yyyy-MM-dd') : undefined,
     profesionalId: profesionalId || undefined,
+    consultorioId: consultorioId || undefined,
   });
   const { data: profesionales = [] } = useProfesionales();
   const { data: consultorios  = [] } = useConsultorios();
@@ -40,13 +53,20 @@ export const AgendaPage: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col h-full max-w-[1600px] mx-auto">
+    <div className="flex flex-col flex-1 min-h-0 max-w-[1600px] mx-auto w-full">
       <CalendarHeader
         currentDate={currentDate}
         onDateChange={setCurrentDate}
         view={view}
         onViewChange={setView}
-        onNewTurno={() => setModalState({ show: true })}
+        onNewTurno={() =>
+          setModalState({
+            show: true,
+            turno: undefined,
+            initialDate: undefined,
+            initialPacienteId: pacientePrefillId ?? undefined,
+          })
+        }
         profesionalNombre={selectedProfesional ? `${selectedProfesional.usuario.nombre} ${selectedProfesional.usuario.apellido}` : undefined}
         consultorioNombre={selectedConsultorio?.nombre}
       />
@@ -127,50 +147,49 @@ export const AgendaPage: React.FC = () => {
       </div>
 
       {/* Grid */}
-      <div className="flex-1 relative min-h-0">
-        <AnimatePresence mode="wait">
-          {isLoading && turnos.length === 0 ? (
-            <motion.div
-              key="loader"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 flex flex-col items-center justify-center gap-4 backdrop-blur-sm z-10 rounded-3xl"
-              style={{ background: 'var(--card-bg)' }}
-            >
-              <div className="relative">
-                <Loader2 className="w-12 h-12 text-blue-600 animate-spin" />
-                <div className="absolute inset-0 blur-xl bg-blue-400/20 animate-pulse" />
-              </div>
-              <p className="text-sm font-bold animate-pulse" style={{ color: 'var(--sb-text-muted)' }}>
-                Cargando agenda clínica...
-              </p>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="grid"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="h-full"
-            >
-              <CalendarGrid
-                currentDate={currentDate}
-                view={view}
-                turnos={turnos}
-                onTurnoClick={(t) => setModalState({ show: true, turno: t })}
-                onTimeSlotClick={(d) => setModalState({ show: true, initialDate: d })}
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
+      <div className="flex-1 relative min-h-[600px]">
+        {isLoading && turnos.length === 0 && (
+          <div
+            className="absolute inset-0 flex flex-col items-center justify-center gap-4 backdrop-blur-sm z-10 rounded-3xl"
+            style={{ background: 'var(--card-bg)' }}
+          >
+            <Loader2 className="w-12 h-12 text-blue-600 animate-spin" />
+            <p className="text-sm font-bold animate-pulse" style={{ color: 'var(--sb-text-muted)' }}>
+              Cargando agenda clínica...
+            </p>
+          </div>
+        )}
+        <CalendarGrid
+          currentDate={currentDate}
+          view={view}
+          turnos={turnos}
+          onTurnoClick={(t) => setModalState({ show: true, turno: t })}
+          onTimeSlotClick={(d) =>
+            setModalState({
+              show: true,
+              initialDate: d,
+              initialPacienteId: pacientePrefillId ?? undefined,
+            })
+          }
+        />
       </div>
 
       <AnimatePresence>
         {modalState.show && (
           <TurnoFormModal
+            key={modalState.turno?.id ?? `nuevo-${modalState.initialPacienteId ?? ''}-${modalState.initialDate?.getTime() ?? ''}`}
             turno={modalState.turno}
             initialDate={modalState.initialDate}
-            onClose={() => setModalState({ show: false })}
+            initialPacienteId={modalState.initialPacienteId}
+            onPacientePrefillClear={() => setPacientePrefillId(null)}
+            onClose={() =>
+              setModalState({
+                show: false,
+                turno: undefined,
+                initialDate: undefined,
+                initialPacienteId: undefined,
+              })
+            }
           />
         )}
       </AnimatePresence>

@@ -40,4 +40,14 @@ export class UsuariosController {
   async update(@Param('id') id: string, @Body() dto: UpdateUsuarioDto) {
     return await this.usuariosService.update(id, dto);
   }
+
+  @Patch(':id/password')
+  @Roles(Role.ADMIN)
+  async changePassword(@Param('id') id: string, @Body('password') password: string) {
+    if (!password || password.length < 6) {
+      throw new Error('La contraseña debe tener al menos 6 caracteres');
+    }
+    await this.usuariosService.changePassword(id, password);
+    return { message: 'Contraseña actualizada correctamente' };
+  }
 }

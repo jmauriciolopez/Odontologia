@@ -17,7 +17,6 @@ export class ConfiguracionController {
   }
 
   @Patch()
-  @Roles(Role.ADMIN)
   updateConfig(@Body() dto: UpdateConfiguracionDto) {
     return this.configService.updateConfig(dto);
   }

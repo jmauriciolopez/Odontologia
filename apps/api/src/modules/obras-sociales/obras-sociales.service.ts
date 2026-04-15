@@ -27,6 +27,25 @@ export class ObrasSocialesService {
     return os;
   }
 
+  async clonar(id: string, dto: CreateObraSocialDto): Promise<ObraSocial> {
+    const origen = await this.findOne(id);
+    // Crear la nueva OS con los datos del DTO
+    const nueva = await this.create(dto);
+    // Copiar todos los precios de la OS origen
+    if (origen.prestaciones?.length) {
+      for (const osp of origen.prestaciones) {
+        await this.ospRepo.save(
+          this.ospRepo.create({
+            obraSocialId: nueva.id,
+            prestacionId: osp.prestacionId,
+            precio: osp.precio,
+          }),
+        );
+      }
+    }
+    return this.findOne(nueva.id);
+  }
+
   async create(dto: CreateObraSocialDto): Promise<ObraSocial> {
     const os = this.obraSocialRepo.create(dto);
     return this.obraSocialRepo.save(os);

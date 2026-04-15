@@ -5,6 +5,7 @@ export class ColoresEstadosDto {
   @IsString() @IsOptional() sano?: string;
   @IsString() @IsOptional() caries?: string;
   @IsString() @IsOptional() restauracion?: string;
+  @IsString() @IsOptional() temporal?: string;
   @IsString() @IsOptional() perdida?: string;
   @IsString() @IsOptional() ausente?: string;
   @IsString() @IsOptional() protesis?: string;
@@ -31,7 +32,11 @@ export class CreatePrestacionDto {
 
   @IsString()
   @IsOptional()
-  descripcion?: string;
+  categoria?: string;
+
+  @IsString()
+  @IsOptional()
+  origen?: 'NON' | 'CLINICA';
 
   @IsNumber()
   @IsOptional()
@@ -41,11 +46,19 @@ export class CreatePrestacionDto {
 export class UpdatePrestacionDto {
   @IsString()
   @IsOptional()
+  codigo?: string;
+
+  @IsString()
+  @IsOptional()
   nombre?: string;
 
   @IsString()
   @IsOptional()
-  descripcion?: string;
+  categoria?: string;
+
+  @IsString()
+  @IsOptional()
+  origen?: 'NON' | 'CLINICA';
 
   @IsNumber()
   @IsOptional()

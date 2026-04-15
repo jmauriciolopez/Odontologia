@@ -1,9 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Plus, Trash2, Activity, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useProfesionales } from '../../agenda/hooks/use-turnos';
 import { CreatePlanTratamientoDto } from '../types';
+import { httpClient } from '@/lib/Httpclient';
+
+interface Prestacion {
+  id: string;
+  codigo: string;
+  nombre: string;
+  categoria?: string;
+  honorarios: number;
+}
 
 interface NuevoPlanModalProps {
   pacienteId: string;
@@ -18,15 +27,29 @@ export const NuevoPlanModal: React.FC<NuevoPlanModalProps> = ({
   pacienteId, onClose, onSubmit, loading,
 }) => {
   const { data: profesionales = [] } = useProfesionales();
+  const [prestaciones, setPrestaciones] = useState<Prestacion[]>([]);
   const [nombre, setNombre]           = useState('');
   const [profesionalId, setProfesionalId] = useState('');
   const [notas, setNotas]             = useState('');
-  const [items, setItems]             = useState([{ tipo: '', precioRef: 0, piezaPosicion: '' }]);
+  const [items, setItems] = useState([{ tipo: '', prestacionId: '', precioRef: 0, piezaPosicion: '', cara: '' }]);
 
-  const addItem    = () => setItems(p => [...p, { tipo: '', precioRef: 0, piezaPosicion: '' }]);
+  useEffect(() => {
+    httpClient.get<Prestacion[]>('configuracion/prestaciones').then(setPrestaciones).catch(() => {});
+  }, []);
+
+  const addItem    = () => setItems(p => [...p, { tipo: '', prestacionId: '', precioRef: 0, piezaPosicion: '', cara: '' }]);
   const removeItem = (i: number) => setItems(p => p.filter((_, idx) => idx !== i));
   const updateItem = (i: number, field: string, value: any) =>
     setItems(p => p.map((item, idx) => idx === i ? { ...item, [field]: value } : item));
+
+  const handleSelectPrestacion = (i: number, prestacionId: string) => {
+    const p = prestaciones.find(x => x.id === prestacionId);
+    if (!p) return;
+    setItems(prev => prev.map((item, idx) => idx === i
+      ? { ...item, prestacionId: p.id, tipo: `${p.codigo} - ${p.nombre}`, precioRef: Number(p.honorarios) }
+      : item
+    ));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,6 +64,7 @@ export const NuevoPlanModal: React.FC<NuevoPlanModalProps> = ({
           tipo:          it.tipo,
           precioRef:     Number(it.precioRef),
           piezaPosicion: it.piezaPosicion ? Number(it.piezaPosicion) : undefined,
+          cara:          it.cara || undefined,
         })),
     });
   };
@@ -130,42 +154,90 @@ export const NuevoPlanModal: React.FC<NuevoPlanModalProps> = ({
               </button>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-3">
+              {/* Header labels */}
+              <div className="hidden sm:grid grid-cols-[1fr_80px_100px_90px_32px] gap-2 px-1">
+                {['Procedimiento *', 'Pieza', 'Cara', 'Precio $', ''].map(h => (
+                  <span key={h} className="text-[9px] font-black uppercase tracking-widest" style={{ color: 'var(--sb-text-muted)' }}>{h}</span>
+                ))}
+              </div>
+
               {items.map((item, i) => (
-                <div key={i} className="flex gap-2 group">
-                  <input
-                    placeholder="Tipo de procedimiento *"
-                    value={item.tipo}
-                    onChange={e => updateItem(i, 'tipo', e.target.value)}
-                    className={cn(inputCls, 'flex-1')}
-                  />
+                <div key={i} className="grid grid-cols-[1fr_80px_100px_90px_32px] gap-2 group items-center">
+                  <select
+                    value={item.prestacionId}
+                    onChange={e => handleSelectPrestacion(i, e.target.value)}
+                    className={cn(inputCls, 'appearance-none')}
+                  >
+                    <option value="">Seleccionar prestación...</option>
+                    {Object.entries(
+                      prestaciones.reduce((acc, p) => {
+                        const cat = p.categoria || 'Sin categoría';
+                        if (!acc[cat]) acc[cat] = [];
+                        acc[cat].push(p);
+                        return acc;
+                      }, {} as Record<string, Prestacion[]>)
+                    ).map(([cat, items]) => (
+                      <optgroup key={cat} label={cat}>
+                        {items.map(p => (
+                          <option key={p.id} value={p.id}>
+                            {p.codigo} — {p.nombre}
+                          </option>
+                        ))}
+                      </optgroup>
+                    ))}
+                  </select>
                   <input
                     type="number"
-                    placeholder="Pieza"
+                    placeholder="Nº"
                     min="11" max="48"
                     value={item.piezaPosicion}
                     onChange={e => updateItem(i, 'piezaPosicion', e.target.value)}
-                    className={cn(inputCls, 'w-20 text-center')}
+                    className={cn(inputCls, 'text-center')}
                   />
+                  <select
+                    value={item.cara}
+                    onChange={e => updateItem(i, 'cara', e.target.value)}
+                    className={cn(inputCls, 'appearance-none')}
+                  >
+                    <option value="">Todas</option>
+                    <option value="vestibular">Vestibular</option>
+                    <option value="lingual">Lingual</option>
+                    <option value="oclusal">Oclusal</option>
+                    <option value="mesial">Mesial</option>
+                    <option value="distal">Distal</option>
+                  </select>
                   <input
                     type="number"
-                    placeholder="$"
+                    placeholder="0"
                     min="0"
                     value={item.precioRef}
                     onChange={e => updateItem(i, 'precioRef', e.target.value)}
-                    className={cn(inputCls, 'w-24 text-right')}
+                    className={cn(inputCls, 'text-right')}
                   />
                   <button
                     type="button"
                     onClick={() => removeItem(i)}
                     disabled={items.length === 1}
-                    className="p-2.5 rounded-xl hover:text-rose-500 transition-colors opacity-0 group-hover:opacity-100 disabled:opacity-0"
+                    className="p-1.5 rounded-lg hover:text-rose-500 transition-colors opacity-0 group-hover:opacity-100 disabled:opacity-0"
                     style={{ color: 'var(--sb-text-muted)' }}
                   >
-                    <Trash2 size={16} />
+                    <Trash2 size={15} />
                   </button>
                 </div>
               ))}
+
+              {/* Total */}
+              {items.length > 0 && (
+                <div className="flex justify-end pt-2 border-t border-[var(--sb-border)]">
+                  <span className="text-xs font-bold" style={{ color: 'var(--sb-text-muted)' }}>
+                    Total estimado:&nbsp;
+                    <span style={{ color: 'var(--sb-text)' }}>
+                      ${items.reduce((acc, it) => acc + Number(it.precioRef || 0), 0).toLocaleString('es-AR')}
+                    </span>
+                  </span>
+                </div>
+              )}
             </div>
           </div>
 

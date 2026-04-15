@@ -41,4 +41,8 @@ export class Turno extends BaseEntity {
 
   @Column({ type: 'text', nullable: true })
   motivo: string;
+
+  /** Mismo UUID en todos los turnos de una serie recurrente (solo relleno al crear series). */
+  @Column({ name: 'serie_recurrencia_id', type: 'uuid', nullable: true })
+  serieRecurrenciaId?: string;
 }

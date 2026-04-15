@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
 import { TurnosService } from './turnos.service';
 import { CreateTurnoDto } from './dto/create-turnos.dto';
+import { CreateTurnosRecurrentesDto } from './dto/create-turnos-recurrentes.dto';
 import { UpdateTurnoDto } from './dto/update-turnos.dto';
 import { TurnoFiltrosDto } from './dto/turnos-filtros.dto';
 import { DisponibilidadQueryDto } from './dto/disponibilidad-query.dto';
@@ -13,6 +14,12 @@ import { Role } from '../../common/constants/roles.constants';
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class TurnosController {
   constructor(private readonly turnosService: TurnosService) {}
+
+  @Post('recurrentes')
+  @Roles(Role.ADMIN, Role.RECEPCIONISTA, Role.ODONTOLOGO)
+  createRecurrentes(@Body() dto: CreateTurnosRecurrentesDto) {
+    return this.turnosService.createRecurrentes(dto);
+  }
 
   @Post()
   @Roles(Role.ADMIN, Role.RECEPCIONISTA, Role.ODONTOLOGO)
