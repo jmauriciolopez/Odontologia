@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsOptional, IsEmail, IsDateString } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsEmail, IsDateString, IsUUID } from 'class-validator';
 
 export class CreatePacienteDto {
   @IsString()
@@ -40,4 +40,8 @@ export class CreatePacienteDto {
   @IsString()
   @IsOptional()
   nroAfiliado?: string;
+
+  @IsUUID()
+  @IsOptional()
+  obraSocialId?: string;
 }

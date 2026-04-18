@@ -1,7 +1,9 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Plus, Trash2, DollarSign, List, User, Calendar } from 'lucide-react';
+import { X, Plus, Trash2, DollarSign, List, User, Calendar, Link2, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { httpClient } from '@/lib/Httpclient';
+import { PlanTratamiento } from '../../tratamientos/types';
 
 interface PresupuestoFormProps {
   onClose: () => void;
@@ -16,14 +18,35 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
   onSubmit,
   loading,
   initialPacienteId = '',
-  initialPacienteNombre = ''
+  initialPacienteNombre = '',
 }) => {
   const [items, setItems] = useState([{ descripcion: '', precioUnitario: 0, cantidad: 1, descuento: 0 }]);
   const [pacienteId, setPacienteId] = useState(initialPacienteId);
+  const [planes, setPlanes] = useState<PlanTratamiento[]>([]);
+  const [selectedPlanId, setSelectedPlanId] = useState<string>('');
+
+  useEffect(() => {
+    if (!pacienteId) return;
+    httpClient.get<PlanTratamiento[]>(`planes-tratamiento/paciente/${pacienteId}`)
+      .then(setPlanes)
+      .catch(() => {});
+  }, [pacienteId]);
+
+  const handleSelectPlan = (planId: string) => {
+    setSelectedPlanId(planId);
+    if (!planId) return;
+    const plan = planes.find(p => p.id === planId);
+    if (!plan?.items?.length) return;
+    setItems(plan.items.map(item => ({
+      descripcion: item.tipo,
+      precioUnitario: Number(item.precioRef),
+      cantidad: 1,
+      descuento: 0,
+    })));
+  };
 
   const addItem = () => setItems([...items, { descripcion: '', precioUnitario: 0, cantidad: 1, descuento: 0 }]);
   const removeItem = (index: number) => setItems(items.filter((_, i) => i !== index));
-
   const updateItem = (index: number, field: string, value: any) => {
     const newItems = [...items];
     newItems[index] = { ...newItems[index], [field]: value };
@@ -36,16 +59,18 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
     e.preventDefault();
     onSubmit({
       pacienteId,
+      ...(selectedPlanId ? { planId: selectedPlanId } : {}),
       items: items.map(item => ({
         descripcion: item.descripcion,
         precioUnitario: Number(item.precioUnitario),
         cantidad: Number(item.cantidad),
         ...(Number(item.descuento) > 0 ? { descuento: Number(item.descuento) } : {}),
-      }))
+      })),
     });
   };
 
-  const inputClasses = "input-premium text-sm font-semibold";
+  const inputClasses = 'input-premium text-sm font-semibold';
+  const selectedPlan = planes.find(p => p.id === selectedPlanId);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md bg-slate-900/40">
@@ -76,7 +101,7 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Header info */}
+            {/* Paciente + Fecha */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="text-[11px] font-black uppercase tracking-wider text-[var(--sb-text-muted)] ml-1 flex items-center gap-2">
@@ -84,7 +109,7 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
                   Paciente
                 </label>
                 {initialPacienteNombre ? (
-                  <div className={cn(inputClasses, "bg-blue-50 dark:bg-blue-500/10 border-blue-100 dark:border-blue-500/20 text-blue-700 dark:text-blue-400 font-bold")}>
+                  <div className={cn(inputClasses, 'bg-blue-50 dark:bg-blue-500/10 border-blue-100 dark:border-blue-500/20 text-blue-700 dark:text-blue-400 font-bold')}>
                     {initialPacienteNombre}
                   </div>
                 ) : (
@@ -103,13 +128,54 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
                   <Calendar size={12} />
                   Fecha de Emisión
                 </label>
-                <div className={cn(inputClasses, "bg-slate-100 items-center flex text-[var(--sb-text-muted)]")}>
+                <div className={cn(inputClasses, 'bg-slate-100 items-center flex text-[var(--sb-text-muted)]')}>
                   {new Date().toLocaleDateString()}
                 </div>
               </div>
             </div>
 
-            {/* Items section */}
+            {/* Vincular con Plan de Tratamiento */}
+            {pacienteId && (
+              <div className="space-y-2">
+                <label className="text-[11px] font-black uppercase tracking-wider text-[var(--sb-text-muted)] ml-1 flex items-center gap-2">
+                  <Link2 size={12} />
+                  Vincular con Plan de Tratamiento
+                  <span className="text-[10px] font-medium normal-case tracking-normal opacity-60">(opcional)</span>
+                </label>
+                {planes.length === 0 ? (
+                  <div className={cn(inputClasses, 'text-[var(--sb-text-muted)] opacity-60 italic')}>
+                    Sin planes activos para este paciente
+                  </div>
+                ) : (
+                  <select
+                    className={cn(inputClasses, 'cursor-pointer')}
+                    value={selectedPlanId}
+                    onChange={(e) => handleSelectPlan(e.target.value)}
+                  >
+                    <option value="">— Sin vincular —</option>
+                    {planes.map(plan => (
+                      <option key={plan.id} value={plan.id}>
+                        {plan.nombre} ({plan.items?.length ?? 0} procedimientos)
+                      </option>
+                    ))}
+                  </select>
+                )}
+                {selectedPlan && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200/50 dark:border-emerald-500/20"
+                  >
+                    <CheckCircle2 size={14} className="text-emerald-500 shrink-0" />
+                    <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-400">
+                      Ítems importados desde "{selectedPlan.nombre}" — podés editarlos abajo
+                    </span>
+                  </motion.div>
+                )}
+              </div>
+            )}
+
+            {/* Items */}
             <div className="space-y-4">
               <div className="flex items-center justify-between ml-1">
                 <label className="text-[11px] font-black uppercase tracking-wider text-[var(--sb-text-muted)] flex items-center gap-2">
@@ -117,9 +183,9 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
                   Procedimientos y Tratamientos
                 </label>
                 <button
-                   type="button"
-                   onClick={addItem}
-                   className="text-[10px] font-bold text-blue-600 hover:text-blue-500 uppercase tracking-widest flex items-center gap-1"
+                  type="button"
+                  onClick={addItem}
+                  className="text-[10px] font-bold text-blue-600 hover:text-blue-500 uppercase tracking-widest flex items-center gap-1"
                 >
                   <Plus size={12} />
                   Añadir Item
@@ -137,8 +203,8 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
                       className="flex gap-3 group"
                     >
                       <input
-                        className={cn(inputClasses, "flex-1")}
-                        placeholder="Descripción del tratamiento (ej: Limpieza Dental)"
+                        className={cn(inputClasses, 'flex-1')}
+                        placeholder="Descripción del tratamiento"
                         value={item.descripcion}
                         onChange={(e) => updateItem(index, 'descripcion', e.target.value)}
                         required
@@ -147,7 +213,7 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
                         <input
                           type="number"
                           min="1"
-                          className={cn(inputClasses, "text-center px-1")}
+                          className={cn(inputClasses, 'text-center px-1')}
                           placeholder="Cant"
                           value={item.cantidad}
                           onChange={(e) => updateItem(index, 'cantidad', e.target.value)}
@@ -158,7 +224,7 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
                         <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--sb-text-muted)]" size={14} />
                         <input
                           type="number"
-                          className={cn(inputClasses, "pl-8 text-right")}
+                          className={cn(inputClasses, 'pl-8 text-right')}
                           placeholder="0"
                           value={item.precioUnitario}
                           onChange={(e) => updateItem(index, 'precioUnitario', e.target.value)}
@@ -179,23 +245,23 @@ export const PresupuestoForm: React.FC<PresupuestoFormProps> = ({
               </div>
             </div>
 
-            {/* Total Display */}
+            {/* Total */}
             <div className="rounded-3xl p-6 border-2 border-dashed border-[var(--sb-border)]"
               style={{ background: 'var(--sb-active-bg)' }}>
-               <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-xl bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400">
-                       <DollarSign size={20} />
-                    </div>
-                    <span className="font-bold text-[var(--sb-text)]">Resumen Mensual</span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-xl bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                    <DollarSign size={20} />
                   </div>
-                  <div className="flex flex-col items-end">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-[var(--sb-text-muted)]">Total a Facturar</span>
-                    <span className="text-3xl font-black text-[var(--sb-text)] tracking-tighter">
-                       ${total.toLocaleString()}
-                    </span>
-                  </div>
-               </div>
+                  <span className="font-bold text-[var(--sb-text)]">Resumen</span>
+                </div>
+                <div className="flex flex-col items-end">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-[var(--sb-text-muted)]">Total a Facturar</span>
+                  <span className="text-3xl font-black text-[var(--sb-text)] tracking-tighter">
+                    ${total.toLocaleString()}
+                  </span>
+                </div>
+              </div>
             </div>
 
             {/* Actions */}

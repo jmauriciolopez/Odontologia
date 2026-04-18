@@ -8,13 +8,15 @@ import {
   X,
   ChevronRight,
   Stethoscope,
-  TrendingUp
+  TrendingUp,
+  Printer
 } from 'lucide-react';
 import { useTratamientos } from '../hooks/use-tratamientos';
 import { PremiumCard } from '@/components/ui/premium-card';
 import { cn } from '@/lib/utils';
 import { PlanTratamiento } from '../types';
 import { TratamientoProgreso } from '../components/TratamientoProgreso';
+import { printPlanTratamiento } from '../../finanzas/components/PresupuestoPrint';
 
 export const TratamientosPage: React.FC = () => {
   const { planes, isLoading, updateItemEstado } = useTratamientos(); // Global view (backend needs to support findAll or similar, for now we will adapt)
@@ -36,7 +38,8 @@ export const TratamientosPage: React.FC = () => {
     });
   }, [activePlanes, searchTerm]);
 
-  const selectedPlan = planes.find((p: PlanTratamiento) => p.id === selectedPlanId);
+  const selectedPlan = planes.find((p: PlanTratamiento) => p.id === selectedPlanId)
+    ?? filteredPlanes.find((p: PlanTratamiento) => p.id === selectedPlanId);
 
   const calculateProgress = (plan: PlanTratamiento) => {
     if (!plan.items || plan.items.length === 0) return 0;
@@ -79,8 +82,11 @@ export const TratamientosPage: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* List Section */}
-        <div className={cn("col-span-1 lg:col-span-12 transition-all duration-500 ease-in-out", selectedPlanId && "lg:col-span-5 hidden lg:block")}>
+        {/* List — se oculta en cualquier tamaño cuando hay detalle abierto */}
+        <div className={cn(
+          "lg:col-span-5 transition-all",
+          selectedPlanId ? "hidden lg:block" : "col-span-1 lg:col-span-12"
+        )}>
           <PremiumCard className="h-full flex flex-col p-0 border-none">
             <div className="p-6 border-b border-[var(--sb-border)] flex items-center gap-4">
               <div className="relative flex-1 group">
@@ -101,16 +107,6 @@ export const TratamientosPage: React.FC = () => {
                   </button>
                 )}
               </div>
-              {searchTerm && (
-                <button
-                  onClick={() => setSearchTerm('')}
-                  className="p-2.5 rounded-xl text-blue-500 border border-blue-200/50 dark:border-blue-800/50 transition-all"
-                  style={{ background: 'var(--sb-active-bg)' }}
-                  title="Limpiar búsqueda"
-                >
-                  <X size={18} />
-                </button>
-              )}
             </div>
 
             <div className="flex-1 overflow-y-auto max-h-[calc(100vh-350px)] custom-scrollbar">
@@ -151,7 +147,6 @@ export const TratamientosPage: React.FC = () => {
                           </div>
                         </div>
 
-                        {/* Progress Bar Mini */}
                         <div className="h-1.5 w-full rounded-full overflow-hidden" style={{ background: 'var(--sb-active-bg)' }}>
                           <motion.div
                             initial={{ width: 0 }}
@@ -167,12 +162,10 @@ export const TratamientosPage: React.FC = () => {
                           <span className="text-[11px] text-[var(--sb-text-muted)] flex items-center gap-1">
                             <Clock size={12} /> Actualizado {new Date(plan.updatedAt).toLocaleDateString()}
                           </span>
-                          <span className={cn(
-                            "text-blue-500 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all",
-                            selectedPlanId === plan.id && "opacity-100 translate-x-0"
-                          )}>
-                            <ChevronRight size={18} />
-                          </span>
+                          <ChevronRight size={18} className={cn(
+                            "text-blue-500 opacity-0 group-hover:opacity-100 transition-all",
+                            selectedPlanId === plan.id && "opacity-100"
+                          )} />
                         </div>
                       </motion.div>
                     );
@@ -181,7 +174,7 @@ export const TratamientosPage: React.FC = () => {
                   <div className="medical-card p-20 text-center mx-6 my-10 border-dashed border-[var(--sb-border)] shadow-none">
                     <Activity size={48} className="mx-auto text-[var(--sb-border)] dark:text-slate-800 mb-4" />
                     <p className="text-[var(--sb-text-muted)] font-bold uppercase tracking-widest text-[11px]">No se encontraron planes</p>
-                    <p className="text-[var(--sb-text-muted)] text-xs mt-2">Intenta con otro término de búsqueda (paciente, profesional o plan).</p>
+                    <p className="text-[var(--sb-text-muted)] text-xs mt-2">Intenta con otro término de búsqueda.</p>
                   </div>
                 )}
               </AnimatePresence>
@@ -189,73 +182,79 @@ export const TratamientosPage: React.FC = () => {
           </PremiumCard>
         </div>
 
-        {/* Detail Section */}
-        <AnimatePresence>
-          {selectedPlanId && selectedPlan && (
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              className="col-span-1 lg:col-span-7"
-            >
-              <PremiumCard className="h-full flex flex-col p-0 border-none shadow-medical">
-                <div className="p-8 border-b border-[var(--sb-border)]">
-                  <div className="flex justify-between items-start mb-6">
-                    <div>
-                      <button
-                        onClick={() => setSelectedPlanId(null)}
-                        className="lg:hidden text-blue-500 font-bold text-sm mb-4 flex items-center gap-1"
-                      >
-                        <ChevronRight size={16} className="rotate-180" /> Volver
-                      </button>
-                      <h2 className="text-2xl font-bold text-[var(--sb-text)] uppercase tracking-tight">{selectedPlan.nombre}</h2>
-                      <div className="flex items-center gap-4 mt-2">
-                         <span className="text-sm font-medium text-[var(--sb-text-muted)] flex items-center gap-1.5">
-                           <Activity size={14} className="text-blue-500" />
-                           {selectedPlan.items.length} Procedimientos
-                         </span>
-                         <span className="text-sm font-medium text-[var(--sb-text-muted)] flex items-center gap-1.5">
-                           <TrendingUp size={14} className="text-emerald-500" />
-                           {calculateProgress(selectedPlan)}% Completado
-                         </span>
-                      </div>
+        {/* Detail panel — visible en cualquier tamaño cuando hay selección */}
+        {selectedPlan ? (
+          <motion.div
+            key={selectedPlan.id}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            className="col-span-1 lg:col-span-7"
+          >
+            <PremiumCard className="h-full flex flex-col p-0 border-none shadow-medical">
+              <div className="p-8 border-b border-[var(--sb-border)]">
+                <div className="flex justify-between items-start mb-6">
+                  <div>
+                    <button
+                      onClick={() => setSelectedPlanId(null)}
+                      className="text-blue-500 font-bold text-sm mb-4 flex items-center gap-1"
+                    >
+                      <ChevronRight size={16} className="rotate-180" /> Volver a la lista
+                    </button>
+                    <h2 className="text-2xl font-bold text-[var(--sb-text)] uppercase tracking-tight">{selectedPlan.nombre}</h2>
+                    <div className="flex items-center gap-4 mt-2">
+                      <span className="text-sm font-medium text-[var(--sb-text-muted)] flex items-center gap-1.5">
+                        <Activity size={14} className="text-blue-500" />
+                        {selectedPlan.items.length} Procedimientos
+                      </span>
+                      <span className="text-sm font-medium text-[var(--sb-text-muted)] flex items-center gap-1.5">
+                        <TrendingUp size={14} className="text-emerald-500" />
+                        {calculateProgress(selectedPlan)}% Completado
+                      </span>
                     </div>
                   </div>
-
-                  {/* Large Progress Indicator */}
-                  <div className="relative pt-1">
-                    <div className="overflow-hidden h-3 mb-4 text-xs flex rounded-full" style={{ background: 'var(--sb-active-bg)' }}>
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${calculateProgress(selectedPlan)}%` }}
-                        transition={{ duration: 0.8, ease: "circOut" }}
-                        className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gradient-to-r from-blue-600 to-indigo-500"
-                      />
-                    </div>
-                  </div>
+                  <button
+                    onClick={() => printPlanTratamiento(selectedPlan)}
+                    title="Imprimir / Guardar PDF"
+                    className="flex items-center gap-2 border border-[var(--sb-border)] hover:border-slate-400 px-3 py-2 rounded-xl text-xs font-bold transition-all hover:text-slate-600 shrink-0"
+                    style={{ background: 'var(--sb-active-bg)', color: 'var(--sb-text-muted)' }}
+                  >
+                    <Printer size={14} />
+                    Imprimir
+                  </button>
                 </div>
 
-                <div className="flex-1 p-8 overflow-y-auto max-h-[calc(100vh-450px)] custom-scrollbar">
-                  <h4 className="text-xs font-bold uppercase tracking-widest text-[var(--sb-text-muted)] mb-6 py-2 border-b border-slate-50 dark:border-slate-800">Hoja de Ruta Clínica</h4>
-
-                  <TratamientoProgreso
-                    plan={selectedPlan}
-                    onUpdateEstado={(itemId: string, estado: string) => updateItemEstado({ itemId, estado })}
+                <div className="overflow-hidden h-3 rounded-full" style={{ background: 'var(--sb-active-bg)' }}>
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${calculateProgress(selectedPlan)}%` }}
+                    transition={{ duration: 0.8, ease: "circOut" }}
+                    className="h-full bg-gradient-to-r from-blue-600 to-indigo-500"
                   />
                 </div>
-              </PremiumCard>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              </div>
 
-        {!selectedPlanId && filteredPlanes.length > 0 && (
-          <div className="hidden lg:block lg:col-span-12 py-20 text-center">
-            <div className="h-24 w-24 rounded-full bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center mx-auto mb-6 text-blue-500 shadow-glass">
-              <Stethoscope size={40} />
+              <div className="flex-1 p-8 overflow-y-auto max-h-[calc(100vh-450px)] custom-scrollbar">
+                <h4 className="text-xs font-bold uppercase tracking-widest text-[var(--sb-text-muted)] mb-6 py-2 border-b border-slate-50 dark:border-slate-800">
+                  Hoja de Ruta Clínica
+                </h4>
+                <TratamientoProgreso
+                  plan={selectedPlan}
+                  onUpdateEstado={(itemId: string, estado: string) => updateItemEstado({ itemId, estado })}
+                />
+              </div>
+            </PremiumCard>
+          </motion.div>
+        ) : (
+          filteredPlanes.length > 0 && (
+            <div className="hidden lg:flex lg:col-span-7 flex-col items-center justify-center py-20 text-center">
+              <div className="h-24 w-24 rounded-full bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center mx-auto mb-6 text-blue-500">
+                <Stethoscope size={40} />
+              </div>
+              <h3 className="text-xl font-bold text-[var(--sb-text)] uppercase tracking-tight">Detalle del Tratamiento</h3>
+              <p className="text-slate-500 mt-2">Seleccioná un plan de la lista para ver el desglose clínico.</p>
             </div>
-            <h3 className="text-xl font-bold text-[var(--sb-text)] uppercase tracking-tight">Detalle del Tratamiento</h3>
-            <p className="text-slate-500 mt-2">Selecciona un plan de la lista para ver el desglose<br />clínico y gestionar su progreso.</p>
-          </div>
+          )
         )}
       </div>
     </div>

@@ -12,7 +12,11 @@ interface PagoModalProps {
 }
 
 export const PagoModal: React.FC<PagoModalProps> = ({ presupuesto, onClose, onSubmit, loading }) => {
-  const [monto, setMonto] = useState(presupuesto.total - (presupuesto.totalPagado || 0));
+  const total = Number(presupuesto.total);
+  const totalPagado = Number(presupuesto.totalPagado || 0);
+  const saldoPendiente = total - totalPagado;
+
+  const [monto, setMonto] = useState(saldoPendiente);
   const [metodo, setMetodo] = useState<'efectivo' | 'transferencia' | 'tarjeta'>('efectivo');
   const [notas, setNotas] = useState('');
 
@@ -20,13 +24,11 @@ export const PagoModal: React.FC<PagoModalProps> = ({ presupuesto, onClose, onSu
     e.preventDefault();
     onSubmit({
       presupuestoId: presupuesto.id,
-      monto,
+      monto: Number(monto),
       metodoPago: metodo,
       ...(notas.trim() ? { notas } : {}),
     });
   };
-
-  const saldoPendiente = presupuesto.total - (presupuesto.totalPagado || 0);
 
   const inputClasses = "input-premium text-lg font-black text-center";
 

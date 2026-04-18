@@ -5,7 +5,7 @@ export interface PlanTratamientoItem {
   piezaPosicion?: number;
   cara?: string;
   precioRef: number;
-  estado: 'pendiente' | 'realizado' | 'cancelado';
+  estado: 'pendiente' | 'iniciado' | 'realizado' | 'cancelado';
   createdAt: string;
   updatedAt: string;
 }

@@ -10,6 +10,16 @@ export interface Paciente {
   genero?: string;
   obraSocial?: string;
   nroAfiliado?: string;
+  obraSocialId?: string;
+  obraSocialData?: {
+    id: string;
+    nombre: string;
+    prestaciones: {
+      prestacionId: string;
+      precio: number;
+      prestacion: { id: string; codigo: string; nombre: string };
+    }[];
+  };
   createdAt: string;
   updatedAt: string;
   ficha?: FichaClinica;
@@ -74,6 +84,7 @@ export interface CreatePacienteDto {
   direccion?: string;
   obraSocial?: string;
   nroAfiliado?: string;
+  obraSocialId?: string;
 }
 
 export type UpdatePacienteDto = Partial<CreatePacienteDto>;

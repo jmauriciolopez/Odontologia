@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useOdontograma, useOdontogramaMutations } from '../hooks/use-odontograma';
 import { useConfiguracionClinica } from '../hooks/use-configuracion-clinica';
@@ -21,6 +21,8 @@ export const OdontogramaManager: React.FC<OdontogramaManagerProps> = ({ fichaId,
   const { updatePieza, addProcedimiento } = useOdontogramaMutations(fichaId);
   const [selectedPiezaId, setSelectedPiezaId] = useState<string | null>(null);
   const [show3D, setShow3D] = useState(false);
+  const [procInputError, setProcInputError] = useState(false);
+  const procInputRef = useRef<HTMLInputElement>(null);
 
   // Derivamos la pieza seleccionada de la data para mantener reactividad tras mutaciones
   const selectedPieza = piezas.find(p => p.id === selectedPiezaId) || null;
@@ -59,6 +61,18 @@ export const OdontogramaManager: React.FC<OdontogramaManagerProps> = ({ fichaId,
       piezaId: selectedPieza.id,
       caras: { [cara]: estado }
     });
+  };
+
+  const handleAddProcedimiento = (piezaId: string) => {
+    const val = procInputRef.current?.value?.trim();
+    if (!val) {
+      setProcInputError(true);
+      procInputRef.current?.focus();
+      setTimeout(() => setProcInputError(false), 1500);
+      return;
+    }
+    addProcedimiento.mutate({ piezaId, tipo: val, observaciones: '' });
+    if (procInputRef.current) procInputRef.current.value = '';
   };
 
   const states = [
@@ -224,42 +238,29 @@ export const OdontogramaManager: React.FC<OdontogramaManagerProps> = ({ fichaId,
                 </div>
                 <div className="flex gap-2">
                   <input
-                    id="new-proc-input"
+                    ref={procInputRef}
                     placeholder="Ej: Limpieza, Amalgama..."
-                    className="flex-1 input-clinical text-xs font-bold py-2.5"
+                    className={cn(
+                      "flex-1 input-clinical text-xs font-bold py-2.5 transition-all",
+                      procInputError && "border-red-400 ring-2 ring-red-200 placeholder:text-red-400"
+                    )}
                     disabled={addProcedimiento.isPending}
                     onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        const val = (e.currentTarget as HTMLInputElement).value;
-                        if (val) {
-                          addProcedimiento.mutate({
-                            piezaId: selectedPieza.id,
-                            tipo: val,
-                            observaciones: ''
-                          });
-                          (e.currentTarget as HTMLInputElement).value = '';
-                        }
-                      }
+                      if (e.key === 'Enter') handleAddProcedimiento(selectedPieza.id);
                     }}
+                    onChange={() => procInputError && setProcInputError(false)}
                   />
                   <button
-                    onClick={() => {
-                      const input = document.getElementById('new-proc-input') as HTMLInputElement;
-                      if (input.value) {
-                        addProcedimiento.mutate({
-                          piezaId: selectedPieza.id,
-                          tipo: input.value,
-                          observaciones: ''
-                        });
-                        input.value = '';
-                      }
-                    }}
+                    onClick={() => handleAddProcedimiento(selectedPieza.id)}
                     disabled={addProcedimiento.isPending}
                     className="bg-primary text-white p-2.5 rounded-xl transition-all shadow-md active:scale-95 disabled:opacity-50"
                   >
-                    <PlusIcon size={16} />
+                    {addProcedimiento.isPending ? <Loader2 size={16} className="animate-spin" /> : <PlusIcon size={16} />}
                   </button>
                 </div>
+                {procInputError && (
+                  <p className="text-[10px] text-red-500 font-bold">Escribí el nombre del tratamiento primero.</p>
+                )}
               </div>
 
               {/* Historial */}

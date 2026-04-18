@@ -478,6 +478,7 @@ export const PacienteDetallePage: React.FC = () => {
         {showNuevoPlanModal && (
           <NuevoPlanModal
             pacienteId={id!}
+            paciente={paciente}
             loading={isCreating}
             onClose={() => setShowNuevoPlanModal(false)}
             onSubmit={async (data) => {

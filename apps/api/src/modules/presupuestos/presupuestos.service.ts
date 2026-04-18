@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { Presupuesto } from './entities/presupuesto.entity';
 import { PresupuestoItem } from './entities/presupuesto-item.entity';
 import { Pago } from './entities/pago.entity';
@@ -15,6 +15,7 @@ export class PresupuestosService {
     private readonly itemRepository: Repository<PresupuestoItem>,
     @InjectRepository(Pago)
     private readonly pagoRepository: Repository<Pago>,
+    private readonly dataSource: DataSource,
   ) {}
 
   async create(dto: CreatePresupuestoDto): Promise<Presupuesto> {
@@ -56,7 +57,7 @@ export class PresupuestosService {
   async findByPaciente(pacienteId: string): Promise<Presupuesto[]> {
     return await this.presupuestoRepository.find({
       where: { pacienteId },
-      relations: ['items', 'pagos'],
+      relations: ['paciente', 'items', 'pagos'],
       order: { createdAt: 'DESC' }
     });
   }
@@ -75,27 +76,50 @@ export class PresupuestosService {
   }
 
   async registerPago(dto: RegisterPagoDto): Promise<Pago> {
-    const presupuesto = await this.findOne(dto.presupuestoId);
+    return await this.dataSource.transaction(async (manager) => {
+      const presupuesto = await manager.findOne(Presupuesto, {
+        where: { id: dto.presupuestoId },
+      });
+      if (!presupuesto) {
+        throw new NotFoundException(`Presupuesto ${dto.presupuestoId} no encontrado`);
+      }
 
-    // Recalculate from actual pagos to avoid stale cache
-    const pagosExistentes = await this.pagoRepository.find({ where: { presupuestoId: dto.presupuestoId } });
-    const totalYaPagado = pagosExistentes.reduce((sum, p) => sum + Number(p.monto), 0);
-    const nuevoTotalPagado = totalYaPagado + Number(dto.monto);
+      // Calcular desde pagos reales dentro de la transacción
+      const { sum } = await manager
+        .createQueryBuilder(Pago, 'p')
+        .select('COALESCE(SUM(p.monto), 0)', 'sum')
+        .where('p.presupuesto_id = :id', { id: dto.presupuestoId })
+        .getRawOne();
 
-    if (nuevoTotalPagado > Number(presupuesto.total)) {
-      throw new BadRequestException(
-        `El monto supera el saldo pendiente. Pendiente: ${Number(presupuesto.total) - totalYaPagado}`
-      );
-    }
+      const totalYaPagado = Number(sum);
+      const nuevoTotalPagado = totalYaPagado + Number(dto.monto);
 
-    const pago = this.pagoRepository.create(dto);
-    const savedPago = await this.pagoRepository.save(pago);
+      if (nuevoTotalPagado > Number(presupuesto.total)) {
+        throw new BadRequestException(
+          `El monto supera el saldo pendiente. Pendiente: ${Number(presupuesto.total) - totalYaPagado}`,
+        );
+      }
 
-    presupuesto.totalPagado = nuevoTotalPagado;
-    presupuesto.estado = nuevoTotalPagado >= Number(presupuesto.total) ? 'pagado' : 'pagado_parcial';
-    await this.presupuestoRepository.save(presupuesto);
+      const result = await manager
+        .createQueryBuilder()
+        .insert()
+        .into(Pago)
+        .values({
+          presupuestoId: dto.presupuestoId,
+          monto: Number(dto.monto),
+          metodoPago: dto.metodoPago,
+          notas: dto.notas ?? undefined,
+        })
+        .returning('*')
+        .execute();
 
-    return savedPago;
+      await manager.update(Presupuesto, dto.presupuestoId, {
+        totalPagado: nuevoTotalPagado,
+        estado: nuevoTotalPagado >= Number(presupuesto.total) ? 'pagado' : 'pagado_parcial',
+      });
+
+      return result.generatedMaps[0] as Pago;
+    });
   }
 
   async iniciarTratamiento(id: string): Promise<Presupuesto> {

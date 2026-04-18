@@ -48,14 +48,10 @@ export const FinanzasTabContent: React.FC<FinanzasTabContentProps> = ({ paciente
 
   // Calculate Aggregates
   const stats = (presupuestos || []).reduce((acc, p) => {
-    const paid = (p.pagos || []).reduce((sum, pago) => sum + Number(pago.monto), 0);
-
-    // Only 'iniciado' and further states generate debt
     const generatesDebt = p.estado !== 'pendiente';
-
     return {
-      total: generatesDebt ? acc.total + Number(p.total) : acc.total,
-      pagado: acc.pagado + paid,
+      total:  generatesDebt ? acc.total  + Number(p.total)       : acc.total,
+      pagado: generatesDebt ? acc.pagado + Number(p.totalPagado || 0) : acc.pagado,
     };
   }, { total: 0, pagado: 0 });
 
@@ -104,6 +100,7 @@ export const FinanzasTabContent: React.FC<FinanzasTabContentProps> = ({ paciente
             <PresupuestoList
               presupuestos={presupuestos}
               isLoading={isLoading}
+              pacienteNombre={pacienteNombre}
               onSelect={(p) => {
                 setSelectedPresupuesto(p);
                 setShowPagoModal(true);

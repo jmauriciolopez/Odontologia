@@ -24,5 +24,5 @@ export class PlanTratamientoItem extends BaseEntity {
   precioRef: number;
 
   @Column({ default: 'pendiente' })
-  estado: string; // pendiente, realizado, cancelado
+  estado: string; // pendiente, iniciado, realizado, cancelado
 }

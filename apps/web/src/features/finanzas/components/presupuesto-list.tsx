@@ -1,17 +1,19 @@
 ﻿import React from 'react';
 import { motion } from 'framer-motion';
 import { Presupuesto } from '../types';
-import { CheckCircle2, Clock, AlertCircle, FileText, ArrowRight, User, Play } from 'lucide-react';
+import { CheckCircle2, Clock, AlertCircle, FileText, ArrowRight, User, Play, Printer } from 'lucide-react';
 import { useFinanzasMutations } from '../hooks/use-presupuestos';
 import { cn } from '@/lib/utils';
+import { printPresupuesto } from './PresupuestoPrint';
 
 interface PresupuestoListProps {
   presupuestos: Presupuesto[];
   isLoading: boolean;
   onSelect: (p: Presupuesto) => void;
+  pacienteNombre?: string;
 }
 
-export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, isLoading, onSelect }) => {
+export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, isLoading, onSelect, pacienteNombre }) => {
   const { iniciarTratamiento } = useFinanzasMutations();
   if (isLoading) {
     return (
@@ -157,6 +159,14 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
                         <Play size={14} />
                       </button>
                     )}
+                    <button
+                      onClick={(e) => { e.stopPropagation(); printPresupuesto(p, undefined, pacienteNombre); }}
+                      title="Imprimir / Guardar PDF"
+                      className="inline-flex items-center gap-2 border-2 border-[var(--sb-border)] hover:border-slate-400 px-3 py-2 rounded-xl text-xs font-bold transition-all hover:text-slate-600"
+                      style={{ background: 'var(--sb-active-bg)', color: 'var(--sb-text-muted)' }}
+                    >
+                      <Printer size={14} />
+                    </button>
                     <button
                       onClick={() => onSelect(p)}
                       className="inline-flex items-center gap-2 border-2 border-[var(--sb-border)] hover:border-blue-500 px-4 py-2 rounded-xl text-xs font-bold transition-all hover:text-blue-600 group/btn"

@@ -69,6 +69,8 @@ class HttpClient {
             if (this.onUnauthorized) {
                 this.onUnauthorized();
             }
+            // Importamos dinámicamente para evitar dependencia circular
+            import('sonner').then(({ toast }) => toast.error('Sesión expirada. Iniciá sesión nuevamente.'));
             throw new Error('Sesión expirada');
         }
 

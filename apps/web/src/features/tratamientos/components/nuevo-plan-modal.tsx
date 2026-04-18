@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Plus, Trash2, Activity, Loader2 } from 'lucide-react';
+import { X, Plus, Trash2, Activity, Loader2, ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useProfesionales } from '../../agenda/hooks/use-turnos';
 import { CreatePlanTratamientoDto } from '../types';
 import { httpClient } from '@/lib/Httpclient';
+import { Paciente } from '../../pacientes/types';
 
 interface Prestacion {
   id: string;
@@ -16,6 +17,7 @@ interface Prestacion {
 
 interface NuevoPlanModalProps {
   pacienteId: string;
+  paciente?: Paciente;
   onClose: () => void;
   onSubmit: (data: CreatePlanTratamientoDto) => Promise<void>;
   loading?: boolean;
@@ -24,7 +26,7 @@ interface NuevoPlanModalProps {
 const inputCls = 'input-premium py-2.5 px-4 text-sm';
 
 export const NuevoPlanModal: React.FC<NuevoPlanModalProps> = ({
-  pacienteId, onClose, onSubmit, loading,
+  pacienteId, paciente, onClose, onSubmit, loading,
 }) => {
   const { data: profesionales = [] } = useProfesionales();
   const [prestaciones, setPrestaciones] = useState<Prestacion[]>([]);
@@ -32,6 +34,15 @@ export const NuevoPlanModal: React.FC<NuevoPlanModalProps> = ({
   const [profesionalId, setProfesionalId] = useState('');
   const [notas, setNotas]             = useState('');
   const [items, setItems] = useState([{ tipo: '', prestacionId: '', precioRef: 0, piezaPosicion: '', cara: '' }]);
+
+  // Mapa rápido: prestacionId → precio de la obra social del paciente
+  const obraSocialPrecios = React.useMemo(() => {
+    const map: Record<string, number> = {};
+    paciente?.obraSocialData?.prestaciones?.forEach(osp => {
+      map[osp.prestacionId] = Number(osp.precio);
+    });
+    return map;
+  }, [paciente]);
 
   useEffect(() => {
     httpClient.get<Prestacion[]>('configuracion/prestaciones').then(setPrestaciones).catch(() => {});
@@ -45,8 +56,10 @@ export const NuevoPlanModal: React.FC<NuevoPlanModalProps> = ({
   const handleSelectPrestacion = (i: number, prestacionId: string) => {
     const p = prestaciones.find(x => x.id === prestacionId);
     if (!p) return;
+    // Usar precio de obra social si existe, sino el honorario base
+    const precio = obraSocialPrecios[p.id] ?? Number(p.honorarios);
     setItems(prev => prev.map((item, idx) => idx === i
-      ? { ...item, prestacionId: p.id, tipo: `${p.codigo} - ${p.nombre}`, precioRef: Number(p.honorarios) }
+      ? { ...item, prestacionId: p.id, tipo: `${p.codigo} - ${p.nombre}`, precioRef: precio }
       : item
     ));
   };
@@ -95,9 +108,18 @@ export const NuevoPlanModal: React.FC<NuevoPlanModalProps> = ({
               <h2 className="text-lg font-black tracking-tight uppercase" style={{ color: 'var(--sb-text)' }}>
                 Nuevo Plan de Tratamiento
               </h2>
-              <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--sb-text-muted)' }}>
-                Hoja de ruta clínica del paciente
-              </p>
+              {paciente?.obraSocialData ? (
+                <div className="flex items-center gap-1 mt-0.5">
+                  <ShieldCheck size={11} className="text-emerald-500" />
+                  <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">
+                    {paciente.obraSocialData.nombre} — precios por cobertura
+                  </span>
+                </div>
+              ) : (
+                <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--sb-text-muted)' }}>
+                  Hoja de ruta clínica del paciente
+                </p>
+              )}
             </div>
           </div>
           <button onClick={onClose} className="p-2 rounded-xl hover:opacity-80 transition-colors"
@@ -213,7 +235,7 @@ export const NuevoPlanModal: React.FC<NuevoPlanModalProps> = ({
                     min="0"
                     value={item.precioRef}
                     onChange={e => updateItem(i, 'precioRef', e.target.value)}
-                    className={cn(inputCls, 'text-right')}
+                    className={cn(inputCls, 'text-right', item.prestacionId && obraSocialPrecios[item.prestacionId] !== undefined ? 'border-emerald-400/50 text-emerald-700 dark:text-emerald-400' : '')}
                   />
                   <button
                     type="button"

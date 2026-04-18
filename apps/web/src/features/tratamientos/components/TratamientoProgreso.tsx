@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, Activity, AlertCircle, TrendingUp } from 'lucide-react';
+import { CheckCircle2, Activity, AlertCircle, TrendingUp, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PlanTratamiento } from '../types';
 
@@ -54,36 +54,53 @@ export const TratamientoProgreso: React.FC<TratamientoProgresoProps> = ({ plan, 
         <div className="absolute left-[11px] top-2 bottom-2 w-0.5" style={{ background: 'var(--sb-border)' }} />
         {plan.items.map((item) => (
           <div key={item.id} className="relative pl-10">
+            {/* Timeline dot */}
             <div className={cn(
               "absolute left-0 top-1.5 h-6 w-6 rounded-full border-2 flex items-center justify-center transition-all z-10",
               item.estado === 'realizado'
                 ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 scale-110 shadow-lg shadow-emerald-500/20"
-                : "border-[var(--sb-border)] text-[var(--sb-border)]"
+                : item.estado === 'iniciado'
+                  ? "border-amber-400 bg-amber-50 dark:bg-amber-400/10 text-amber-500 scale-105 shadow-md shadow-amber-400/20"
+                  : "border-[var(--sb-border)] text-[var(--sb-border)]"
             )}
-            style={item.estado !== 'realizado' ? { background: 'var(--card-bg)' } : {}}
+            style={item.estado === 'pendiente' ? { background: 'var(--card-bg)' } : {}}
             >
-              {item.estado === 'realizado' ? <CheckCircle2 size={14} /> : <div className="h-1.5 w-1.5 rounded-full bg-current" />}
+              {item.estado === 'realizado'
+                ? <CheckCircle2 size={14} />
+                : item.estado === 'iniciado'
+                  ? <Clock size={13} />
+                  : <div className="h-1.5 w-1.5 rounded-full bg-current" />
+              }
             </div>
 
             <div
               className="p-4 rounded-2xl border transition-all hover:shadow-medical-hover"
               style={{
                 background: 'var(--card-bg)',
-                borderColor: item.estado === 'realizado' ? 'rgba(16,185,129,.2)' : 'var(--sb-border)',
+                borderColor:
+                  item.estado === 'realizado' ? 'rgba(16,185,129,.2)'
+                  : item.estado === 'iniciado' ? 'rgba(251,191,36,.3)'
+                  : 'var(--sb-border)',
               }}
             >
               <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                   <div
                     className={cn("h-10 w-10 rounded-xl flex items-center justify-center transition-colors",
-                      item.estado === 'realizado' ? "bg-emerald-500/10 text-emerald-500" : ""
+                      item.estado === 'realizado' ? "bg-emerald-500/10 text-emerald-500"
+                      : item.estado === 'iniciado' ? "bg-amber-400/10 text-amber-500"
+                      : ""
                     )}
-                    style={item.estado !== 'realizado' ? { background: 'var(--sb-active-bg)', color: 'var(--sb-text-muted)' } : {}}
+                    style={item.estado === 'pendiente' ? { background: 'var(--sb-active-bg)', color: 'var(--sb-text-muted)' } : {}}
                   >
                     <Activity size={20} />
                   </div>
                   <div>
-                    <h5 className={cn("text-sm font-bold", item.estado === 'realizado' ? "text-emerald-700 dark:text-emerald-400" : "text-[var(--sb-text)]")}>
+                    <h5 className={cn("text-sm font-bold",
+                      item.estado === 'realizado' ? "text-emerald-700 dark:text-emerald-400"
+                      : item.estado === 'iniciado' ? "text-amber-700 dark:text-amber-400"
+                      : "text-[var(--sb-text)]"
+                    )}>
                       {item.tipo}
                     </h5>
                     {item.piezaPosicion && (
@@ -97,17 +114,24 @@ export const TratamientoProgreso: React.FC<TratamientoProgresoProps> = ({ plan, 
                 {!isReadOnly && onUpdateEstado && (
                   <button
                     onClick={() => {
-                      const nextEstado = item.estado === 'pendiente' ? 'realizado' : 'pendiente';
+                      const nextEstado =
+                        item.estado === 'pendiente' ? 'iniciado'
+                        : item.estado === 'iniciado' ? 'realizado'
+                        : 'pendiente';
                       onUpdateEstado(item.id, nextEstado);
                     }}
                     className={cn(
                       "text-[10px] font-bold px-4 py-2 rounded-xl border transition-all shrink-0",
                       item.estado === 'realizado'
                         ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20"
-                        : "border-[var(--sb-border)] text-[var(--sb-text-muted)] hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50"
+                        : item.estado === 'iniciado'
+                          ? "border-amber-400/40 bg-amber-400/10 text-amber-600 hover:bg-amber-400/20"
+                          : "border-[var(--sb-border)] text-[var(--sb-text-muted)] hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50"
                     )}
                   >
-                    {item.estado === 'realizado' ? 'COMPLETADO' : 'MARCAR HECHO'}
+                    {item.estado === 'realizado' ? 'COMPLETADO'
+                      : item.estado === 'iniciado' ? 'EN PROGRESO'
+                      : 'INICIAR'}
                   </button>
                 )}
               </div>
