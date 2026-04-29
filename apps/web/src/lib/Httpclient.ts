@@ -120,6 +120,38 @@ class HttpClient {
     async delete<T>(endpoint: string, options?: RequestOptions): Promise<T> {
         return this.request<T>(endpoint, { ...options, method: 'DELETE' });
     }
+
+    async downloadFile(endpoint: string, filename: string, params?: Record<string, any>) {
+        const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+        const url = new URL(`${this.baseUrl}${cleanEndpoint}`);
+
+        if (params) {
+            Object.keys(params).forEach(key => {
+                if (params[key] !== undefined && params[key] !== 'all') {
+                    url.searchParams.append(key, String(params[key]));
+                }
+            });
+        }
+
+        const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+        const headers: Record<string, string> = {};
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const response = await fetch(url.toString(), { headers });
+        if (!response.ok) throw new Error('Error al descargar el archivo');
+
+        const blob = await response.blob();
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(downloadUrl);
+    }
 }
 
 export const httpClient = new HttpClient(API_URL);

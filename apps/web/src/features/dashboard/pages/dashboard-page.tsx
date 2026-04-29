@@ -1,18 +1,85 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../../context/auth-context';
-import { useDashboard } from '../hooks/use-dashboard';
+import { useDashboard, useHistoricalDashboard } from '../hooks/use-dashboard';
+import { DashboardChart } from '../components/dashboard-chart';
 import { PremiumCard } from '../../../components/ui/premium-card';
-import { Users, Calendar, TrendingUp, DollarSign, Clock, User, ChevronRight, Activity } from 'lucide-react';
+import { Users, Calendar, TrendingUp, DollarSign, Clock, User, ChevronRight, Activity, Filter, FileDown } from 'lucide-react';
+import { httpClient } from '../../../lib/Httpclient';
+import { toast } from 'sonner';
 import { cn } from '../../../lib/utils';
 import { useNavigate } from 'react-router-dom';
 
 export const DashboardPage: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { data: dashboardData, isLoading } = useDashboard();
+  const { data: dashboardData, isLoading: isLoadingStats } = useDashboard();
 
-  if (isLoading) {
+  // Rango histórico predeterminado: últimos 6 meses
+  const [dateRange, setDateRange] = React.useState({
+    from: new Date(new Date().setMonth(new Date().getMonth() - 6)).toISOString().split('T')[0],
+    to: new Date().toISOString().split('T')[0]
+  });
+
+  const { data: historicalData, isLoading: isLoadingHistorical } = useHistoricalDashboard(dateRange.from, dateRange.to);
+  const [isExporting, setIsExporting] = React.useState(false);
+  const [isExportingCobranza, setIsExportingCobranza] = React.useState(false);
+  const [isExportingPacientes, setIsExportingPacientes] = React.useState(false);
+
+  const handleExportPdf = async () => {
+    try {
+      setIsExporting(true);
+      await httpClient.downloadFile(
+        '/dashboard/historical/export-pdf',
+        `reporte-dashboard-${dateRange.from}-a-${dateRange.to}.pdf`,
+        { from: dateRange.from, to: dateRange.to }
+      );
+      toast.success('Reporte exportado correctamente');
+    } catch (error) {
+      console.error('Error al exportar PDF:', error);
+      toast.error('Error al generar el PDF del dashboard');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  const handleExportCobranza = async () => {
+    if (user?.rol !== 'admin') {
+      toast.error('Acceso restringido a Administradores');
+      return;
+    }
+    try {
+      setIsExportingCobranza(true);
+      await httpClient.downloadFile(
+        '/dashboard/reports/cobranza/export-pdf',
+        `reporte-cobranza-${dateRange.from}-a-${dateRange.to}.pdf`,
+        { from: dateRange.from, to: dateRange.to }
+      );
+      toast.success('Reporte de cobranza exportado');
+    } catch (error) {
+      toast.error('Error al exportar cobranza');
+    } finally {
+      setIsExportingCobranza(false);
+    }
+  };
+
+  const handleExportPacientes = async () => {
+    try {
+      setIsExportingPacientes(true);
+      await httpClient.downloadFile(
+        '/dashboard/reports/pacientes-nuevos/export-pdf',
+        `reporte-nuevos-pacientes-${dateRange.from}-a-${dateRange.to}.pdf`,
+        { from: dateRange.from, to: dateRange.to }
+      );
+      toast.success('Reporte de nuevos pacientes exportado');
+    } catch (error) {
+      toast.error('Error al exportar pacientes');
+    } finally {
+      setIsExportingPacientes(false);
+    }
+  };
+
+  if (isLoadingStats) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
         <div className="relative">
@@ -66,34 +133,99 @@ export const DashboardPage: React.FC = () => {
             Su clínica está operando con normalidad hoy.
           </motion.p>
         </div>
-        <motion.div
-          variants={itemVariants}
-          className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full border"
-          style={{ background: 'var(--sb-active-bg)', borderColor: 'var(--sb-border)', color: 'var(--sb-text-muted)' }}
-        >
-          <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          Sistema En Línea
+        
+        <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg border bg-card/50 backdrop-blur-sm border-border">
+            <Filter size={14} className="text-muted-foreground" />
+            <input 
+              type="date" 
+              value={dateRange.from}
+              onChange={(e) => setDateRange(prev => ({ ...prev, from: e.target.value }))}
+              className="bg-transparent text-xs font-medium outline-none focus:ring-0 w-28"
+            />
+            <span className="text-muted-foreground text-xs">—</span>
+            <input 
+              type="date" 
+              value={dateRange.to}
+              onChange={(e) => setDateRange(prev => ({ ...prev, to: e.target.value }))}
+              className="bg-transparent text-xs font-medium outline-none focus:ring-0 w-28"
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleExportPdf}
+              disabled={isExporting}
+              title="Exportar Resumen Histórico"
+              className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-xl border border-blue-200 dark:border-blue-500/20 bg-blue-50/50 dark:bg-blue-500/5 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-500/10 transition-all disabled:opacity-50"
+            >
+              <FileDown size={14} className={cn(isExporting && "animate-bounce")} />
+              {isExporting ? '...' : 'General'}
+            </button>
+
+            {user?.rol === 'admin' && (
+              <button
+                onClick={handleExportCobranza}
+                disabled={isExportingCobranza}
+                title="Reporte Detallado de Cobranza"
+                className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-xl border border-emerald-200 dark:border-emerald-500/20 bg-emerald-50/50 dark:bg-emerald-500/5 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-500/10 transition-all disabled:opacity-50"
+              >
+                <DollarSign size={14} className={cn(isExportingCobranza && "animate-bounce")} />
+                {isExportingCobranza ? '...' : 'Cobranza'}
+              </button>
+            )}
+
+            <button
+              onClick={handleExportPacientes}
+              disabled={isExportingPacientes}
+              title="Reporte de Nuevos Pacientes"
+              className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-xl border border-amber-200 dark:border-amber-500/20 bg-amber-50/50 dark:bg-amber-500/5 text-amber-600 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-500/10 transition-all disabled:opacity-50"
+            >
+              <Users size={14} className={cn(isExportingPacientes && "animate-bounce")} />
+              {isExportingPacientes ? '...' : 'Pacientes'}
+            </button>
+          </div>
+
+          <div
+            className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full border"
+            style={{ background: 'var(--sb-active-bg)', borderColor: 'var(--sb-border)', color: 'var(--sb-text-muted)' }}
+          >
+            <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            En Línea
+          </div>
         </motion.div>
       </header>
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, i) => (
-          <PremiumCard key={stat.label} delay={i * 0.1}>
-            <div className="flex items-center justify-between mb-4">
-              <div className={cn('p-2.5 rounded-xl', stat.bg)}>
-                <stat.icon className={stat.color} size={24} />
+          <motion.div key={stat.label} variants={itemVariants}>
+            <PremiumCard className="p-5 hover:scale-[1.02] transition-transform duration-300">
+              <div className="flex items-start justify-between">
+                <div className="space-y-1">
+                  <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    {stat.label}
+                  </p>
+                  <p className="text-2xl font-bold tracking-tight">
+                    {stat.value}
+                  </p>
+                </div>
+                <div className={cn("p-2 rounded-xl", stat.bg)}>
+                  <stat.icon className={stat.color} size={20} />
+                </div>
               </div>
-              <Activity size={20} style={{ color: 'var(--sb-border)' }} />
-            </div>
-            <div className="space-y-1">
-              <p className="text-sm font-medium" style={{ color: 'var(--sb-text-muted)' }}>{stat.label}</p>
-              <h3 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--sb-text)' }}>{stat.value}</h3>
-            </div>
-          </PremiumCard>
+            </PremiumCard>
+          </motion.div>
         ))}
       </div>
 
+      {/* Historical Chart */}
+      <motion.div variants={itemVariants}>
+        <DashboardChart 
+          data={historicalData || []} 
+          isLoading={isLoadingHistorical} 
+        />
+      </motion.div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Turnos del día */}
         <PremiumCard className="lg:col-span-2" delay={0.4}>

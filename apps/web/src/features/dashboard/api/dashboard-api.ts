@@ -8,8 +8,17 @@ export interface DashboardStats {
   proximosTurnos: any[];
 }
 
+export interface HistoricalStat {
+  month: string;
+  ingresos: number;
+  tratamientos: number;
+}
+
 export const dashboardApi = {
   getStats: async (): Promise<DashboardStats> => {
     return httpClient.get('dashboard/stats');
+  },
+  getHistorical: async (from: string, to: string): Promise<HistoricalStat[]> => {
+    return httpClient.get(`dashboard/historical?from=${from}&to=${to}`);
   }
 };

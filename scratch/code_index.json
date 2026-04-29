@@ -1,6 +1,6 @@
 {
   "repo": "local/odontologia-104eafc5",
-  "indexed_at": "2026-04-15T13:10:43.851114",
+  "indexed_at": "2026-04-26T17:55:43.810603",
   "source_files": [
     "apps/api/database/init.sql",
     "apps/api/database/seed.sql",
@@ -248,7 +248,7 @@
     "tsx": 63,
     "typescript": 159
   },
-  "symbol_count": 1099,
+  "symbol_count": 1101,
   "symbols": [
     {
       "id": "apps/api/database/init.sql::tenants#type",
@@ -27571,370 +27571,6 @@
       "call_references": []
     },
     {
-      "id": "apps/web/src/lib/Httpclient.ts::API_URL#constant",
-      "file": "apps/web/src/lib/Httpclient.ts",
-      "name": "API_URL",
-      "kind": "constant",
-      "signature": "const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002/api/v1';",
-      "summary": "Constant API_URL",
-      "docstring": "",
-      "qualified_name": "API_URL",
-      "language": "typescript",
-      "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
-      "parent": null,
-      "line": 3,
-      "end_line": 3,
-      "byte_offset": 33,
-      "byte_length": 79,
-      "content_hash": "b6cd3eec5a1a6a13ab4cab11222bc2a5ba3b799d6c5427da7667bebe478f0d5a",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-04)",
-      "cyclomatic": 0,
-      "max_nesting": 0,
-      "param_count": 0,
-      "call_references": []
-    },
-    {
-      "id": "apps/web/src/lib/Httpclient.ts::RequestOptions#type",
-      "file": "apps/web/src/lib/Httpclient.ts",
-      "name": "RequestOptions",
-      "kind": "type",
-      "signature": "interface RequestOptions extends RequestInit",
-      "summary": "Type definition RequestOptions",
-      "docstring": "",
-      "qualified_name": "RequestOptions",
-      "language": "typescript",
-      "decorators": [],
-      "keywords": [
-        "interface",
-        "last_author",
-        "last_modified"
-      ],
-      "parent": null,
-      "line": 5,
-      "end_line": 7,
-      "byte_offset": 121,
-      "byte_length": 82,
-      "content_hash": "81f828b77f87ded206b59ede499913cf6731774d999802159020f82a22870a22",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-04)",
-      "cyclomatic": 0,
-      "max_nesting": 0,
-      "param_count": 0,
-      "call_references": []
-    },
-    {
-      "id": "apps/web/src/lib/Httpclient.ts::HttpClient#class",
-      "file": "apps/web/src/lib/Httpclient.ts",
-      "name": "HttpClient",
-      "kind": "class",
-      "signature": "class HttpClient",
-      "summary": "Class HttpClient",
-      "docstring": "",
-      "qualified_name": "HttpClient",
-      "language": "typescript",
-      "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
-      "parent": null,
-      "line": 9,
-      "end_line": 121,
-      "byte_offset": 205,
-      "byte_length": 3983,
-      "content_hash": "77bd9ba189ed83e0c5cb2e888a3fc301fd5ec7fddb5dafa1b5bbbd8a23d6f8b5",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-04)",
-      "cyclomatic": 0,
-      "max_nesting": 0,
-      "param_count": 0,
-      "call_references": []
-    },
-    {
-      "id": "apps/web/src/lib/Httpclient.ts::HttpClient.constructor#method",
-      "file": "apps/web/src/lib/Httpclient.ts",
-      "name": "constructor",
-      "kind": "method",
-      "signature": "constructor(baseUrl: string)",
-      "summary": "constructor(baseUrl: string)",
-      "docstring": "",
-      "qualified_name": "constructor",
-      "language": "",
-      "decorators": [],
-      "keywords": [],
-      "parent": "apps/web/src/lib/Httpclient.ts::HttpClient#class",
-      "line": 13,
-      "end_line": 20,
-      "byte_offset": 299,
-      "byte_length": 289,
-      "content_hash": "",
-      "ecosystem_context": "",
-      "cyclomatic": 3,
-      "max_nesting": 2,
-      "param_count": 1,
-      "call_references": [
-        "endsWith",
-        "slice"
-      ]
-    },
-    {
-      "id": "apps/web/src/lib/Httpclient.ts::HttpClient.setUnauthorizedCallback#method",
-      "file": "apps/web/src/lib/Httpclient.ts",
-      "name": "setUnauthorizedCallback",
-      "kind": "method",
-      "signature": "setUnauthorizedCallback(callback: () => void)",
-      "summary": "setUnauthorizedCallback(callback: () => void)",
-      "docstring": "",
-      "qualified_name": "HttpClient.setUnauthorizedCallback",
-      "language": "typescript",
-      "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
-      "parent": "apps/web/src/lib/Httpclient.ts::HttpClient#class",
-      "line": 22,
-      "end_line": 24,
-      "byte_offset": 594,
-      "byte_length": 93,
-      "content_hash": "d51b6c2cc4a540b4549504dd3f0e7919673c8e85e70435f9ddb64b87dd9d1043",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-04)",
-      "cyclomatic": 1,
-      "max_nesting": 1,
-      "param_count": 1,
-      "call_references": []
-    },
-    {
-      "id": "apps/web/src/lib/Httpclient.ts::HttpClient.request#method",
-      "file": "apps/web/src/lib/Httpclient.ts",
-      "name": "request",
-      "kind": "method",
-      "signature": "private async request<T>(endpoint: string, options: RequestOptions = {}): Promise<T>",
-      "summary": "private async request<T>(endpoint: string, options: RequestOptions = {}): Promise<T>",
-      "docstring": "",
-      "qualified_name": "request",
-      "language": "",
-      "decorators": [],
-      "keywords": [],
-      "parent": "apps/web/src/lib/Httpclient.ts::HttpClient#class",
-      "line": 26,
-      "end_line": 88,
-      "byte_offset": 693,
-      "byte_length": 2340,
-      "content_hash": "",
-      "ecosystem_context": "",
-      "cyclomatic": 23,
-      "max_nesting": 7,
-      "param_count": 2,
-      "call_references": [
-        "startsWith",
-        "URL",
-        "forEach",
-        "keys",
-        "append",
-        "String",
-        "getItem",
-        "fetch",
-        "toString",
-        "removeItem",
-        "onUnauthorized",
-        "Error",
-        "catch",
-        "json",
-        "isArray",
-        "join"
-      ]
-    },
-    {
-      "id": "apps/web/src/lib/Httpclient.ts::HttpClient.get#method",
-      "file": "apps/web/src/lib/Httpclient.ts",
-      "name": "get",
-      "kind": "method",
-      "signature": "async get<T>(endpoint: string, options?: RequestOptions): Promise<T>",
-      "summary": "async get<T>(endpoint: string, options?: RequestOptions): Promise<T>",
-      "docstring": "",
-      "qualified_name": "get",
-      "language": "",
-      "decorators": [],
-      "keywords": [],
-      "parent": "apps/web/src/lib/Httpclient.ts::HttpClient#class",
-      "line": 90,
-      "end_line": 92,
-      "byte_offset": 3039,
-      "byte_length": 149,
-      "content_hash": "",
-      "ecosystem_context": "",
-      "cyclomatic": 1,
-      "max_nesting": 2,
-      "param_count": 2,
-      "call_references": [
-        "request"
-      ]
-    },
-    {
-      "id": "apps/web/src/lib/Httpclient.ts::HttpClient.post#method",
-      "file": "apps/web/src/lib/Httpclient.ts",
-      "name": "post",
-      "kind": "method",
-      "signature": "async post<T>(endpoint: string, body?: unknown, options?: RequestOptions): Promise<T>",
-      "summary": "async post<T>(endpoint: string, body?: unknown, options?: RequestOptions): Promise<T>",
-      "docstring": "",
-      "qualified_name": "post",
-      "language": "",
-      "decorators": [],
-      "keywords": [],
-      "parent": "apps/web/src/lib/Httpclient.ts::HttpClient#class",
-      "line": 94,
-      "end_line": 100,
-      "byte_offset": 3194,
-      "byte_length": 273,
-      "content_hash": "",
-      "ecosystem_context": "",
-      "cyclomatic": 2,
-      "max_nesting": 3,
-      "param_count": 3,
-      "call_references": [
-        "request",
-        "stringify"
-      ]
-    },
-    {
-      "id": "apps/web/src/lib/Httpclient.ts::HttpClient.put#method",
-      "file": "apps/web/src/lib/Httpclient.ts",
-      "name": "put",
-      "kind": "method",
-      "signature": "async put<T>(endpoint: string, body?: unknown, options?: RequestOptions): Promise<T>",
-      "summary": "async put<T>(endpoint: string, body?: unknown, options?: RequestOptions): Promise<T>",
-      "docstring": "",
-      "qualified_name": "put",
-      "language": "",
-      "decorators": [],
-      "keywords": [],
-      "parent": "apps/web/src/lib/Httpclient.ts::HttpClient#class",
-      "line": 102,
-      "end_line": 108,
-      "byte_offset": 3473,
-      "byte_length": 271,
-      "content_hash": "",
-      "ecosystem_context": "",
-      "cyclomatic": 2,
-      "max_nesting": 3,
-      "param_count": 3,
-      "call_references": [
-        "request",
-        "stringify"
-      ]
-    },
-    {
-      "id": "apps/web/src/lib/Httpclient.ts::HttpClient.patch#method",
-      "file": "apps/web/src/lib/Httpclient.ts",
-      "name": "patch",
-      "kind": "method",
-      "signature": "async patch<T>(endpoint: string, body?: unknown, options?: RequestOptions): Promise<T>",
-      "summary": "async patch<T>(endpoint: string, body?: unknown, options?: RequestOptions): Promise<T>",
-      "docstring": "",
-      "qualified_name": "patch",
-      "language": "",
-      "decorators": [],
-      "keywords": [],
-      "parent": "apps/web/src/lib/Httpclient.ts::HttpClient#class",
-      "line": 110,
-      "end_line": 116,
-      "byte_offset": 3750,
-      "byte_length": 275,
-      "content_hash": "",
-      "ecosystem_context": "",
-      "cyclomatic": 2,
-      "max_nesting": 3,
-      "param_count": 3,
-      "call_references": [
-        "request",
-        "stringify"
-      ]
-    },
-    {
-      "id": "apps/web/src/lib/Httpclient.ts::HttpClient.delete#method",
-      "file": "apps/web/src/lib/Httpclient.ts",
-      "name": "delete",
-      "kind": "method",
-      "signature": "async delete<T>(endpoint: string, options?: RequestOptions): Promise<T>",
-      "summary": "async delete<T>(endpoint: string, options?: RequestOptions): Promise<T>",
-      "docstring": "",
-      "qualified_name": "delete",
-      "language": "",
-      "decorators": [],
-      "keywords": [],
-      "parent": "apps/web/src/lib/Httpclient.ts::HttpClient#class",
-      "line": 118,
-      "end_line": 120,
-      "byte_offset": 4031,
-      "byte_length": 155,
-      "content_hash": "",
-      "ecosystem_context": "",
-      "cyclomatic": 1,
-      "max_nesting": 2,
-      "param_count": 2,
-      "call_references": [
-        "request"
-      ]
-    },
-    {
-      "id": "apps/web/src/lib/Httpclient.ts::httpClient#constant",
-      "file": "apps/web/src/lib/Httpclient.ts",
-      "name": "httpClient",
-      "kind": "constant",
-      "signature": "const httpClient = new HttpClient(API_URL);",
-      "summary": "Constant httpClient",
-      "docstring": "",
-      "qualified_name": "httpClient",
-      "language": "typescript",
-      "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
-      "parent": null,
-      "line": 123,
-      "end_line": 123,
-      "byte_offset": 4197,
-      "byte_length": 43,
-      "content_hash": "cb86336a781081c733fa1f5c7867abf9f4d0eb3092d20e6ea03d3225a9ba4bb8",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-04)",
-      "cyclomatic": 0,
-      "max_nesting": 0,
-      "param_count": 0,
-      "call_references": []
-    },
-    {
-      "id": "apps/web/src/lib/Httpclient.ts::http#constant",
-      "file": "apps/web/src/lib/Httpclient.ts",
-      "name": "http",
-      "kind": "constant",
-      "signature": "const http = httpClient;",
-      "summary": "Constant http",
-      "docstring": "",
-      "qualified_name": "http",
-      "language": "typescript",
-      "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
-      "parent": null,
-      "line": 124,
-      "end_line": 124,
-      "byte_offset": 4248,
-      "byte_length": 24,
-      "content_hash": "b13a897d7898de3338e8a5e87096a5312ef4d8447d18c4e0fbd8f32a56cdb170",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-04)",
-      "cyclomatic": 0,
-      "max_nesting": 0,
-      "param_count": 0,
-      "call_references": []
-    },
-    {
       "id": "apps/web/src/lib/dental-numbering.ts::SistemaDental#type",
       "file": "apps/web/src/lib/dental-numbering.ts",
       "name": "SistemaDental",
@@ -28095,33 +27731,6 @@
       "call_references": [
         "normalizarSistemaDental"
       ]
-    },
-    {
-      "id": "apps/web/src/lib/query-client.ts::queryClient#constant",
-      "file": "apps/web/src/lib/query-client.ts",
-      "name": "queryClient",
-      "kind": "constant",
-      "signature": "const queryClient = new QueryClient({\n  defaultOptions: {\n    queries: {\n      refetchOnWindowFocus: false,\n      retry: 1,\n      staleTime: 1000 * 60 * 5, // 5 minutes\n    },\n  },\n});",
-      "summary": "Constant queryClient",
-      "docstring": "",
-      "qualified_name": "queryClient",
-      "language": "typescript",
-      "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
-      "parent": null,
-      "line": 3,
-      "end_line": 11,
-      "byte_offset": 61,
-      "byte_length": 184,
-      "content_hash": "868dc6f38d16cafcbc91655a7bcc960eab7813bcaeb312fa3b38ebf6a1d082e4",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-01)",
-      "cyclomatic": 0,
-      "max_nesting": 0,
-      "param_count": 0,
-      "call_references": []
     },
     {
       "id": "apps/web/src/lib/utils.ts::cn#function",
@@ -29183,7 +28792,7 @@
       "summary": "async function cleanPacientes()",
       "docstring": "",
       "qualified_name": "cleanPacientes",
-      "language": "typescript",
+      "language": "",
       "decorators": [],
       "keywords": [],
       "parent": null,
@@ -29191,7 +28800,7 @@
       "end_line": 29,
       "byte_offset": 154,
       "byte_length": 736,
-      "content_hash": "a003d9f4772e1374105083ed67af7b21560fbb7457b89e7063904642afb53fff",
+      "content_hash": "",
       "ecosystem_context": "",
       "cyclomatic": 3,
       "max_nesting": 5,
@@ -29244,20 +28853,17 @@
       "signature": "constructor(\n    @InjectRepository(Presupuesto)\n    private readonly presupuestoRepository: Repository<Presupuesto>,\n    @InjectRepository(PresupuestoItem)\n    private readonly itemRepository: Repository<PresupuestoItem>,\n    @InjectRepository(Pago)\n    private readonly pagoRepository: Repository<Pago>,\n    private readonly dataSource: DataSource,\n  )",
       "summary": "constructor(\n    @InjectRepository(Presupuesto)\n    private readonly presupuestoRepository: Repository<Presupuesto>,\n   ",
       "docstring": "",
-      "qualified_name": "PresupuestosService.constructor",
-      "language": "typescript",
+      "qualified_name": "constructor",
+      "language": "",
       "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
+      "keywords": [],
       "parent": "apps/api/src/modules/presupuestos/presupuestos.service.ts::PresupuestosService#class",
       "line": 11,
       "end_line": 19,
       "byte_offset": 496,
       "byte_length": 356,
-      "content_hash": "56b5fa120c157684142a556948a715a3a26b1809a284784241d47c1896d2ebe7",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-09)",
+      "content_hash": "",
+      "ecosystem_context": "",
       "cyclomatic": 1,
       "max_nesting": 1,
       "param_count": 1,
@@ -29273,20 +28879,17 @@
       "signature": "async create(dto: CreatePresupuestoDto): Promise<Presupuesto>",
       "summary": "async create(dto: CreatePresupuestoDto): Promise<Presupuesto>",
       "docstring": "",
-      "qualified_name": "PresupuestosService.create",
-      "language": "typescript",
+      "qualified_name": "create",
+      "language": "",
       "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
+      "keywords": [],
       "parent": "apps/api/src/modules/presupuestos/presupuestos.service.ts::PresupuestosService#class",
       "line": 21,
       "end_line": 48,
       "byte_offset": 856,
       "byte_length": 872,
-      "content_hash": "4c18a112de4eb0e642a1bf40451c1f22f3d98b4388ab49c2138b2b71160f4e0c",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-09)",
+      "content_hash": "",
+      "ecosystem_context": "",
       "cyclomatic": 3,
       "max_nesting": 5,
       "param_count": 1,
@@ -29306,20 +28909,17 @@
       "signature": "async findAll(): Promise<Presupuesto[]>",
       "summary": "async findAll(): Promise<Presupuesto[]>",
       "docstring": "",
-      "qualified_name": "PresupuestosService.findAll",
-      "language": "typescript",
+      "qualified_name": "findAll",
+      "language": "",
       "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
+      "keywords": [],
       "parent": "apps/api/src/modules/presupuestos/presupuestos.service.ts::PresupuestosService#class",
       "line": 50,
       "end_line": 55,
       "byte_offset": 1732,
       "byte_length": 179,
-      "content_hash": "aa7ad74e4d9de6b7ec2c5f87ea09920f0a68606b2f03897f7cc8c475b4079230",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-09)",
+      "content_hash": "",
+      "ecosystem_context": "",
       "cyclomatic": 1,
       "max_nesting": 3,
       "param_count": 0,
@@ -29335,20 +28935,17 @@
       "signature": "async findByPaciente(pacienteId: string): Promise<Presupuesto[]>",
       "summary": "async findByPaciente(pacienteId: string): Promise<Presupuesto[]>",
       "docstring": "",
-      "qualified_name": "PresupuestosService.findByPaciente",
-      "language": "typescript",
+      "qualified_name": "findByPaciente",
+      "language": "",
       "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
+      "keywords": [],
       "parent": "apps/api/src/modules/presupuestos/presupuestos.service.ts::PresupuestosService#class",
       "line": 57,
       "end_line": 63,
       "byte_offset": 1915,
       "byte_length": 242,
-      "content_hash": "f5bd7921852b0fdcc849e50974c08d12e77da9fc4d085ff8be4a34a45d7e88dd",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-09)",
+      "content_hash": "",
+      "ecosystem_context": "",
       "cyclomatic": 1,
       "max_nesting": 3,
       "param_count": 1,
@@ -29364,20 +28961,17 @@
       "signature": "async findOne(id: string): Promise<Presupuesto>",
       "summary": "async findOne(id: string): Promise<Presupuesto>",
       "docstring": "",
-      "qualified_name": "PresupuestosService.findOne",
-      "language": "typescript",
+      "qualified_name": "findOne",
+      "language": "",
       "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
+      "keywords": [],
       "parent": "apps/api/src/modules/presupuestos/presupuestos.service.ts::PresupuestosService#class",
       "line": 65,
       "end_line": 76,
       "byte_offset": 2161,
       "byte_length": 324,
-      "content_hash": "43536d4808880922d9030898c6707f9e0cadd91ffa66870fc17a06802c3e6d43",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-09)",
+      "content_hash": "",
+      "ecosystem_context": "",
       "cyclomatic": 2,
       "max_nesting": 3,
       "param_count": 1,
@@ -29393,20 +28987,17 @@
       "signature": "async registerPago(dto: RegisterPagoDto): Promise<Pago>",
       "summary": "async registerPago(dto: RegisterPagoDto): Promise<Pago>",
       "docstring": "",
-      "qualified_name": "PresupuestosService.registerPago",
-      "language": "typescript",
+      "qualified_name": "registerPago",
+      "language": "",
       "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
+      "keywords": [],
       "parent": "apps/api/src/modules/presupuestos/presupuestos.service.ts::PresupuestosService#class",
       "line": 78,
       "end_line": 123,
       "byte_offset": 2489,
       "byte_length": 1569,
-      "content_hash": "b3f854a4ce25f6e9a0bb2a128a1220b8f14b09545e45ed3886a4ba5ae2d40e73",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-09)",
+      "content_hash": "",
+      "ecosystem_context": "",
       "cyclomatic": 6,
       "max_nesting": 6,
       "param_count": 1,
@@ -29436,20 +29027,17 @@
       "signature": "async iniciarTratamiento(id: string): Promise<Presupuesto>",
       "summary": "async iniciarTratamiento(id: string): Promise<Presupuesto>",
       "docstring": "",
-      "qualified_name": "PresupuestosService.iniciarTratamiento",
-      "language": "typescript",
+      "qualified_name": "iniciarTratamiento",
+      "language": "",
       "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
+      "keywords": [],
       "parent": "apps/api/src/modules/presupuestos/presupuestos.service.ts::PresupuestosService#class",
       "line": 125,
       "end_line": 134,
       "byte_offset": 4062,
       "byte_length": 369,
-      "content_hash": "6845fa2e04d754b40092205a357d31a82e369ec7bd8ed67d97ddd6af3152bbde",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-09)",
+      "content_hash": "",
+      "ecosystem_context": "",
       "cyclomatic": 2,
       "max_nesting": 2,
       "param_count": 1,
@@ -29467,20 +29055,17 @@
       "signature": "async findPagosByPresupuesto(presupuestoId: string): Promise<Pago[]>",
       "summary": "async findPagosByPresupuesto(presupuestoId: string): Promise<Pago[]>",
       "docstring": "",
-      "qualified_name": "PresupuestosService.findPagosByPresupuesto",
-      "language": "typescript",
+      "qualified_name": "findPagosByPresupuesto",
+      "language": "",
       "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
+      "keywords": [],
       "parent": "apps/api/src/modules/presupuestos/presupuestos.service.ts::PresupuestosService#class",
       "line": 136,
       "end_line": 141,
       "byte_offset": 4435,
       "byte_length": 193,
-      "content_hash": "31413d5ff0bb013060b4fbbcd6f7d69daf3c19cc19be2fc045f76946a441a84a",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-09)",
+      "content_hash": "",
+      "ecosystem_context": "",
       "cyclomatic": 1,
       "max_nesting": 3,
       "param_count": 1,
@@ -29525,19 +29110,16 @@
       "summary": "export const FinanzasTabContent: React.FC<FinanzasTabContentProps> = ({ pacienteId, pacienteNombre }) => {\n  const [show",
       "docstring": "",
       "qualified_name": "FinanzasTabContent",
-      "language": "tsx",
+      "language": "",
       "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
+      "keywords": [],
       "parent": null,
       "line": 22,
       "end_line": 150,
       "byte_offset": 636,
       "byte_length": 4867,
-      "content_hash": "8fd22cbfe9d540d2b2d759453446ae849c3cd9eefaee07c397ede0c82e0961b8",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-09)",
+      "content_hash": "",
+      "ecosystem_context": "",
       "cyclomatic": 12,
       "max_nesting": 6,
       "param_count": 1,
@@ -29561,19 +29143,16 @@
       "summary": "const handleCreate = async (data: any) => {\n    try {\n      await createPresupuesto.mutateAsync({ ...data, pacienteId })",
       "docstring": "",
       "qualified_name": "handleCreate",
-      "language": "tsx",
+      "language": "",
       "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
+      "keywords": [],
       "parent": null,
       "line": 30,
       "end_line": 37,
       "byte_offset": 1117,
       "byte_length": 207,
-      "content_hash": "c34dc5c572aa3680d7f1a55a8f3ce1c54223f59f791181447af941cf729853f0",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-09)",
+      "content_hash": "",
+      "ecosystem_context": "",
       "cyclomatic": 2,
       "max_nesting": 3,
       "param_count": 1,
@@ -29592,19 +29171,16 @@
       "summary": "const handleRegisterPago = async (data: any) => {\n    try {\n      await registerPago.mutateAsync(data);\n      setShowPag",
       "docstring": "",
       "qualified_name": "handleRegisterPago",
-      "language": "tsx",
+      "language": "",
       "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
+      "keywords": [],
       "parent": null,
       "line": 39,
       "end_line": 47,
       "byte_offset": 1328,
       "byte_length": 223,
-      "content_hash": "68f6dd8faf555fc98ab98e31757028c658a081e7a16c8f47d55a1faf20d3fb84",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-09)",
+      "content_hash": "",
+      "ecosystem_context": "",
       "cyclomatic": 2,
       "max_nesting": 2,
       "param_count": 1,
@@ -29731,7 +29307,7 @@
       "summary": "const fmt = (v: number) =>\n  new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(Number(v));",
       "docstring": "",
       "qualified_name": "fmt",
-      "language": "tsx",
+      "language": "",
       "decorators": [],
       "keywords": [],
       "parent": null,
@@ -29739,7 +29315,7 @@
       "end_line": 11,
       "byte_offset": 203,
       "byte_length": 118,
-      "content_hash": "ba997585c95f3684276e03ecb34abfd8bb185e4a83e9fde8703beaba2f60336d",
+      "content_hash": "",
       "ecosystem_context": "",
       "cyclomatic": 1,
       "max_nesting": 1,
@@ -29783,7 +29359,7 @@
       "summary": "export const printPresupuesto = (presupuesto: Presupuesto, clinicaNombre = 'Cl\u00ednica Odontol\u00f3gica', pacienteNombreFallbac",
       "docstring": "",
       "qualified_name": "printPresupuesto",
-      "language": "tsx",
+      "language": "",
       "decorators": [],
       "keywords": [],
       "parent": null,
@@ -29791,7 +29367,7 @@
       "end_line": 164,
       "byte_offset": 503,
       "byte_length": 6653,
-      "content_hash": "874f1dad600f41bba91ac64ec5bc8b6bb7667d62ef86bc6fdd64eb623743d146",
+      "content_hash": "",
       "ecosystem_context": "",
       "cyclomatic": 15,
       "max_nesting": 4,
@@ -29990,7 +29566,7 @@
       "summary": "export const printPlanTratamiento = (plan: PlanTratamiento, clinicaNombre = 'Cl\u00ednica Odontol\u00f3gica') => {\n  const pacient",
       "docstring": "",
       "qualified_name": "printPlanTratamiento",
-      "language": "tsx",
+      "language": "",
       "decorators": [],
       "keywords": [],
       "parent": null,
@@ -29998,7 +29574,7 @@
       "end_line": 317,
       "byte_offset": 7317,
       "byte_length": 7114,
-      "content_hash": "59201d80cd27ee8e30c863022e92628201b534fdcc9189c184d652402b3b6218",
+      "content_hash": "",
       "ecosystem_context": "",
       "cyclomatic": 21,
       "max_nesting": 3,
@@ -30277,19 +29853,16 @@
       "summary": "export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, isLoading, onSelect, pacienteNombre }) =",
       "docstring": "",
       "qualified_name": "PresupuestoList",
-      "language": "tsx",
+      "language": "",
       "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
+      "keywords": [],
       "parent": null,
       "line": 16,
       "end_line": 200,
       "byte_offset": 528,
       "byte_length": 8694,
-      "content_hash": "a9559415eb447656d648f71f8130e55050f49865e5df4cfd0dd4f0f1f728db90",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-09)",
+      "content_hash": "",
+      "ecosystem_context": "",
       "cyclomatic": 11,
       "max_nesting": 10,
       "param_count": 1,
@@ -30345,19 +29918,16 @@
       "summary": "const formatCurrency = (value: number) => {\n    return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'AR",
       "docstring": "",
       "qualified_name": "formatCurrency",
-      "language": "tsx",
+      "language": "",
       "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
+      "keywords": [],
       "parent": null,
       "line": 72,
       "end_line": 74,
       "byte_offset": 2457,
       "byte_length": 145,
-      "content_hash": "aff536a59042e0d0d989b593b175ad8d765405b764b1ba0b7cf6f5ac936cc640",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-09)",
+      "content_hash": "",
+      "ecosystem_context": "",
       "cyclomatic": 1,
       "max_nesting": 2,
       "param_count": 1,
@@ -30430,19 +30000,16 @@
       "summary": "export const OdontogramaManager: React.FC<OdontogramaManagerProps> = ({ fichaId, isReadOnly = false }) => {\n  const { da",
       "docstring": "",
       "qualified_name": "OdontogramaManager",
-      "language": "tsx",
+      "language": "",
       "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
+      "keywords": [],
       "parent": null,
       "line": 17,
       "end_line": 305,
       "byte_offset": 734,
       "byte_length": 13644,
-      "content_hash": "ec507516cef3343d767656d5e70dd825346786526047fef79c1a4d4d820d821f",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-15)",
+      "content_hash": "",
+      "ecosystem_context": "",
       "cyclomatic": 37,
       "max_nesting": 10,
       "param_count": 1,
@@ -30557,19 +30124,16 @@
       "summary": "const handleMarkAusente = async () => {\n    if (isReadOnly || !selectedPieza) return;\n    await updatePieza.mutateAsync(",
       "docstring": "",
       "qualified_name": "handleMarkAusente",
-      "language": "tsx",
+      "language": "",
       "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
+      "keywords": [],
       "parent": null,
       "line": 30,
       "end_line": 42,
       "byte_offset": 1511,
       "byte_length": 331,
-      "content_hash": "173fdc4c71f8807268f2bb1a5ca5ac214cb9d4c4f60fd1c947edfaf38638f771",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-15)",
+      "content_hash": "",
+      "ecosystem_context": "",
       "cyclomatic": 3,
       "max_nesting": 3,
       "param_count": 0,
@@ -30586,19 +30150,16 @@
       "summary": "const handleMarkSano = async () => {\n    if (isReadOnly || !selectedPieza) return;\n    await updatePieza.mutateAsync({\n ",
       "docstring": "",
       "qualified_name": "handleMarkSano",
-      "language": "tsx",
+      "language": "",
       "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
+      "keywords": [],
       "parent": null,
       "line": 44,
       "end_line": 56,
       "byte_offset": 1846,
       "byte_length": 313,
-      "content_hash": "2604e4f8c53b9cdf864d24e3ded65e11ec7ce6f152c66a2704d79e47ad916b59",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-15)",
+      "content_hash": "",
+      "ecosystem_context": "",
       "cyclomatic": 3,
       "max_nesting": 3,
       "param_count": 0,
@@ -30615,19 +30176,16 @@
       "summary": "const handleUpdateCara = async (cara: string, estado: string) => {\n    if (isReadOnly || !selectedPieza) return;\n    awa",
       "docstring": "",
       "qualified_name": "handleUpdateCara",
-      "language": "tsx",
+      "language": "",
       "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
+      "keywords": [],
       "parent": null,
       "line": 58,
       "end_line": 64,
       "byte_offset": 2163,
       "byte_length": 226,
-      "content_hash": "062a5294fa3fe1043bda387fdcc0d0f9713fc829cefcef2387fd7945705edd76",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-15)",
+      "content_hash": "",
+      "ecosystem_context": "",
       "cyclomatic": 3,
       "max_nesting": 4,
       "param_count": 2,
@@ -30644,19 +30202,16 @@
       "summary": "const handleAddProcedimiento = (piezaId: string) => {\n    const val = procInputRef.current?.value?.trim();\n    if (!val)",
       "docstring": "",
       "qualified_name": "handleAddProcedimiento",
-      "language": "tsx",
+      "language": "",
       "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
+      "keywords": [],
       "parent": null,
       "line": 66,
       "end_line": 76,
       "byte_offset": 2393,
       "byte_length": 406,
-      "content_hash": "073b6877a2f7de381a848b454e8da6a2c0cb7722c021df82be9b02699faa2845",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-15)",
+      "content_hash": "",
+      "ecosystem_context": "",
       "cyclomatic": 6,
       "max_nesting": 3,
       "param_count": 1,
@@ -30723,151 +30278,6 @@
       "call_references": []
     },
     {
-      "id": "apps/web/src/features/odontograma/hooks/use-odontograma.ts::useOdontograma#function",
-      "file": "apps/web/src/features/odontograma/hooks/use-odontograma.ts",
-      "name": "useOdontograma",
-      "kind": "function",
-      "signature": "export const useOdontograma = (fichaId: string) => {\n  return useQuery({\n    queryKey: ['odontograma', fichaId],\n    queryFn: () => odontogramaApi.getOdontograma(fichaId),\n    enabled: !!fichaId,\n  });\n};",
-      "summary": "export const useOdontograma = (fichaId: string) => {\n  return useQuery({\n    queryKey: ['odontograma', fichaId],\n    que",
-      "docstring": "",
-      "qualified_name": "useOdontograma",
-      "language": "typescript",
-      "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
-      "parent": null,
-      "line": 5,
-      "end_line": 11,
-      "byte_offset": 201,
-      "byte_length": 204,
-      "content_hash": "00f36ed3d4f2ff62a19b8b6ff9e4ea64d22e6418bcb8390c07618eb4000117d2",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-01)",
-      "cyclomatic": 1,
-      "max_nesting": 3,
-      "param_count": 1,
-      "call_references": [
-        "useQuery",
-        "getOdontograma"
-      ]
-    },
-    {
-      "id": "apps/web/src/features/odontograma/hooks/use-odontograma.ts::useOdontogramaMutations#function",
-      "file": "apps/web/src/features/odontograma/hooks/use-odontograma.ts",
-      "name": "useOdontogramaMutations",
-      "kind": "function",
-      "signature": "export const useOdontogramaMutations = (fichaId: string) => {\n  const queryClient = useQueryClient();\n\n  const updatePieza = useMutation({\n    mutationFn: (dto: UpdatePiezaDto) => odontogramaApi.updatePieza(dto),\n    onSuccess: () => {\n      queryClient.invalidateQueries({ queryKey: ['odontograma', fichaId] });\n    },\n  });\n\n  const addProcedimiento = useMutation({\n    mutationFn: (dto: AddProcedimientoDto) => odontogramaApi.addProcedimiento(dto),\n    onSuccess: () => {\n      queryClient.invalidateQueries({ queryKey: ['odontograma', fichaId] });\n    },\n    onError: (error: any) => {\n      console.error('[addProcedimiento] error:', error);\n    },\n  });\n\n  return { updatePieza, addProcedimiento };\n};",
-      "summary": "export const useOdontogramaMutations = (fichaId: string) => {\n  const queryClient = useQueryClient();\n\n  const updatePie",
-      "docstring": "",
-      "qualified_name": "useOdontogramaMutations",
-      "language": "typescript",
-      "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
-      "parent": null,
-      "line": 13,
-      "end_line": 34,
-      "byte_offset": 407,
-      "byte_length": 707,
-      "content_hash": "5090419211439b9ef3830e5b96109d768d5f23d0ddbc97305d2ca93df38d6de7",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-01)",
-      "cyclomatic": 1,
-      "max_nesting": 6,
-      "param_count": 1,
-      "call_references": [
-        "useQueryClient",
-        "useMutation",
-        "updatePieza",
-        "invalidateQueries",
-        "addProcedimiento",
-        "error"
-      ]
-    },
-    {
-      "id": "apps/web/src/features/odontograma/hooks/use-odontograma.ts::queryClient#constant",
-      "file": "apps/web/src/features/odontograma/hooks/use-odontograma.ts",
-      "name": "queryClient",
-      "kind": "constant",
-      "signature": "const queryClient = useQueryClient();",
-      "summary": "Constant queryClient",
-      "docstring": "",
-      "qualified_name": "queryClient",
-      "language": "typescript",
-      "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
-      "parent": null,
-      "line": 14,
-      "end_line": 14,
-      "byte_offset": 471,
-      "byte_length": 37,
-      "content_hash": "2987229726586e561fc2ffe3b2376dd349ee54d88c52d9ef0f76b06e133d8695",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-01)",
-      "cyclomatic": 0,
-      "max_nesting": 0,
-      "param_count": 0,
-      "call_references": []
-    },
-    {
-      "id": "apps/web/src/features/odontograma/hooks/use-odontograma.ts::updatePieza#constant",
-      "file": "apps/web/src/features/odontograma/hooks/use-odontograma.ts",
-      "name": "updatePieza",
-      "kind": "constant",
-      "signature": "const updatePieza = useMutation({\n    mutationFn: (dto: UpdatePiezaDto) => odontogramaApi.updatePieza(dto),\n    onSuccess: () => {\n      queryClient.invalidateQueries({ queryKey: ['odontograma', ficha",
-      "summary": "Constant updatePieza",
-      "docstring": "",
-      "qualified_name": "updatePieza",
-      "language": "typescript",
-      "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
-      "parent": null,
-      "line": 16,
-      "end_line": 21,
-      "byte_offset": 512,
-      "byte_length": 220,
-      "content_hash": "82034cb751b425b62bfc3dcbbab812981c365141bb237a0a73cf21d236164915",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-01)",
-      "cyclomatic": 0,
-      "max_nesting": 0,
-      "param_count": 0,
-      "call_references": []
-    },
-    {
-      "id": "apps/web/src/features/odontograma/hooks/use-odontograma.ts::addProcedimiento#constant",
-      "file": "apps/web/src/features/odontograma/hooks/use-odontograma.ts",
-      "name": "addProcedimiento",
-      "kind": "constant",
-      "signature": "const addProcedimiento = useMutation({\n    mutationFn: (dto: AddProcedimientoDto) => odontogramaApi.addProcedimiento(dto),\n    onSuccess: () => {\n      queryClient.invalidateQueries({ queryKey: ['odon",
-      "summary": "Constant addProcedimiento",
-      "docstring": "",
-      "qualified_name": "addProcedimiento",
-      "language": "typescript",
-      "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
-      "parent": null,
-      "line": 23,
-      "end_line": 31,
-      "byte_offset": 736,
-      "byte_length": 330,
-      "content_hash": "80427d783f86f8a9a34e064fd4d87f044c9b10360351e16be4defd13dc190667",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-01)",
-      "cyclomatic": 0,
-      "max_nesting": 0,
-      "param_count": 0,
-      "call_references": []
-    },
-    {
       "id": "apps/web/src/features/tratamientos/pages/tratamientos-page.tsx::TratamientosPage#function",
       "file": "apps/web/src/features/tratamientos/pages/tratamientos-page.tsx",
       "name": "TratamientosPage",
@@ -30876,19 +30286,16 @@
       "summary": "export const TratamientosPage: React.FC = () => {\n  const { planes, isLoading, updateItemEstado } = useTratamientos(); /",
       "docstring": "",
       "qualified_name": "TratamientosPage",
-      "language": "tsx",
+      "language": "",
       "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
+      "keywords": [],
       "parent": null,
       "line": 21,
       "end_line": 262,
       "byte_offset": 596,
       "byte_length": 13143,
-      "content_hash": "fb8f3995b624f84d69492609b5334971c05a4d93ae9f1b2c5e9e3004728d8fbe",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-15)",
+      "content_hash": "",
+      "ecosystem_context": "",
       "cyclomatic": 38,
       "max_nesting": 10,
       "param_count": 0,
@@ -31032,19 +30439,16 @@
       "summary": "const calculateProgress = (plan: PlanTratamiento) => {\n    if (!plan.items || plan.items.length === 0) return 0;\n    con",
       "docstring": "",
       "qualified_name": "calculateProgress",
-      "language": "tsx",
+      "language": "",
       "decorators": [],
-      "keywords": [
-        "last_author",
-        "last_modified"
-      ],
+      "keywords": [],
       "parent": null,
       "line": 44,
       "end_line": 48,
       "byte_offset": 1786,
       "byte_length": 264,
-      "content_hash": "b3383e89cf4ab0df22c089976ef4223f86b8b158d46b3e70ca0af2ec574e1c1a",
-      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-15)",
+      "content_hash": "",
+      "ecosystem_context": "",
       "cyclomatic": 3,
       "max_nesting": 2,
       "param_count": 1,
@@ -31102,6 +30506,618 @@
       "byte_length": 41,
       "content_hash": "b947de1e806fc35a7d52ea582b1807848e65bada39c4cb23b70bffb1fc775a81",
       "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-15)",
+      "cyclomatic": 0,
+      "max_nesting": 0,
+      "param_count": 0,
+      "call_references": []
+    },
+    {
+      "id": "apps/web/src/features/odontograma/hooks/use-odontograma.ts::useOdontograma#function",
+      "file": "apps/web/src/features/odontograma/hooks/use-odontograma.ts",
+      "name": "useOdontograma",
+      "kind": "function",
+      "signature": "export const useOdontograma = (fichaId: string) => {\n  return useQuery({\n    queryKey: ['odontograma', fichaId],\n    queryFn: () => odontogramaApi.getOdontograma(fichaId),\n    enabled: !!fichaId,\n  });\n};",
+      "summary": "export const useOdontograma = (fichaId: string) => {\n  return useQuery({\n    queryKey: ['odontograma', fichaId],\n    que",
+      "docstring": "",
+      "qualified_name": "useOdontograma",
+      "language": "typescript",
+      "decorators": [],
+      "keywords": [
+        "last_author",
+        "last_modified"
+      ],
+      "parent": null,
+      "line": 5,
+      "end_line": 11,
+      "byte_offset": 201,
+      "byte_length": 204,
+      "content_hash": "00f36ed3d4f2ff62a19b8b6ff9e4ea64d22e6418bcb8390c07618eb4000117d2",
+      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-01)",
+      "cyclomatic": 1,
+      "max_nesting": 3,
+      "param_count": 1,
+      "call_references": [
+        "useQuery",
+        "getOdontograma"
+      ]
+    },
+    {
+      "id": "apps/web/src/features/odontograma/hooks/use-odontograma.ts::useOdontogramaMutations#function",
+      "file": "apps/web/src/features/odontograma/hooks/use-odontograma.ts",
+      "name": "useOdontogramaMutations",
+      "kind": "function",
+      "signature": "export const useOdontogramaMutations = (fichaId: string) => {\n  const queryClient = useQueryClient();\n\n  const updatePieza = useMutation({\n    mutationFn: (dto: UpdatePiezaDto) => odontogramaApi.updatePieza(dto),\n    onSuccess: () => {\n      queryClient.invalidateQueries({ queryKey: ['odontograma', fichaId] });\n    },\n  });\n\n  const addProcedimiento = useMutation({\n    mutationFn: (dto: AddProcedimientoDto) => odontogramaApi.addProcedimiento(dto),\n    onSuccess: () => {\n      queryClient.invalidateQueries({ queryKey: ['odontograma', fichaId] });\n    },\n  });\n\n  return { updatePieza, addProcedimiento };\n};",
+      "summary": "export const useOdontogramaMutations = (fichaId: string) => {\n  const queryClient = useQueryClient();\n\n  const updatePie",
+      "docstring": "",
+      "qualified_name": "useOdontogramaMutations",
+      "language": "typescript",
+      "decorators": [],
+      "keywords": [
+        "last_author",
+        "last_modified"
+      ],
+      "parent": null,
+      "line": 13,
+      "end_line": 31,
+      "byte_offset": 407,
+      "byte_length": 612,
+      "content_hash": "8a3fe3096488eaafc90724314efd47d3bfbcd1dafa3ac3ffaa8648051cc245f6",
+      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-01)",
+      "cyclomatic": 1,
+      "max_nesting": 6,
+      "param_count": 1,
+      "call_references": [
+        "useQueryClient",
+        "useMutation",
+        "updatePieza",
+        "invalidateQueries",
+        "addProcedimiento"
+      ]
+    },
+    {
+      "id": "apps/web/src/features/odontograma/hooks/use-odontograma.ts::queryClient#constant",
+      "file": "apps/web/src/features/odontograma/hooks/use-odontograma.ts",
+      "name": "queryClient",
+      "kind": "constant",
+      "signature": "const queryClient = useQueryClient();",
+      "summary": "Constant queryClient",
+      "docstring": "",
+      "qualified_name": "queryClient",
+      "language": "typescript",
+      "decorators": [],
+      "keywords": [
+        "last_author",
+        "last_modified"
+      ],
+      "parent": null,
+      "line": 14,
+      "end_line": 14,
+      "byte_offset": 471,
+      "byte_length": 37,
+      "content_hash": "2987229726586e561fc2ffe3b2376dd349ee54d88c52d9ef0f76b06e133d8695",
+      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-01)",
+      "cyclomatic": 0,
+      "max_nesting": 0,
+      "param_count": 0,
+      "call_references": []
+    },
+    {
+      "id": "apps/web/src/features/odontograma/hooks/use-odontograma.ts::updatePieza#constant",
+      "file": "apps/web/src/features/odontograma/hooks/use-odontograma.ts",
+      "name": "updatePieza",
+      "kind": "constant",
+      "signature": "const updatePieza = useMutation({\n    mutationFn: (dto: UpdatePiezaDto) => odontogramaApi.updatePieza(dto),\n    onSuccess: () => {\n      queryClient.invalidateQueries({ queryKey: ['odontograma', ficha",
+      "summary": "Constant updatePieza",
+      "docstring": "",
+      "qualified_name": "updatePieza",
+      "language": "typescript",
+      "decorators": [],
+      "keywords": [
+        "last_author",
+        "last_modified"
+      ],
+      "parent": null,
+      "line": 16,
+      "end_line": 21,
+      "byte_offset": 512,
+      "byte_length": 220,
+      "content_hash": "82034cb751b425b62bfc3dcbbab812981c365141bb237a0a73cf21d236164915",
+      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-01)",
+      "cyclomatic": 0,
+      "max_nesting": 0,
+      "param_count": 0,
+      "call_references": []
+    },
+    {
+      "id": "apps/web/src/features/odontograma/hooks/use-odontograma.ts::addProcedimiento#constant",
+      "file": "apps/web/src/features/odontograma/hooks/use-odontograma.ts",
+      "name": "addProcedimiento",
+      "kind": "constant",
+      "signature": "const addProcedimiento = useMutation({\n    mutationFn: (dto: AddProcedimientoDto) => odontogramaApi.addProcedimiento(dto),\n    onSuccess: () => {\n      queryClient.invalidateQueries({ queryKey: ['odon",
+      "summary": "Constant addProcedimiento",
+      "docstring": "",
+      "qualified_name": "addProcedimiento",
+      "language": "typescript",
+      "decorators": [],
+      "keywords": [
+        "last_author",
+        "last_modified"
+      ],
+      "parent": null,
+      "line": 23,
+      "end_line": 28,
+      "byte_offset": 736,
+      "byte_length": 235,
+      "content_hash": "070eeeb9cfcc439e512d3720ff577a792ae0bcaf475f88be54e52b99a1bdaeb9",
+      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-01)",
+      "cyclomatic": 0,
+      "max_nesting": 0,
+      "param_count": 0,
+      "call_references": []
+    },
+    {
+      "id": "apps/web/src/lib/Httpclient.ts::API_URL#constant",
+      "file": "apps/web/src/lib/Httpclient.ts",
+      "name": "API_URL",
+      "kind": "constant",
+      "signature": "const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002/api/v1';",
+      "summary": "Constant API_URL",
+      "docstring": "",
+      "qualified_name": "API_URL",
+      "language": "typescript",
+      "decorators": [],
+      "keywords": [
+        "last_author",
+        "last_modified"
+      ],
+      "parent": null,
+      "line": 3,
+      "end_line": 3,
+      "byte_offset": 33,
+      "byte_length": 79,
+      "content_hash": "b6cd3eec5a1a6a13ab4cab11222bc2a5ba3b799d6c5427da7667bebe478f0d5a",
+      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-18)",
+      "cyclomatic": 0,
+      "max_nesting": 0,
+      "param_count": 0,
+      "call_references": []
+    },
+    {
+      "id": "apps/web/src/lib/Httpclient.ts::RequestOptions#type",
+      "file": "apps/web/src/lib/Httpclient.ts",
+      "name": "RequestOptions",
+      "kind": "type",
+      "signature": "interface RequestOptions extends RequestInit",
+      "summary": "Type definition RequestOptions",
+      "docstring": "",
+      "qualified_name": "RequestOptions",
+      "language": "typescript",
+      "decorators": [],
+      "keywords": [
+        "interface",
+        "last_author",
+        "last_modified"
+      ],
+      "parent": null,
+      "line": 5,
+      "end_line": 7,
+      "byte_offset": 121,
+      "byte_length": 82,
+      "content_hash": "81f828b77f87ded206b59ede499913cf6731774d999802159020f82a22870a22",
+      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-18)",
+      "cyclomatic": 0,
+      "max_nesting": 0,
+      "param_count": 0,
+      "call_references": []
+    },
+    {
+      "id": "apps/web/src/lib/Httpclient.ts::HttpClient#class",
+      "file": "apps/web/src/lib/Httpclient.ts",
+      "name": "HttpClient",
+      "kind": "class",
+      "signature": "class HttpClient",
+      "summary": "Class HttpClient",
+      "docstring": "",
+      "qualified_name": "HttpClient",
+      "language": "typescript",
+      "decorators": [],
+      "keywords": [
+        "last_author",
+        "last_modified"
+      ],
+      "parent": null,
+      "line": 9,
+      "end_line": 123,
+      "byte_offset": 205,
+      "byte_length": 4169,
+      "content_hash": "ba291c603f8adaa494f52b932f46ce4c95da077f8da1adf5720b4804d927260d",
+      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-18)",
+      "cyclomatic": 0,
+      "max_nesting": 0,
+      "param_count": 0,
+      "call_references": []
+    },
+    {
+      "id": "apps/web/src/lib/Httpclient.ts::HttpClient.constructor#method",
+      "file": "apps/web/src/lib/Httpclient.ts",
+      "name": "constructor",
+      "kind": "method",
+      "signature": "constructor(baseUrl: string)",
+      "summary": "constructor(baseUrl: string)",
+      "docstring": "",
+      "qualified_name": "HttpClient.constructor",
+      "language": "typescript",
+      "decorators": [],
+      "keywords": [
+        "last_author",
+        "last_modified"
+      ],
+      "parent": "apps/web/src/lib/Httpclient.ts::HttpClient#class",
+      "line": 13,
+      "end_line": 20,
+      "byte_offset": 299,
+      "byte_length": 289,
+      "content_hash": "bbb47ad3b1a927dd4d78e10e261517a4a81b9b4e47ec8a3de4251ee8798a9a82",
+      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-18)",
+      "cyclomatic": 3,
+      "max_nesting": 2,
+      "param_count": 1,
+      "call_references": [
+        "endsWith",
+        "slice"
+      ]
+    },
+    {
+      "id": "apps/web/src/lib/Httpclient.ts::HttpClient.setUnauthorizedCallback#method",
+      "file": "apps/web/src/lib/Httpclient.ts",
+      "name": "setUnauthorizedCallback",
+      "kind": "method",
+      "signature": "setUnauthorizedCallback(callback: () => void)",
+      "summary": "setUnauthorizedCallback(callback: () => void)",
+      "docstring": "",
+      "qualified_name": "HttpClient.setUnauthorizedCallback",
+      "language": "typescript",
+      "decorators": [],
+      "keywords": [
+        "last_author",
+        "last_modified"
+      ],
+      "parent": "apps/web/src/lib/Httpclient.ts::HttpClient#class",
+      "line": 22,
+      "end_line": 24,
+      "byte_offset": 594,
+      "byte_length": 93,
+      "content_hash": "d51b6c2cc4a540b4549504dd3f0e7919673c8e85e70435f9ddb64b87dd9d1043",
+      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-18)",
+      "cyclomatic": 1,
+      "max_nesting": 1,
+      "param_count": 1,
+      "call_references": []
+    },
+    {
+      "id": "apps/web/src/lib/Httpclient.ts::HttpClient.request#method",
+      "file": "apps/web/src/lib/Httpclient.ts",
+      "name": "request",
+      "kind": "method",
+      "signature": "private async request<T>(endpoint: string, options: RequestOptions = {}): Promise<T>",
+      "summary": "private async request<T>(endpoint: string, options: RequestOptions = {}): Promise<T>",
+      "docstring": "",
+      "qualified_name": "HttpClient.request",
+      "language": "typescript",
+      "decorators": [],
+      "keywords": [
+        "last_author",
+        "last_modified"
+      ],
+      "parent": "apps/web/src/lib/Httpclient.ts::HttpClient#class",
+      "line": 26,
+      "end_line": 90,
+      "byte_offset": 693,
+      "byte_length": 2526,
+      "content_hash": "856e8809723627187f6ce34767f542f74dd968d7ddda25334fe08d9faf5e6315",
+      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-18)",
+      "cyclomatic": 23,
+      "max_nesting": 7,
+      "param_count": 2,
+      "call_references": [
+        "startsWith",
+        "URL",
+        "forEach",
+        "keys",
+        "append",
+        "String",
+        "getItem",
+        "fetch",
+        "toString",
+        "removeItem",
+        "onUnauthorized",
+        "then",
+        "error",
+        "Error",
+        "catch",
+        "json",
+        "isArray",
+        "join"
+      ]
+    },
+    {
+      "id": "apps/web/src/lib/Httpclient.ts::HttpClient.get#method",
+      "file": "apps/web/src/lib/Httpclient.ts",
+      "name": "get",
+      "kind": "method",
+      "signature": "async get<T>(endpoint: string, options?: RequestOptions): Promise<T>",
+      "summary": "async get<T>(endpoint: string, options?: RequestOptions): Promise<T>",
+      "docstring": "",
+      "qualified_name": "HttpClient.get",
+      "language": "typescript",
+      "decorators": [],
+      "keywords": [
+        "last_author",
+        "last_modified"
+      ],
+      "parent": "apps/web/src/lib/Httpclient.ts::HttpClient#class",
+      "line": 92,
+      "end_line": 94,
+      "byte_offset": 3225,
+      "byte_length": 149,
+      "content_hash": "508180c43c99c0132c9242a23b2fcfcd680337abbbb735ba798cc955335c54fd",
+      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-18)",
+      "cyclomatic": 1,
+      "max_nesting": 2,
+      "param_count": 2,
+      "call_references": [
+        "request"
+      ]
+    },
+    {
+      "id": "apps/web/src/lib/Httpclient.ts::HttpClient.post#method",
+      "file": "apps/web/src/lib/Httpclient.ts",
+      "name": "post",
+      "kind": "method",
+      "signature": "async post<T>(endpoint: string, body?: unknown, options?: RequestOptions): Promise<T>",
+      "summary": "async post<T>(endpoint: string, body?: unknown, options?: RequestOptions): Promise<T>",
+      "docstring": "",
+      "qualified_name": "HttpClient.post",
+      "language": "typescript",
+      "decorators": [],
+      "keywords": [
+        "last_author",
+        "last_modified"
+      ],
+      "parent": "apps/web/src/lib/Httpclient.ts::HttpClient#class",
+      "line": 96,
+      "end_line": 102,
+      "byte_offset": 3380,
+      "byte_length": 273,
+      "content_hash": "6a20105ae1bace95260af42d2290f0ac9e234da811db9f133c936cbc92c5e1ee",
+      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-18)",
+      "cyclomatic": 2,
+      "max_nesting": 3,
+      "param_count": 3,
+      "call_references": [
+        "request",
+        "stringify"
+      ]
+    },
+    {
+      "id": "apps/web/src/lib/Httpclient.ts::HttpClient.put#method",
+      "file": "apps/web/src/lib/Httpclient.ts",
+      "name": "put",
+      "kind": "method",
+      "signature": "async put<T>(endpoint: string, body?: unknown, options?: RequestOptions): Promise<T>",
+      "summary": "async put<T>(endpoint: string, body?: unknown, options?: RequestOptions): Promise<T>",
+      "docstring": "",
+      "qualified_name": "HttpClient.put",
+      "language": "typescript",
+      "decorators": [],
+      "keywords": [
+        "last_author",
+        "last_modified"
+      ],
+      "parent": "apps/web/src/lib/Httpclient.ts::HttpClient#class",
+      "line": 104,
+      "end_line": 110,
+      "byte_offset": 3659,
+      "byte_length": 271,
+      "content_hash": "7d8dc9f2644ee136a151fb6e1a5d2f1d146b1422cc892ed4f8958ca74dc7bcbe",
+      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-18)",
+      "cyclomatic": 2,
+      "max_nesting": 3,
+      "param_count": 3,
+      "call_references": [
+        "request",
+        "stringify"
+      ]
+    },
+    {
+      "id": "apps/web/src/lib/Httpclient.ts::HttpClient.patch#method",
+      "file": "apps/web/src/lib/Httpclient.ts",
+      "name": "patch",
+      "kind": "method",
+      "signature": "async patch<T>(endpoint: string, body?: unknown, options?: RequestOptions): Promise<T>",
+      "summary": "async patch<T>(endpoint: string, body?: unknown, options?: RequestOptions): Promise<T>",
+      "docstring": "",
+      "qualified_name": "HttpClient.patch",
+      "language": "typescript",
+      "decorators": [],
+      "keywords": [
+        "last_author",
+        "last_modified"
+      ],
+      "parent": "apps/web/src/lib/Httpclient.ts::HttpClient#class",
+      "line": 112,
+      "end_line": 118,
+      "byte_offset": 3936,
+      "byte_length": 275,
+      "content_hash": "6a8a7a40761c3655744e1030b1fdfb9fc2801746fef014430b96af18a8e2df3f",
+      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-18)",
+      "cyclomatic": 2,
+      "max_nesting": 3,
+      "param_count": 3,
+      "call_references": [
+        "request",
+        "stringify"
+      ]
+    },
+    {
+      "id": "apps/web/src/lib/Httpclient.ts::HttpClient.delete#method",
+      "file": "apps/web/src/lib/Httpclient.ts",
+      "name": "delete",
+      "kind": "method",
+      "signature": "async delete<T>(endpoint: string, options?: RequestOptions): Promise<T>",
+      "summary": "async delete<T>(endpoint: string, options?: RequestOptions): Promise<T>",
+      "docstring": "",
+      "qualified_name": "HttpClient.delete",
+      "language": "typescript",
+      "decorators": [],
+      "keywords": [
+        "last_author",
+        "last_modified"
+      ],
+      "parent": "apps/web/src/lib/Httpclient.ts::HttpClient#class",
+      "line": 120,
+      "end_line": 122,
+      "byte_offset": 4217,
+      "byte_length": 155,
+      "content_hash": "77552b861b5fcb1847dd10de0db438fde62d51c4a8963d03c42948619acef61b",
+      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-18)",
+      "cyclomatic": 1,
+      "max_nesting": 2,
+      "param_count": 2,
+      "call_references": [
+        "request"
+      ]
+    },
+    {
+      "id": "apps/web/src/lib/Httpclient.ts::httpClient#constant",
+      "file": "apps/web/src/lib/Httpclient.ts",
+      "name": "httpClient",
+      "kind": "constant",
+      "signature": "const httpClient = new HttpClient(API_URL);",
+      "summary": "Constant httpClient",
+      "docstring": "",
+      "qualified_name": "httpClient",
+      "language": "typescript",
+      "decorators": [],
+      "keywords": [
+        "last_author",
+        "last_modified"
+      ],
+      "parent": null,
+      "line": 125,
+      "end_line": 125,
+      "byte_offset": 4383,
+      "byte_length": 43,
+      "content_hash": "cb86336a781081c733fa1f5c7867abf9f4d0eb3092d20e6ea03d3225a9ba4bb8",
+      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-18)",
+      "cyclomatic": 0,
+      "max_nesting": 0,
+      "param_count": 0,
+      "call_references": []
+    },
+    {
+      "id": "apps/web/src/lib/Httpclient.ts::http#constant",
+      "file": "apps/web/src/lib/Httpclient.ts",
+      "name": "http",
+      "kind": "constant",
+      "signature": "const http = httpClient;",
+      "summary": "Constant http",
+      "docstring": "",
+      "qualified_name": "http",
+      "language": "typescript",
+      "decorators": [],
+      "keywords": [
+        "last_author",
+        "last_modified"
+      ],
+      "parent": null,
+      "line": 126,
+      "end_line": 126,
+      "byte_offset": 4434,
+      "byte_length": 24,
+      "content_hash": "b13a897d7898de3338e8a5e87096a5312ef4d8447d18c4e0fbd8f32a56cdb170",
+      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-18)",
+      "cyclomatic": 0,
+      "max_nesting": 0,
+      "param_count": 0,
+      "call_references": []
+    },
+    {
+      "id": "apps/web/src/lib/query-client.ts::queryClient#constant",
+      "file": "apps/web/src/lib/query-client.ts",
+      "name": "queryClient",
+      "kind": "constant",
+      "signature": "const queryClient = new QueryClient({\n  defaultOptions: {\n    queries: {\n      refetchOnWindowFocus: false,\n      retry: 1,\n      staleTime: 1000 * 60 * 5, // 5 minutes\n    },\n    mutations: {\n      o",
+      "summary": "Constant queryClient",
+      "docstring": "",
+      "qualified_name": "queryClient",
+      "language": "typescript",
+      "decorators": [],
+      "keywords": [
+        "last_author",
+        "last_modified"
+      ],
+      "parent": null,
+      "line": 4,
+      "end_line": 24,
+      "byte_offset": 93,
+      "byte_length": 585,
+      "content_hash": "904d5f903855d8e95c94dc9edf1c37aa965af6fb7afbeabab1b778095b1f06e7",
+      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-18)",
+      "cyclomatic": 0,
+      "max_nesting": 0,
+      "param_count": 0,
+      "call_references": []
+    },
+    {
+      "id": "apps/web/src/lib/query-client.ts::status#constant",
+      "file": "apps/web/src/lib/query-client.ts",
+      "name": "status",
+      "kind": "constant",
+      "signature": "const status = error?.status;",
+      "summary": "Constant status",
+      "docstring": "",
+      "qualified_name": "status",
+      "language": "typescript",
+      "decorators": [],
+      "keywords": [
+        "last_author",
+        "last_modified"
+      ],
+      "parent": null,
+      "line": 13,
+      "end_line": 13,
+      "byte_offset": 327,
+      "byte_length": 29,
+      "content_hash": "a1a90e87c6e7df85a7c57887a769a1354a6dad277f6759b76dd5f406170f6b63",
+      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-18)",
+      "cyclomatic": 0,
+      "max_nesting": 0,
+      "param_count": 0,
+      "call_references": []
+    },
+    {
+      "id": "apps/web/src/lib/query-client.ts::msg#constant",
+      "file": "apps/web/src/lib/query-client.ts",
+      "name": "msg",
+      "kind": "constant",
+      "signature": "const msg = error?.message || 'Ocurri\u00f3 un error inesperado';",
+      "summary": "Constant msg",
+      "docstring": "",
+      "qualified_name": "msg",
+      "language": "typescript",
+      "decorators": [],
+      "keywords": [
+        "last_author",
+        "last_modified"
+      ],
+      "parent": null,
+      "line": 19,
+      "end_line": 19,
+      "byte_offset": 566,
+      "byte_length": 61,
+      "content_hash": "dbef155006959ff0dfa83c971f4b4099c5bb2487d02603ab2398f69eb896f28d",
+      "ecosystem_context": "git_blame: Properties: last_author (MauricioLopez), last_modified (2026-04-18)",
       "cyclomatic": 0,
       "max_nesting": 0,
       "param_count": 0,
@@ -37463,14 +37479,6 @@
         ]
       }
     ],
-    "apps/web/src/lib/query-client.ts": [
-      {
-        "specifier": "@tanstack/react-query",
-        "names": [
-          "QueryClient"
-        ]
-      }
-    ],
     "apps/web/src/lib/utils.ts": [
       {
         "specifier": "clsx",
@@ -37652,6 +37660,76 @@
         ]
       }
     ],
+    "apps/api/src/database/clean-pacientes.ts": [
+      {
+        "specifier": "typeorm",
+        "names": [
+          "DataSource"
+        ]
+      },
+      {
+        "specifier": "../config/typeorm.config",
+        "names": [
+          "typeOrmConfig"
+        ]
+      },
+      {
+        "specifier": "path",
+        "names": []
+      },
+      {
+        "specifier": "reflect-metadata",
+        "names": []
+      }
+    ],
+    "apps/api/src/modules/presupuestos/presupuestos.service.ts": [
+      {
+        "specifier": "@nestjs/common",
+        "names": [
+          "Injectable",
+          "NotFoundException",
+          "BadRequestException"
+        ]
+      },
+      {
+        "specifier": "@nestjs/typeorm",
+        "names": [
+          "InjectRepository"
+        ]
+      },
+      {
+        "specifier": "typeorm",
+        "names": [
+          "Repository",
+          "DataSource"
+        ]
+      },
+      {
+        "specifier": "./entities/presupuesto.entity",
+        "names": [
+          "Presupuesto"
+        ]
+      },
+      {
+        "specifier": "./entities/presupuesto-item.entity",
+        "names": [
+          "PresupuestoItem"
+        ]
+      },
+      {
+        "specifier": "./entities/pago.entity",
+        "names": [
+          "Pago"
+        ]
+      },
+      {
+        "specifier": "./dto/presupuesto.dto",
+        "names": [
+          "CreatePresupuestoDto",
+          "RegisterPagoDto"
+        ]
+      }
+    ],
     "apps/web/src/features/finanzas/components/FinanzasTabContent.tsx": [
       {
         "specifier": "framer-motion",
@@ -37727,87 +37805,6 @@
         ]
       }
     ],
-    "apps/web/src/features/tratamientos/pages/tratamientos-page.tsx": [
-      {
-        "specifier": "framer-motion",
-        "names": [
-          "motion",
-          "AnimatePresence"
-        ]
-      },
-      {
-        "specifier": "lucide-react",
-        "names": [
-          "Activity",
-          "CheckCircle2",
-          "Clock",
-          "Search",
-          "X",
-          "ChevronRight",
-          "Stethoscope",
-          "TrendingUp",
-          "Printer"
-        ]
-      },
-      {
-        "specifier": "../hooks/use-tratamientos",
-        "names": [
-          "useTratamientos"
-        ]
-      },
-      {
-        "specifier": "@/components/ui/premium-card",
-        "names": [
-          "PremiumCard"
-        ]
-      },
-      {
-        "specifier": "@/lib/utils",
-        "names": [
-          "cn"
-        ]
-      },
-      {
-        "specifier": "../types",
-        "names": [
-          "PlanTratamiento"
-        ]
-      },
-      {
-        "specifier": "../components/TratamientoProgreso",
-        "names": [
-          "TratamientoProgreso"
-        ]
-      },
-      {
-        "specifier": "../../finanzas/components/PresupuestoPrint",
-        "names": [
-          "printPlanTratamiento"
-        ]
-      }
-    ],
-    "apps/api/src/database/clean-pacientes.ts": [
-      {
-        "specifier": "typeorm",
-        "names": [
-          "DataSource"
-        ]
-      },
-      {
-        "specifier": "../config/typeorm.config",
-        "names": [
-          "typeOrmConfig"
-        ]
-      },
-      {
-        "specifier": "path",
-        "names": []
-      },
-      {
-        "specifier": "reflect-metadata",
-        "names": []
-      }
-    ],
     "apps/web/src/features/finanzas/components/presupuesto-list.tsx": [
       {
         "specifier": "framer-motion",
@@ -37850,77 +37847,6 @@
         "specifier": "./PresupuestoPrint",
         "names": [
           "printPresupuesto"
-        ]
-      }
-    ],
-    "apps/web/src/features/odontograma/hooks/use-odontograma.ts": [
-      {
-        "specifier": "@tanstack/react-query",
-        "names": [
-          "useQuery",
-          "useMutation",
-          "useQueryClient"
-        ]
-      },
-      {
-        "specifier": "../api/odontograma-api",
-        "names": [
-          "odontogramaApi"
-        ]
-      },
-      {
-        "specifier": "../types",
-        "names": [
-          "UpdatePiezaDto",
-          "AddProcedimientoDto"
-        ]
-      }
-    ],
-    "apps/api/src/modules/presupuestos/presupuestos.service.ts": [
-      {
-        "specifier": "@nestjs/common",
-        "names": [
-          "Injectable",
-          "NotFoundException",
-          "BadRequestException"
-        ]
-      },
-      {
-        "specifier": "@nestjs/typeorm",
-        "names": [
-          "InjectRepository"
-        ]
-      },
-      {
-        "specifier": "typeorm",
-        "names": [
-          "Repository",
-          "DataSource"
-        ]
-      },
-      {
-        "specifier": "./entities/presupuesto.entity",
-        "names": [
-          "Presupuesto"
-        ]
-      },
-      {
-        "specifier": "./entities/presupuesto-item.entity",
-        "names": [
-          "PresupuestoItem"
-        ]
-      },
-      {
-        "specifier": "./entities/pago.entity",
-        "names": [
-          "Pago"
-        ]
-      },
-      {
-        "specifier": "./dto/presupuesto.dto",
-        "names": [
-          "CreatePresupuestoDto",
-          "RegisterPagoDto"
         ]
       }
     ],
@@ -37997,8 +37923,110 @@
           "normalizarSistemaDental"
         ]
       }
+    ],
+    "apps/web/src/features/tratamientos/pages/tratamientos-page.tsx": [
+      {
+        "specifier": "framer-motion",
+        "names": [
+          "motion",
+          "AnimatePresence"
+        ]
+      },
+      {
+        "specifier": "lucide-react",
+        "names": [
+          "Activity",
+          "CheckCircle2",
+          "Clock",
+          "Search",
+          "X",
+          "ChevronRight",
+          "Stethoscope",
+          "TrendingUp",
+          "Printer"
+        ]
+      },
+      {
+        "specifier": "../hooks/use-tratamientos",
+        "names": [
+          "useTratamientos"
+        ]
+      },
+      {
+        "specifier": "@/components/ui/premium-card",
+        "names": [
+          "PremiumCard"
+        ]
+      },
+      {
+        "specifier": "@/lib/utils",
+        "names": [
+          "cn"
+        ]
+      },
+      {
+        "specifier": "../types",
+        "names": [
+          "PlanTratamiento"
+        ]
+      },
+      {
+        "specifier": "../components/TratamientoProgreso",
+        "names": [
+          "TratamientoProgreso"
+        ]
+      },
+      {
+        "specifier": "../../finanzas/components/PresupuestoPrint",
+        "names": [
+          "printPlanTratamiento"
+        ]
+      }
+    ],
+    "apps/web/src/features/odontograma/hooks/use-odontograma.ts": [
+      {
+        "specifier": "@tanstack/react-query",
+        "names": [
+          "useQuery",
+          "useMutation",
+          "useQueryClient"
+        ]
+      },
+      {
+        "specifier": "../api/odontograma-api",
+        "names": [
+          "odontogramaApi"
+        ]
+      },
+      {
+        "specifier": "../types",
+        "names": [
+          "UpdatePiezaDto",
+          "AddProcedimientoDto"
+        ]
+      }
+    ],
+    "apps/web/src/lib/query-client.ts": [
+      {
+        "specifier": "@tanstack/react-query",
+        "names": [
+          "QueryClient"
+        ]
+      },
+      {
+        "specifier": "sonner",
+        "names": [
+          "toast"
+        ]
+      }
+    ],
+    "apps/web/src/lib/Httpclient.ts": [
+      {
+        "specifier": "sonner",
+        "names": []
+      }
     ]
   },
-  "git_head": "4b6a1993c9caade62948ab2d39d19e00e56e416c",
+  "git_head": "5283f5447f3eecbe79857e9dbc45937a4d7edddc",
   "source_root": "D:\\Code\\odontologia"
 }

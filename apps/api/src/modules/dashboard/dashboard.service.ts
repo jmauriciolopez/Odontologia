@@ -5,6 +5,7 @@ import { Paciente } from '../pacientes/entities/paciente.entity';
 import { Turno } from '../turnos/entities/turno.entity';
 import { Presupuesto } from '../presupuestos/entities/presupuesto.entity';
 import { Pago } from '../presupuestos/entities/pago.entity';
+import { PlanTratamientoItem } from '../planes-tratamiento/entities/plan-tratamiento-item.entity';
 
 @Injectable()
 export class DashboardService {
@@ -17,7 +18,41 @@ export class DashboardService {
     private readonly presupuestoRepository: Repository<Presupuesto>,
     @InjectRepository(Pago)
     private readonly pagoRepository: Repository<Pago>,
+    @InjectRepository(PlanTratamientoItem)
+    private readonly planTratamientoItemRepository: Repository<PlanTratamientoItem>,
   ) {}
+
+  async getHistoricalStats(from: string, to: string) {
+    const start = new Date(from);
+    const end = new Date(to);
+
+    const [ingresos, tratamientos] = await Promise.all([
+      this.pagoRepository.createQueryBuilder('pago')
+        .select("TO_CHAR(pago.fechaPago, 'YYYY-MM')", 'month')
+        .addSelect('SUM(pago.monto)', 'total')
+        .where('pago.fechaPago BETWEEN :start AND :end', { start, end })
+        .groupBy('month')
+        .orderBy('month', 'ASC')
+        .getRawMany(),
+      this.planTratamientoItemRepository.createQueryBuilder('item')
+        .select("TO_CHAR(item.createdAt, 'YYYY-MM')", 'month')
+        .addSelect('COUNT(*)', 'total')
+        .where('item.createdAt BETWEEN :start AND :end', { start, end })
+        .andWhere("item.estado = 'realizado'")
+        .groupBy('month')
+        .orderBy('month', 'ASC')
+        .getRawMany()
+    ]);
+
+    const months = new Set([...ingresos.map(i => i.month), ...tratamientos.map(t => t.month)]);
+    const sortedMonths = Array.from(months).sort();
+
+    return sortedMonths.map(month => ({
+      month,
+      ingresos: parseFloat(ingresos.find(i => i.month === month)?.total || '0'),
+      tratamientos: parseInt(tratamientos.find(t => t.month === month)?.total || '0')
+    }));
+  }
 
   async getStats() {
     const today = new Date();
@@ -68,5 +103,30 @@ export class DashboardService {
       facturacionReal: parseFloat(pagosMes?.total || '0'),
       proximosTurnos
     };
+  }
+
+  async getCobranzaReport(from: string, to: string) {
+    const start = new Date(from);
+    const end = new Date(to);
+
+    return this.pagoRepository.find({
+      where: {
+        fechaPago: Between(start, end)
+      },
+      relations: ['presupuesto', 'presupuesto.paciente'],
+      order: { fechaPago: 'DESC' }
+    });
+  }
+
+  async getNuevosPacientesReport(from: string, to: string) {
+    const start = new Date(from);
+    const end = new Date(to);
+
+    return this.pacienteRepository.find({
+      where: {
+        createdAt: Between(start, end)
+      },
+      order: { createdAt: 'DESC' }
+    });
   }
 }

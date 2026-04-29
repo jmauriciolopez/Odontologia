@@ -1,10 +1,12 @@
-﻿import React from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Presupuesto } from '../types';
-import { CheckCircle2, Clock, AlertCircle, FileText, ArrowRight, User, Play, Printer } from 'lucide-react';
+import { CheckCircle2, Clock, AlertCircle, FileText, ArrowRight, User, Play, Printer, FileDown } from 'lucide-react';
 import { useFinanzasMutations } from '../hooks/use-presupuestos';
 import { cn } from '@/lib/utils';
 import { printPresupuesto } from './PresupuestoPrint';
+import { httpClient } from '@/lib/Httpclient';
+import { toast } from 'sonner';
 
 interface PresupuestoListProps {
   presupuestos: Presupuesto[];
@@ -160,8 +162,24 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
                       </button>
                     )}
                     <button
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        try {
+                          await httpClient.downloadFile(`/presupuestos/${p.id}/export-pdf`, `presupuesto-${p.folio || p.id.slice(0, 8)}.pdf`);
+                          toast.success('Presupuesto exportado correctamente');
+                        } catch (err) {
+                          console.error(err);
+                          toast.error('Error al exportar presupuesto');
+                        }
+                      }}
+                      title="Descargar PDF Oficial"
+                      className="inline-flex items-center gap-2 border-2 border-blue-100 dark:border-blue-500/20 hover:border-blue-500 px-3 py-2 rounded-xl text-xs font-bold transition-all text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-500/5"
+                    >
+                      <FileDown size={14} />
+                    </button>
+                    <button
                       onClick={(e) => { e.stopPropagation(); printPresupuesto(p, undefined, pacienteNombre); }}
-                      title="Imprimir / Guardar PDF"
+                      title="Imprimir Rápido (Navegador)"
                       className="inline-flex items-center gap-2 border-2 border-[var(--sb-border)] hover:border-slate-400 px-3 py-2 rounded-xl text-xs font-bold transition-all hover:text-slate-600"
                       style={{ background: 'var(--sb-active-bg)', color: 'var(--sb-text-muted)' }}
                     >

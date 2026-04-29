@@ -45,7 +45,7 @@ export class PacientesService {
   }
 
   async findOne(id: string): Promise<Paciente> {
-    let paciente = await this.pacientesRepository.findOne({
+    const paciente = await this.pacientesRepository.findOne({
       where: { id },
       relations: ['ficha', 'ficha.antecedentes', 'ficha.evoluciones', 'obraSocialData', 'obraSocialData.prestaciones', 'obraSocialData.prestaciones.prestacion'],
     });

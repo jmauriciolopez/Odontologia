@@ -6,10 +6,13 @@ import { Paciente } from '../pacientes/entities/paciente.entity';
 import { Turno } from '../turnos/entities/turno.entity';
 import { Presupuesto } from '../presupuestos/entities/presupuesto.entity';
 import { Pago } from '../presupuestos/entities/pago.entity';
+import { PlanTratamientoItem } from '../planes-tratamiento/entities/plan-tratamiento-item.entity';
+import { ReportsModule } from '../reports/reports.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Paciente, Turno, Presupuesto, Pago]),
+    TypeOrmModule.forFeature([Paciente, Turno, Presupuesto, Pago, PlanTratamientoItem]),
+    ReportsModule,
   ],
   controllers: [DashboardController],
   providers: [DashboardService],

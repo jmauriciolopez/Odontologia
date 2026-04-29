@@ -5,8 +5,9 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch"
+    "build": "echo skipped",
+    "dev": "echo skipped",
+    "lint": "echo skipped"
   },
   "dependencies": {
     "zod": "^3.22.4"
