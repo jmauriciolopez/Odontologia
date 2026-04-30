@@ -18,10 +18,16 @@ import { RemindersModule } from './modules/reminders/reminders.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { ConfiguracionModule } from './modules/configuracion/configuracion.module';
 import { ObrasSocialesModule } from './modules/obras-sociales/obras-sociales.module';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(typeOrmConfig),
+    ThrottlerModule.forRoot([{
+      ttl: 60000,
+      limit: 100, // Máximo 100 requests por minuto por IP
+    }]),
     ServeStaticModule.forRoot({
       rootPath: join(process.cwd(), 'uploads'),
       serveRoot: '/uploads',
@@ -44,6 +50,11 @@ import { ObrasSocialesModule } from './modules/obras-sociales/obras-sociales.mod
     ObrasSocialesModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}

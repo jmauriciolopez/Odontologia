@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePresupuestos, useFinanzasMutations } from '../hooks/use-presupuestos';
 import { PresupuestoList } from '../components/presupuesto-list';
@@ -6,8 +6,16 @@ import { PresupuestoForm } from '../components/presupuesto-form';
 import { PagoModal } from '../components/pago-modal';
 import { Presupuesto } from '../types';
 import { PremiumCard } from '../../../components/ui/premium-card';
-import { DollarSign, CreditCard, PieChart, Plus, ArrowUpRight, TrendingUp, Wallet, Receipt, Search, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { 
+  ChartPie, 
+  Plus, 
+  ArrowUpRight, 
+  TrendUp, 
+  Wallet, 
+  Receipt, 
+  MagnifyingGlass, 
+  X 
+} from '@phosphor-icons/react';
 
 export const PresupuestosPage: React.FC = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -15,7 +23,8 @@ export const PresupuestosPage: React.FC = () => {
   const [showPagoModal, setShowPagoModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const { data: presupuestos = [], isLoading } = usePresupuestos();
+  const { data: presupuestosData, isLoading } = usePresupuestos();
+  const presupuestos = presupuestosData?.data || [];
   const { createPresupuesto, registerPago } = useFinanzasMutations();
 
   // Filtrado de presupuestos por Nombre de Paciente
@@ -99,10 +108,10 @@ export const PresupuestosPage: React.FC = () => {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => setShowCreateModal(true)}
-          className="flex items-center gap-2 btn-primary px-6 py-3 rounded-2xl"
+          className="flex items-center gap-2 btn-primary px-6 py-3 rounded-2xl shadow-lg shadow-blue-500/20"
         >
-          <Plus size={20} />
-          Nuevo Presupuesto
+          <Plus size={20} weight="bold" />
+          <span className="font-bold tracking-tight">Nuevo Presupuesto</span>
         </motion.button>
       </header>
 
@@ -114,13 +123,13 @@ export const PresupuestosPage: React.FC = () => {
               <Receipt className="text-blue-600 dark:text-blue-400" size={24} />
             </div>
             <div className="flex items-center gap-1 text-emerald-500 font-bold text-xs">
-              <TrendingUp size={14} />
+              <TrendUp size={14} />
               +8%
             </div>
           </div>
           <div className="space-y-1">
-            <p className="text-[var(--sb-text-muted)] text-sm font-medium">Total Facturado</p>
-            <h3 className="text-2xl font-bold tracking-tight text-[var(--sb-text)]">
+            <p className="text-[var(--sb-text-muted)] text-xs font-bold uppercase tracking-wider opacity-70">Total Facturado</p>
+            <h3 className="text-2xl font-mono font-bold tracking-tighter text-[var(--sb-text)]">
               {formatCurrency(totalFacturado || 1240000)}
             </h3>
           </div>
@@ -134,8 +143,8 @@ export const PresupuestosPage: React.FC = () => {
             <ArrowUpRight className="text-slate-200 dark:text-slate-800" size={20} />
           </div>
           <div className="space-y-1">
-            <p className="text-[var(--sb-text-muted)] text-sm font-medium">Cobros Realizados</p>
-            <h3 className="text-2xl font-bold tracking-tight text-[var(--sb-text)]">
+            <p className="text-[var(--sb-text-muted)] text-xs font-bold uppercase tracking-wider opacity-70">Cobros Realizados</p>
+            <h3 className="text-2xl font-mono font-bold tracking-tighter text-[var(--sb-text)]">
               {formatCurrency(totalPagadoAmount || 790000)}
             </h3>
           </div>
@@ -144,15 +153,15 @@ export const PresupuestosPage: React.FC = () => {
         <PremiumCard delay={0.3}>
           <div className="flex items-center justify-between mb-4">
             <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-500/10">
-              <PieChart className="text-amber-600 dark:text-amber-400" size={24} />
+              <ChartPie className="text-amber-600 dark:text-amber-400" size={24} />
             </div>
             <div className="h-2 w-12 bg-amber-200 dark:bg-amber-900/50 rounded-full overflow-hidden">
                <div className="h-full bg-amber-500 w-[60%]" />
             </div>
           </div>
           <div className="space-y-1">
-            <p className="text-[var(--sb-text-muted)] text-sm font-medium">Saldo Pendiente</p>
-            <h3 className="text-2xl font-bold tracking-tight text-[var(--sb-text)]">
+            <p className="text-[var(--sb-text-muted)] text-xs font-bold uppercase tracking-wider opacity-70">Saldo Pendiente</p>
+            <h3 className="text-2xl font-mono font-bold tracking-tighter text-[var(--sb-text)]">
               {formatCurrency(saldoPendiente || 450000)}
             </h3>
           </div>
@@ -166,13 +175,13 @@ export const PresupuestosPage: React.FC = () => {
 
           <div className="flex items-center gap-4 flex-1 justify-end">
             <div className="relative group max-w-sm w-full">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--sb-border)] dark:text-slate-600 group-focus-within:text-blue-500 transition-colors" size={18} />
+              <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--sb-border)] dark:text-slate-600 group-focus-within:text-blue-500 transition-colors" size={18} weight="bold" />
               <input
                 type="text"
                 placeholder="Buscar por paciente o folio..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-[var(--card-bg)] border-[var(--sb-border)] rounded-xl py-2 pl-10 pr-10 text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500/20 border transition-all shadow-sm"
+                className="w-full bg-[var(--card-bg)] border-[var(--sb-border)] rounded-xl py-2.5 pl-10 pr-10 text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500/20 border transition-all shadow-sm"
               />
               {searchTerm && (
                 <button

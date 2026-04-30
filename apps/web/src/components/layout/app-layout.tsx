@@ -28,7 +28,7 @@ export const AppLayout: React.FC = () => {
 
   return (
     <div
-      className="flex h-screen overflow-hidden font-sans transition-colors duration-300"
+      className="flex min-h-[100dvh] overflow-hidden font-sans transition-colors duration-300"
       style={{ background: 'var(--card-bg)', color: 'var(--sb-text)' }}
     >
       {/* Mobile sidebar overlay */}

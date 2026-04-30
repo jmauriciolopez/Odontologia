@@ -25,10 +25,10 @@ export class UpdateConfiguracionDto {
 
 export class CreatePrestacionDto {
   @IsString()
-  codigo: string;
+  codigo!: string;
 
   @IsString()
-  nombre: string;
+  nombre!: string;
 
   @IsString()
   @IsOptional()

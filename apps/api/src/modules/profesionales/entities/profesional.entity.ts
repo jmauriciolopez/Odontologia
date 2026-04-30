@@ -5,15 +5,15 @@ import { Usuario } from '../../usuarios/entities/usuario.entity';
 @Entity('profesionales')
 export class Profesional extends BaseEntity {
   @Column({ name: 'usuario_id' })
-  usuarioId: string;
+  usuarioId!: string;
 
   @OneToOne(() => Usuario)
   @JoinColumn({ name: 'usuario_id' })
-  usuario: Usuario;
+  usuario!: Usuario;
 
   @Column({ nullable: true })
-  especialidad: string;
+  especialidad?: string;
 
   @Column({ nullable: true })
-  matricula: string;
+  matricula?: string;
 }

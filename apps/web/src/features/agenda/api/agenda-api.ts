@@ -9,10 +9,11 @@ import {
   Profesional,
   Consultorio
 } from '../types';
+import { PaginatedResponse } from '../../../types/pagination';
 
 export const agendaApi = {
-  findAll: async (params?: TurnosFiltros): Promise<Turno[]> => {
-    return httpClient.get<Turno[]>('turnos', { params });
+  findAll: async (params?: TurnosFiltros & { page?: number; limit?: number }): Promise<PaginatedResponse<Turno>> => {
+    return httpClient.get<PaginatedResponse<Turno>>('turnos', { params });
   },
 
   findOne: async (id: string): Promise<Turno> => {

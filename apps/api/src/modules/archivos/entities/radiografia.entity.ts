@@ -5,21 +5,21 @@ import { Paciente } from '../../pacientes/entities/paciente.entity';
 @Entity('radiografias')
 export class Radiografia extends BaseEntity {
   @Column({ name: 'paciente_id' })
-  pacienteId: string;
+  pacienteId!: string;
 
   @ManyToOne(() => Paciente)
   @JoinColumn({ name: 'paciente_id' })
-  paciente: Paciente;
+  paciente!: Paciente;
 
   @Column({ name: 'nombre_archivo' })
-  nombreArchivo: string;
+  nombreArchivo!: string;
 
   @Column({ type: 'text' })
-  path: string;
+  path!: string;
 
   @Column()
-  tipo: string; // periapical, panoramica, etc
+  tipo!: string; // periapical, panoramica, etc
 
   @Column({ name: 'fecha_toma', type: 'date', nullable: true })
-  fechaToma: Date;
+  fechaToma?: Date;
 }

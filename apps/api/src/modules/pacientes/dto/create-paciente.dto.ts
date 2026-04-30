@@ -3,11 +3,11 @@ import { IsString, IsNotEmpty, IsOptional, IsEmail, IsDateString, IsUUID } from 
 export class CreatePacienteDto {
   @IsString()
   @IsNotEmpty()
-  nombre: string;
+  nombre!: string;
 
   @IsString()
   @IsNotEmpty()
-  apellido: string;
+  apellido!: string;
 
   @IsString()
   @IsOptional()

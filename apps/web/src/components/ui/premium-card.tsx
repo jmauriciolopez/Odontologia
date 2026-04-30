@@ -19,16 +19,9 @@ export const PremiumCard: React.FC<PremiumCardProps> = ({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay, ease: 'easeOut' }}
+      transition={{ type: 'spring', stiffness: 100, damping: 20, delay }}
       onClick={onClick}
-      className={cn('rounded-2xl p-6 transition-all duration-300', className)}
-      style={{
-        background:    'var(--card-bg)',
-        border:        '1px solid var(--card-border)',
-        boxShadow:     'var(--card-shadow)',
-        backdropFilter:'blur(var(--card-blur, 0px))',
-        color:         'var(--sb-text)',
-      }}
+      className={cn('card-premium', className)}
     >
       {children}
     </motion.div>

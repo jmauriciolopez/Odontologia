@@ -9,20 +9,10 @@ import { UpdateTurnoDto } from './dto/update-turnos.dto';
 import { TurnoFiltrosDto } from './dto/turnos-filtros.dto';
 import { DisponibilidadQueryDto } from './dto/disponibilidad-query.dto';
 import { ConfiguracionClinica } from '../configuracion/entities/configuracion-clinica.entity';
-import { Consultorio } from '../consultorios/entities/consultorio.entity';
+import { ConsultoriosService } from '../consultorios/consultorios.service';
+import { PaginatedResponse } from '../../common/interfaces/paginated-response.interface';
 
 const MAX_RECURRENCIAS = 104;
-
-// Mapeo día JS (0=domingo) → nombre usado en diasAtencion del consultorio
-const DIA_NOMBRE: Record<number, string> = {
-  0: 'Domingo',
-  1: 'Lunes',
-  2: 'Martes',
-  3: 'Miércoles',
-  4: 'Jueves',
-  5: 'Viernes',
-  6: 'Sábado',
-};
 
 @Injectable()
 export class TurnosService {
@@ -33,52 +23,11 @@ export class TurnosService {
     private readonly turnosRepository: Repository<Turno>,
     @InjectRepository(ConfiguracionClinica)
     private readonly configRepository: Repository<ConfiguracionClinica>,
-    @InjectRepository(Consultorio)
-    private readonly consultorioRepository: Repository<Consultorio>,
+    private readonly consultoriosService: ConsultoriosService,
   ) {}
 
   private async checkHorarioConsultorio(consultorioId: string, inicio: Date, fin: Date): Promise<void> {
-    const consultorio = await this.consultorioRepository.findOneBy({ id: consultorioId });
-    if (!consultorio) return;
-
-    // Validar día de atención
-    const diaNombre = DIA_NOMBRE[inicio.getUTCDay()];
-    if (consultorio.diasAtencion?.length > 0) {
-      // Normalizar para comparar sin tildes ni mayúsculas
-      const normalize = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-      const atiende = consultorio.diasAtencion.some(d => normalize(d) === normalize(diaNombre));
-      if (!atiende) {
-        throw new BadRequestException(
-          `El consultorio "${consultorio.nombre}" no atiende los ${diaNombre}`
-        );
-      }
-    }
-
-    // Validar horario — formato esperado: "HH:MM - HH:MM" o "HH:MM - HH:MM, HH:MM - HH:MM"
-    if (consultorio.horario?.trim()) {
-      const toMin = (hhmm: string) => {
-        const [h, m] = hhmm.trim().split(':').map(Number);
-        return h * 60 + m;
-      };
-      const inicioMin = inicio.getUTCHours() * 60 + inicio.getUTCMinutes();
-      const finMin    = fin.getUTCHours()    * 60 + fin.getUTCMinutes();
-
-      // Soporta múltiples rangos separados por coma
-      const rangos = consultorio.horario.split(',').map(r => r.trim());
-      const dentroDeAlgunRango = rangos.some(rango => {
-        const partes = rango.split('-').map(p => p.trim());
-        if (partes.length !== 2) return true; // formato desconocido, no bloquear
-        const desde = toMin(partes[0]);
-        const hasta = toMin(partes[1]);
-        return inicioMin >= desde && finMin <= hasta;
-      });
-
-      if (!dentroDeAlgunRango) {
-        throw new BadRequestException(
-          `El horario del turno está fuera del horario operativo del consultorio "${consultorio.nombre}" (${consultorio.horario})`
-        );
-      }
-    }
+    await this.consultoriosService.validarDisponibilidadHoraria(consultorioId, inicio, fin);
   }
 
   private async checkConflict(
@@ -221,7 +170,7 @@ export class TurnosService {
           motivo: dto.motivo,
           serieRecurrenciaId: serieId,
         });
-        creados.push(await repo.save(turno));
+        creados.push(turno);
         count++;
 
         if (dto.finSerie === 'cantidad' && count >= dto.cantidad!) {
@@ -235,16 +184,16 @@ export class TurnosService {
         throw new BadRequestException('No se generó ningún turno con los criterios indicados');
       }
 
-      return creados;
+      return await repo.save(creados);
     });
   }
 
-  async findAll(filtros: TurnoFiltrosDto): Promise<Turno[]> {
-    const { fecha, desde, hasta, profesionalId, consultorioId, pacienteId, estado } = filtros;
+  async findAll(filtros: TurnoFiltrosDto): Promise<PaginatedResponse<Turno>> {
+    const { fecha, desde, hasta, profesionalId, consultorioId, pacienteId, estado, page = 1, limit = 10 } = filtros;
     const qb = this.turnosRepository.createQueryBuilder('turno')
       .leftJoinAndSelect('turno.paciente', 'paciente')
       .leftJoinAndSelect('turno.profesional', 'profesional')
-      .leftJoinAndSelect('profesional.usuario', 'usuario_prof')
+      // Removed leftJoinAndSelect for profesional.usuario to reduce over-fetching unless strictly necessary
       .leftJoinAndSelect('turno.consultorio', 'consultorio');
 
     if (fecha) {
@@ -275,7 +224,20 @@ export class TurnosService {
       qb.andWhere('turno.estado = :estado', { estado });
     }
 
-    return await qb.orderBy('turno.fecha_inicio', 'ASC').getMany();
+    qb.skip((page - 1) * limit).take(limit);
+    qb.orderBy('turno.fecha_inicio', 'ASC');
+
+    const [data, total] = await qb.getManyAndCount();
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 
   async findOne(id: string): Promise<Turno> {

@@ -6,28 +6,28 @@ import { Usuario } from '../../usuarios/entities/usuario.entity';
 @Entity('documentos_adjuntos')
 export class DocumentoAdjunto extends BaseEntity {
   @Column({ name: 'paciente_id' })
-  pacienteId: string;
+  pacienteId!: string;
 
   @ManyToOne(() => Paciente)
   @JoinColumn({ name: 'paciente_id' })
-  paciente: Paciente;
+  paciente!: Paciente;
 
   @Column({ name: 'nombre_archivo' })
-  nombreArchivo: string;
+  nombreArchivo!: string;
 
   @Column({ name: 'mime_type', nullable: true })
-  mimeType: string;
+  mimeType?: string;
 
   @Column({ name: 'size_bytes', type: 'bigint', nullable: true })
-  sizeBytes: number;
+  sizeBytes?: number;
 
   @Column({ type: 'text' })
-  path: string;
+  path!: string;
 
   @Column({ name: 'uploaded_by', nullable: true })
-  uploadedById: string;
+  uploadedById?: string;
 
   @ManyToOne(() => Usuario)
   @JoinColumn({ name: 'uploaded_by' })
-  uploadedBy: Usuario;
+  uploadedBy?: Usuario;
 }

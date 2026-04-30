@@ -1,9 +1,10 @@
 import { httpClient } from '../../../lib/Httpclient';
 import { Presupuesto, CreatePresupuestoDto, Pago, CreatePagoDto } from '../types';
+import { PaginatedResponse } from '../../../types/pagination';
 
 export const finanzasApi = {
-  findAll: async (params?: any): Promise<Presupuesto[]> => {
-    return httpClient.get('presupuestos', { params });
+  findAll: async (params?: { page?: number; limit?: number }): Promise<PaginatedResponse<Presupuesto>> => {
+    return httpClient.get<PaginatedResponse<Presupuesto>>('presupuestos', { params });
   },
 
   findOne: async (id: string): Promise<Presupuesto> => {

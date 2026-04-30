@@ -7,23 +7,23 @@ export class CreateTurnoDto {
 
   @IsUUID()
   @IsNotEmpty()
-  pacienteId: string;
+  pacienteId!: string;
 
   @IsUUID()
   @IsNotEmpty()
-  profesionalId: string;
+  profesionalId!: string;
 
   @IsUUID()
   @IsNotEmpty()
-  consultorioId: string;
+  consultorioId!: string;
 
   @IsDateString()
   @IsNotEmpty()
-  fechaInicio: string;
+  fechaInicio!: string;
 
   @IsDateString()
   @IsNotEmpty()
-  fechaFin: string;
+  fechaFin!: string;
 
   @IsString()
   @IsOptional()

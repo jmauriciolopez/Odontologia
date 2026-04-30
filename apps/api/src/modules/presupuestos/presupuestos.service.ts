@@ -5,6 +5,8 @@ import { Presupuesto } from './entities/presupuesto.entity';
 import { PresupuestoItem } from './entities/presupuesto-item.entity';
 import { Pago } from './entities/pago.entity';
 import { CreatePresupuestoDto, RegisterPagoDto } from './dto/presupuesto.dto';
+import { PaginationDto } from '../../common/dto/pagination.dto';
+import { PaginatedResponse } from '../../common/interfaces/paginated-response.interface';
 
 @Injectable()
 export class PresupuestosService {
@@ -47,11 +49,24 @@ export class PresupuestosService {
     return await this.findOne(savedPresupuesto.id);
   }
 
-  async findAll(): Promise<Presupuesto[]> {
-    return await this.presupuestoRepository.find({
+  async findAll(pagination: PaginationDto = {}): Promise<PaginatedResponse<Presupuesto>> {
+    const { page = 1, limit = 10 } = pagination;
+    const [data, total] = await this.presupuestoRepository.findAndCount({
       relations: ['paciente', 'items'],
-      order: { createdAt: 'DESC' }
+      order: { createdAt: 'DESC' },
+      skip: (page - 1) * limit,
+      take: limit,
     });
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 
   async findByPaciente(pacienteId: string): Promise<Presupuesto[]> {

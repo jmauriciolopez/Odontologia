@@ -5,24 +5,24 @@ import { Presupuesto } from './presupuesto.entity';
 @Entity('presupuesto_items')
 export class PresupuestoItem extends BaseEntity {
   @Column({ name: 'presupuesto_id' })
-  presupuestoId: string;
+  presupuestoId!: string;
 
   @ManyToOne(() => Presupuesto, (presupuesto) => presupuesto.items)
   @JoinColumn({ name: 'presupuesto_id' })
-  presupuesto: Presupuesto;
+  presupuesto!: Presupuesto;
 
   @Column()
-  descripcion: string;
+  descripcion!: string;
 
   @Column({ type: 'int', default: 1 })
-  cantidad: number;
+  cantidad!: number;
 
   @Column({ type: 'decimal', precision: 12, scale: 2 })
-  precioUnitario: number;
+  precioUnitario!: number;
 
   @Column({ type: 'decimal', precision: 12, scale: 2 })
-  descuento: number; // Porcentaje o monto, asumamos monto por simplificación en esta etapa
+  descuento!: number; // Porcentaje o monto, asumamos monto por simplificación en esta etapa
 
   @Column({ type: 'decimal', precision: 12, scale: 2 })
-  subtotal: number;
+  subtotal!: number;
 }

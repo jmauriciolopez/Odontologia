@@ -4,32 +4,32 @@ import { BaseEntity } from '../../../common/entities/base.entity';
 @Entity('consultorios')
 export class Consultorio extends BaseEntity {
   @Column({ name: 'sucursal_id', nullable: true })
-  sucursalId: string;
+  sucursalId?: string;
 
   @Column()
-  nombre: string;
+  nombre!: string;
 
   @Column({ nullable: true })
-  direccion: string;
+  direccion?: string;
 
   @Column({ name: 'numero_sillones', type: 'int', default: 1 })
-  numeroSillones: number;
+  numeroSillones!: number;
 
   @Column({ nullable: true })
-  piso: string;
+  piso?: string;
 
   @Column({ nullable: true })
-  telefono: string;
+  telefono?: string;
 
   @Column({ nullable: true })
-  whatsapp: string;
+  whatsapp?: string;
 
   @Column({ nullable: true })
-  horario: string;
+  horario?: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  diasAtencion: string[];
+  diasAtencion?: string[];
 
   @Column({ default: true })
-  activo: boolean;
+  activo!: boolean;
 }

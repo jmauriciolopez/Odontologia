@@ -48,8 +48,8 @@ export const DashboardChart: React.FC<DashboardChartProps> = ({ data, isLoading 
   return (
     <PremiumCard className="p-6">
       <div className="mb-6">
-        <h3 className="text-lg font-bold">Evolución Mensual</h3>
-        <p className="text-sm text-muted-foreground">Ingresos vs Tratamientos Realizados</p>
+        <h3 className="font-heading text-lg font-bold tracking-tighter">Evolución Mensual</h3>
+        <p className="text-sm font-medium opacity-60" style={{ color: 'var(--sb-text-muted)' }}>Ingresos vs Tratamientos Realizados</p>
       </div>
 
       <div className="h-[350px] w-full">
@@ -65,12 +65,12 @@ export const DashboardChart: React.FC<DashboardChartProps> = ({ data, isLoading 
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--sb-border)" />
-            <XAxis
+             <XAxis
               dataKey="month"
               tickFormatter={formatMonth}
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 12, fill: 'var(--sb-text-muted)' }}
+              tick={{ fontSize: 11, fill: 'var(--sb-text-muted)', fontWeight: 500, fontFamily: 'Geist Mono' }}
               dy={10}
             />
             <YAxis
@@ -78,22 +78,25 @@ export const DashboardChart: React.FC<DashboardChartProps> = ({ data, isLoading 
               tickFormatter={formatCurrency}
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 12, fill: 'var(--sb-text-muted)' }}
+              tick={{ fontSize: 11, fill: 'var(--sb-text-muted)', fontWeight: 500, fontFamily: 'Geist Mono' }}
             />
             <YAxis
               yAxisId="right"
               orientation="right"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 12, fill: 'var(--sb-text-muted)' }}
+              tick={{ fontSize: 11, fill: 'var(--sb-text-muted)', fontWeight: 500, fontFamily: 'Geist Mono' }}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: 'var(--sb-card-bg, #fff)',
-                borderColor: 'var(--sb-border)',
-                borderRadius: '8px',
-                fontSize: '12px',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                backdropFilter: 'blur(10px)',
+                borderColor: 'rgba(255, 255, 255, 0.5)',
+                borderRadius: '12px',
+                fontSize: '11px',
+                fontFamily: 'Geist Mono',
+                boxShadow: 'var(--shadow-glass)',
+                padding: '12px'
               }}
               formatter={(value: any, name: any) => {
                 if (name === 'ingresos') return [formatCurrency(value), 'Ingresos'];

@@ -1,19 +1,17 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { EvolucionClinica } from '../types';
 import {
   Plus,
-  History,
-  Clock,
   User,
   MessageSquare,
   Stethoscope,
-  ShieldAlert,
-  Sparkles,
   Scissors,
   FileText,
   ChevronDown,
-  Info
+  Info,
+  Sparkles,
+  ShieldAlert
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 

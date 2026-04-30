@@ -5,16 +5,16 @@ import { Rol } from './rol.entity';
 @Entity('usuario_roles')
 export class UsuarioRol {
   @PrimaryColumn({ name: 'usuario_id' })
-  usuarioId: string;
+  usuarioId!: string;
 
   @PrimaryColumn({ name: 'rol_id' })
-  rolId: string;
+  rolId!: string;
 
   @ManyToOne(() => Usuario, (usuario) => usuario.usuarioRoles)
   @JoinColumn({ name: 'usuario_id' })
-  usuario: Usuario;
+  usuario!: Usuario;
 
   @ManyToOne(() => Rol, (rol) => rol.usuarioRoles)
   @JoinColumn({ name: 'rol_id' })
-  rol: Rol;
+  rol!: Rol;
 }

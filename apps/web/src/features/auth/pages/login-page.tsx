@@ -1,11 +1,20 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Eye, EyeOff, Lock, Mail, Loader2, Activity, Shield, Stethoscope } from 'lucide-react';
+import { 
+  Eye, 
+  EyeSlash, 
+  LockSimple, 
+  EnvelopeSimple, 
+  CircleNotch, 
+  Pulse, 
+  Shield, 
+  Stethoscope 
+} from '@phosphor-icons/react';
 import { useLogin } from '../hooks/use-login';
 
 const FEATURES = [
   { icon: Stethoscope, label: 'Fichas clínicas digitales' },
-  { icon: Activity,    label: 'Odontograma interactivo' },
+  { icon: Pulse,       label: 'Odontograma interactivo' },
   { icon: Shield,      label: 'Acceso seguro por roles' },
 ];
 
@@ -45,10 +54,10 @@ export const LoginPage: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="relative z-10 flex items-center gap-3"
         >
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-600 shadow-lg shadow-blue-600/30 text-2xl">
-            🦷
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-600 shadow-lg shadow-blue-600/30 text-white">
+            <Stethoscope size={24} weight="bold" />
           </div>
-          <span className="text-xl font-bold tracking-tight text-white">OdontoSaaS</span>
+          <span className="font-heading text-xl font-bold tracking-tighter text-white">OdontoSaaS</span>
         </motion.div>
 
         {/* Hero copy */}
@@ -63,7 +72,7 @@ export const LoginPage: React.FC = () => {
               <span className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse" />
               Plataforma clínica v2.0
             </div>
-            <h1 className="text-5xl font-black leading-[1.1] tracking-tight text-white">
+            <h1 className="font-heading text-5xl font-black leading-[1.1] tracking-tighter text-white">
               Gestión clínica<br />
               <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
                 sin fricciones.
@@ -85,7 +94,7 @@ export const LoginPage: React.FC = () => {
                 className="flex items-center gap-3"
               >
                 <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[var(--sb-active-bg)] border border-[var(--sb-border)]">
-                  <Icon size={15} className="text-blue-400" />
+                  <Icon size={15} weight="bold" className="text-blue-400" />
                 </div>
                 <span className="text-sm font-medium text-slate-400">{label}</span>
               </motion.div>
@@ -120,17 +129,17 @@ export const LoginPage: React.FC = () => {
         >
           {/* Mobile logo */}
           <div className="mb-10 flex items-center gap-3 lg:hidden">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-xl shadow-lg shadow-blue-600/30">
-              🦷
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 shadow-lg shadow-blue-600/30 text-white">
+              <Stethoscope size={20} weight="bold" />
             </div>
-            <span className="text-lg font-bold text-white">OdontoSaaS</span>
+            <span className="font-heading text-lg font-bold tracking-tighter text-white">OdontoSaaS</span>
           </div>
 
           {/* Card */}
           <div className="rounded-3xl border border-[var(--sb-border)] bg-slate-900/80 p-8 shadow-2xl shadow-black/40 backdrop-blur-xl">
 
             <div className="mb-8 space-y-1">
-              <h2 className="text-2xl font-black tracking-tight text-white">Bienvenido de vuelta</h2>
+              <h2 className="font-heading text-2xl font-black tracking-tighter text-white">Bienvenido de vuelta</h2>
               <p className="text-sm font-medium text-[var(--sb-text-muted)]">Ingresá tus credenciales para continuar</p>
             </div>
 
@@ -142,8 +151,9 @@ export const LoginPage: React.FC = () => {
                   Correo electrónico
                 </label>
                 <div className="group relative">
-                  <Mail
+                  <EnvelopeSimple
                     size={16}
+                    weight="bold"
                     className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--sb-text-muted)] transition-colors group-focus-within:text-blue-400"
                   />
                   <input
@@ -152,7 +162,7 @@ export const LoginPage: React.FC = () => {
                     onChange={e => setEmail(e.target.value)}
                     required
                     placeholder="admin@clinica.com"
-                    className="w-full rounded-xl border border-[var(--sb-border)] bg-slate-800/60 py-3 pl-10 pr-4 text-sm font-medium text-white placeholder-slate-600 outline-none transition-all focus:border-blue-500/50 focus:bg-slate-800 focus:ring-2 focus:ring-blue-500/10"
+                    className="w-full rounded-xl border border-[var(--sb-border)] bg-slate-800/60 py-3 pl-10 pr-4 text-sm font-mono font-medium text-white placeholder-slate-600 outline-none transition-all focus:border-blue-500/50 focus:bg-slate-800 focus:ring-2 focus:ring-blue-500/10"
                   />
                 </div>
               </div>
@@ -163,8 +173,9 @@ export const LoginPage: React.FC = () => {
                   Contraseña
                 </label>
                 <div className="group relative">
-                  <Lock
+                  <LockSimple
                     size={16}
+                    weight="bold"
                     className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--sb-text-muted)] transition-colors group-focus-within:text-blue-400"
                   />
                   <input
@@ -173,14 +184,14 @@ export const LoginPage: React.FC = () => {
                     onChange={e => setPassword(e.target.value)}
                     required
                     placeholder="••••••••"
-                    className="w-full rounded-xl border border-[var(--sb-border)] bg-slate-800/60 py-3 pl-10 pr-12 text-sm font-medium text-white placeholder-slate-600 outline-none transition-all focus:border-blue-500/50 focus:bg-slate-800 focus:ring-2 focus:ring-blue-500/10"
+                    className="w-full rounded-xl border border-[var(--sb-border)] bg-slate-800/60 py-3 pl-10 pr-12 text-sm font-mono font-medium text-white placeholder-slate-600 outline-none transition-all focus:border-blue-500/50 focus:bg-slate-800 focus:ring-2 focus:ring-blue-500/10"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(v => !v)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[var(--sb-text-muted)] transition-colors hover:text-slate-300"
                   >
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    {showPassword ? <EyeSlash size={16} weight="bold" /> : <Eye size={16} weight="bold" />}
                   </button>
                 </div>
               </div>
@@ -207,7 +218,7 @@ export const LoginPage: React.FC = () => {
               >
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   {isLoading
-                    ? <><Loader2 size={16} className="animate-spin" /> Verificando...</>
+                    ? <><CircleNotch size={16} weight="bold" className="animate-spin" /> Verificando...</>
                     : 'Iniciar sesión'
                   }
                 </span>
@@ -219,13 +230,13 @@ export const LoginPage: React.FC = () => {
             {/* Demo shortcut — only on localhost */}
             {typeof window !== 'undefined' && window.location.hostname === 'localhost' && (
               <div className="mt-6 border-t border-[var(--sb-border)] pt-5">
-                <button
-                  type="button"
-                  onClick={() => { setEmail('admin@odontologia.com'); setPassword('Admin123!'); }}
-                  className="w-full rounded-xl border border-[var(--sb-border)] bg-slate-800/40 py-2.5 text-[11px] font-bold uppercase tracking-widest text-[var(--sb-text-muted)] transition-all hover:border-slate-700 hover:bg-slate-800 hover:text-slate-300"
-                >
-                  🚀 Cargar credenciales demo
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => { setEmail('admin@odontologia.com'); setPassword('Admin123!'); }}
+                    className="w-full rounded-xl border border-[var(--sb-border)] bg-slate-800/40 py-2.5 text-[11px] font-mono font-bold uppercase tracking-widest text-[var(--sb-text-muted)] transition-all hover:border-slate-700 hover:bg-slate-800 hover:text-slate-300"
+                  >
+                    Cargar credenciales demo
+                  </button>
               </div>
             )}
           </div>

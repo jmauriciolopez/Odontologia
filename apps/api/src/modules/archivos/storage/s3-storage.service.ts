@@ -41,7 +41,7 @@ export class S3StorageService implements IStorageService {
 
       await parallelUploads3.done();
       return key;
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(`Error uploading to S3: ${error.message}`);
       throw error;
     }
@@ -55,7 +55,7 @@ export class S3StorageService implements IStorageService {
           Key: key,
         }),
       );
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(`Error deleting from S3: ${error.message}`);
     }
   }

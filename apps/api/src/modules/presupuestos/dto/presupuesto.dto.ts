@@ -4,15 +4,15 @@ import { Type } from 'class-transformer';
 export class PresupuestoItemDto {
   @IsString()
   @IsNotEmpty()
-  descripcion: string;
+  descripcion!: string;
 
   @IsInt()
   @IsNotEmpty()
-  cantidad: number;
+  cantidad!: number;
 
   @IsNumber()
   @IsNotEmpty()
-  precioUnitario: number;
+  precioUnitario!: number;
 
   @IsNumber()
   @IsOptional()
@@ -22,7 +22,7 @@ export class PresupuestoItemDto {
 export class CreatePresupuestoDto {
   @IsUUID()
   @IsNotEmpty()
-  pacienteId: string;
+  pacienteId!: string;
 
   @IsUUID()
   @IsOptional()
@@ -31,21 +31,21 @@ export class CreatePresupuestoDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => PresupuestoItemDto)
-  items: PresupuestoItemDto[];
+  items!: PresupuestoItemDto[];
 }
 
 export class RegisterPagoDto {
   @IsUUID()
   @IsNotEmpty()
-  presupuestoId: string;
+  presupuestoId!: string;
 
   @IsNumber()
   @IsNotEmpty()
-  monto: number;
+  monto!: number;
 
   @IsString()
   @IsNotEmpty()
-  metodoPago: string;
+  metodoPago!: string;
 
   @IsString()
   @IsOptional()

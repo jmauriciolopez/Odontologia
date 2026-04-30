@@ -3,19 +3,19 @@ import { IsDateString, IsNotEmpty, IsUUID, IsOptional } from 'class-validator';
 export class DisponibilidadQueryDto {
   @IsDateString()
   @IsNotEmpty()
-  fechaInicio: string;
+  fechaInicio!: string;
 
   @IsDateString()
   @IsNotEmpty()
-  fechaFin: string;
+  fechaFin!: string;
 
   @IsUUID()
   @IsNotEmpty()
-  profesionalId: string;
+  profesionalId!: string;
 
   @IsUUID()
   @IsNotEmpty()
-  consultorioId: string;
+  consultorioId!: string;
 
   @IsUUID()
   @IsOptional()

@@ -4,11 +4,23 @@ import { useAuth } from '../../../context/auth-context';
 import { useDashboard, useHistoricalDashboard } from '../hooks/use-dashboard';
 import { DashboardChart } from '../components/dashboard-chart';
 import { PremiumCard } from '../../../components/ui/premium-card';
-import { Users, Calendar, TrendingUp, DollarSign, Clock, User, ChevronRight, Activity, Filter, FileDown } from 'lucide-react';
+import { 
+  Users, 
+  Calendar, 
+  TrendUp, 
+  CurrencyDollar, 
+  Clock, 
+  User, 
+  CaretRight, 
+  Pulse, 
+  Funnel, 
+  FileArrowDown 
+} from '@phosphor-icons/react';
 import { httpClient } from '../../../lib/Httpclient';
 import { toast } from 'sonner';
 import { cn } from '../../../lib/utils';
 import { useNavigate } from 'react-router-dom';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export const DashboardPage: React.FC = () => {
   const { user } = useAuth();
@@ -81,14 +93,45 @@ export const DashboardPage: React.FC = () => {
 
   if (isLoadingStats) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <div className="relative">
-          <div className="h-12 w-12 rounded-full border-4 border-blue-500/20 border-t-blue-500 animate-spin" />
-          <Activity className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-blue-500 animate-pulse" size={20} />
+      <div className="flex flex-col gap-8 pb-10">
+        <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div className="space-y-2">
+            <Skeleton className="h-10 w-64 rounded-xl" />
+            <Skeleton className="h-4 w-48 rounded-lg opacity-60" />
+          </div>
+          <div className="flex gap-3">
+             <Skeleton className="h-10 w-32 rounded-xl" />
+             <Skeleton className="h-10 w-24 rounded-xl" />
+          </div>
+        </header>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="card-premium p-6 flex flex-col gap-4">
+              <div className="flex justify-between items-center">
+                <Skeleton className="h-10 w-10 rounded-xl" />
+                <Skeleton className="h-4 w-12 rounded-lg" />
+              </div>
+              <div className="space-y-2">
+                <Skeleton className="h-3 w-24 rounded-lg opacity-60" />
+                <Skeleton className="h-8 w-32 rounded-xl" />
+              </div>
+            </div>
+          ))}
         </div>
-        <p className="text-sm font-medium animate-pulse" style={{ color: 'var(--sb-text-muted)' }}>
-          Sincronizando datos clínicos...
-        </p>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+           <div className="lg:col-span-2 card-premium p-6 h-[400px]">
+              <Skeleton className="h-6 w-48 mb-6" />
+              <Skeleton className="h-full w-full rounded-2xl" />
+           </div>
+           <div className="card-premium p-6 h-[400px]">
+              <Skeleton className="h-6 w-48 mb-6" />
+              <div className="flex justify-center items-center h-full">
+                <Skeleton className="h-48 w-48 rounded-full" />
+              </div>
+           </div>
+        </div>
       </div>
     );
   }
@@ -106,10 +149,10 @@ export const DashboardPage: React.FC = () => {
   };
 
   const stats = [
-    { label: 'Pacientes Totales',      value: dashboardData?.totalPacientes || 0,                              icon: Users,      color: 'text-blue-500',    bg: 'bg-blue-50 dark:bg-blue-500/10' },
-    { label: 'Turnos Hoy',             value: dashboardData?.turnosHoy || 0,                                   icon: Calendar,   color: 'text-indigo-500',  bg: 'bg-indigo-50 dark:bg-indigo-500/10' },
-    { label: 'Facturación Proyectada', value: formatCurrency(dashboardData?.facturacionProyectada || 0),       icon: TrendingUp, color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-500/10' },
-    { label: 'Facturación Real',       value: formatCurrency(dashboardData?.facturacionReal || 0),             icon: DollarSign, color: 'text-amber-500',   bg: 'bg-amber-50 dark:bg-amber-500/10' },
+    { label: 'Pacientes Totales',      value: dashboardData?.totalPacientes || 0,                              icon: Users,          color: 'text-blue-500',    bg: 'bg-blue-50 dark:bg-blue-500/10' },
+    { label: 'Turnos Hoy',             value: dashboardData?.turnosHoy || 0,                                   icon: Calendar,       color: 'text-indigo-500',  bg: 'bg-indigo-50 dark:bg-indigo-500/10' },
+    { label: 'Facturación Proyectada', value: formatCurrency(dashboardData?.facturacionProyectada || 0),       icon: TrendUp,        color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-500/10' },
+    { label: 'Facturación Real',       value: formatCurrency(dashboardData?.facturacionReal || 0),             icon: CurrencyDollar, color: 'text-amber-500',   bg: 'bg-amber-50 dark:bg-amber-500/10' },
   ];
 
   return (
@@ -124,10 +167,10 @@ export const DashboardPage: React.FC = () => {
         <div className="space-y-1">
           <motion.h1
             variants={itemVariants}
-            className="font-heading text-3xl font-bold tracking-tight"
+            className="font-heading text-3xl font-bold tracking-tighter"
             style={{ color: 'var(--sb-text)' }}
           >
-            Bienvenido, {user?.nombre || 'Doc'} 👋
+            Bienvenido, {user?.nombre || 'Doc'}
           </motion.h1>
           <motion.p variants={itemVariants} className="font-medium" style={{ color: 'var(--sb-text-muted)' }}>
             Su clínica está operando con normalidad hoy.
@@ -136,16 +179,20 @@ export const DashboardPage: React.FC = () => {
         
         <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-2 px-3 py-2 rounded-lg border bg-card/50 backdrop-blur-sm border-border">
-            <Filter size={14} className="text-muted-foreground" />
+            <Funnel size={14} weight="bold" className="text-muted-foreground" aria-hidden="true" />
             <input 
               type="date" 
+              id="fecha-desde"
+              aria-label="Fecha inicio para filtro histórico"
               value={dateRange.from}
               onChange={(e) => setDateRange(prev => ({ ...prev, from: e.target.value }))}
-              className="bg-transparent text-xs font-medium outline-none focus:ring-0 w-28"
+              className="bg-transparent text-xs font-mono font-medium outline-none focus:ring-0 w-28"
             />
-            <span className="text-muted-foreground text-xs">—</span>
+            <span className="text-muted-foreground text-xs" aria-hidden="true">—</span>
             <input 
               type="date" 
+              id="fecha-hasta"
+              aria-label="Fecha fin para filtro histórico"
               value={dateRange.to}
               onChange={(e) => setDateRange(prev => ({ ...prev, to: e.target.value }))}
               className="bg-transparent text-xs font-medium outline-none focus:ring-0 w-28"
@@ -153,37 +200,40 @@ export const DashboardPage: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <button
+            <motion.button
+              whileTap={{ scale: 0.98 }}
               onClick={handleExportPdf}
               disabled={isExporting}
               title="Exportar Resumen Histórico"
               className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-xl border border-blue-200 dark:border-blue-500/20 bg-blue-50/50 dark:bg-blue-500/5 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-500/10 transition-all disabled:opacity-50"
             >
-              <FileDown size={14} className={cn(isExporting && "animate-bounce")} />
+              <FileArrowDown size={14} weight="bold" className={cn(isExporting && "animate-bounce")} />
               {isExporting ? '...' : 'General'}
-            </button>
+            </motion.button>
 
             {user?.rol === 'admin' && (
-              <button
-                onClick={handleExportCobranza}
-                disabled={isExportingCobranza}
-                title="Reporte Detallado de Cobranza"
-                className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-xl border border-emerald-200 dark:border-emerald-500/20 bg-emerald-50/50 dark:bg-emerald-500/5 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-500/10 transition-all disabled:opacity-50"
-              >
-                <DollarSign size={14} className={cn(isExportingCobranza && "animate-bounce")} />
-                {isExportingCobranza ? '...' : 'Cobranza'}
-              </button>
+                <motion.button
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleExportCobranza}
+                  disabled={isExportingCobranza}
+                  title="Reporte Detallado de Cobranza"
+                  className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-xl border border-emerald-200 dark:border-emerald-500/20 bg-emerald-50/50 dark:bg-emerald-500/5 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-500/10 transition-all disabled:opacity-50"
+                >
+                  <CurrencyDollar size={14} weight="bold" className={cn(isExportingCobranza && "animate-bounce")} />
+                  {isExportingCobranza ? '...' : 'Cobranza'}
+                </motion.button>
             )}
 
-            <button
+            <motion.button
+              whileTap={{ scale: 0.98 }}
               onClick={handleExportPacientes}
               disabled={isExportingPacientes}
               title="Reporte de Nuevos Pacientes"
               className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-xl border border-amber-200 dark:border-amber-500/20 bg-amber-50/50 dark:bg-amber-500/5 text-amber-600 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-500/10 transition-all disabled:opacity-50"
             >
-              <Users size={14} className={cn(isExportingPacientes && "animate-bounce")} />
+              <Users size={14} weight="bold" className={cn(isExportingPacientes && "animate-bounce")} />
               {isExportingPacientes ? '...' : 'Pacientes'}
-            </button>
+            </motion.button>
           </div>
 
           <div
@@ -196,22 +246,35 @@ export const DashboardPage: React.FC = () => {
         </motion.div>
       </header>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Stats Bento Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
         {stats.map((stat, i) => (
-          <motion.div key={stat.label} variants={itemVariants}>
-            <PremiumCard className="p-5 hover:scale-[1.02] transition-transform duration-300">
-              <div className="flex items-start justify-between">
+          <motion.div 
+            key={stat.label} 
+            variants={itemVariants}
+            className={cn(
+              "h-full",
+              i === 0 && "lg:col-span-1",
+              i === 1 && "lg:col-span-1",
+              i === 2 && "lg:col-span-2",
+              i === 3 && "lg:col-span-2"
+            )}
+          >
+            <PremiumCard className="h-full p-5 hover:scale-[1.02] transition-transform duration-300">
+              <div className="flex flex-col h-full justify-between gap-4">
+                <div className="flex items-start justify-between">
+                  <div className={cn("p-2 rounded-xl", stat.bg)}>
+                    <stat.icon weight="bold" className={stat.color} size={20} />
+                  </div>
+                  <div className="h-1.5 w-1.5 rounded-full bg-emerald-500/50" />
+                </div>
                 <div className="space-y-1">
-                  <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground opacity-70">
                     {stat.label}
                   </p>
-                  <p className="text-2xl font-bold tracking-tight">
+                  <p className="text-2xl font-mono font-bold tracking-tighter">
                     {stat.value}
                   </p>
-                </div>
-                <div className={cn("p-2 rounded-xl", stat.bg)}>
-                  <stat.icon className={stat.color} size={20} />
                 </div>
               </div>
             </PremiumCard>
@@ -243,7 +306,7 @@ export const DashboardPage: React.FC = () => {
               onClick={() => navigate('/agenda')}
               className="text-xs font-bold text-blue-600 hover:text-blue-500 hover:underline uppercase tracking-widest flex items-center gap-1 group">
               Ver Agenda
-              <ChevronRight className="transition-transform group-hover:translate-x-0.5" size={14} />
+              <CaretRight className="transition-transform group-hover:translate-x-0.5" size={14} weight="bold" />
             </button>
           </div>
 
@@ -318,20 +381,16 @@ export const DashboardPage: React.FC = () => {
 
           <div className="space-y-6">
             <div className="space-y-2">
-              <div className="flex justify-between items-center text-sm">
                 <span className="font-medium" style={{ color: 'var(--sb-text-muted)' }}>Facturación Proyectada</span>
-                <span className="font-bold" style={{ color: 'var(--sb-text)' }}>{formatCurrency(dashboardData?.facturacionProyectada || 0)}</span>
-              </div>
+                <span className="font-mono font-bold" style={{ color: 'var(--sb-text)' }}>{formatCurrency(dashboardData?.facturacionProyectada || 0)}</span>
               <div className="h-2 w-full rounded-full overflow-hidden" style={{ background: 'var(--sb-active-bg)' }}>
                 <motion.div initial={{ width: 0 }} animate={{ width: '65%' }} className="h-full bg-blue-500 rounded-full" />
               </div>
             </div>
 
             <div className="space-y-2">
-              <div className="flex justify-between items-center text-sm">
                 <span className="font-medium" style={{ color: 'var(--sb-text-muted)' }}>Cobros Realizados</span>
-                <span className="font-bold text-emerald-600 dark:text-emerald-400">{formatCurrency(dashboardData?.facturacionReal || 0)}</span>
-              </div>
+                <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">{formatCurrency(dashboardData?.facturacionReal || 0)}</span>
               <div className="h-2 w-full rounded-full overflow-hidden" style={{ background: 'var(--sb-active-bg)' }}>
                 <motion.div initial={{ width: 0 }} animate={{ width: '45%' }} className="h-full bg-emerald-500 rounded-full" />
               </div>
@@ -341,7 +400,7 @@ export const DashboardPage: React.FC = () => {
               <div className="rounded-2xl p-4" style={{ background: 'var(--sb-active-bg)', border: '1px solid var(--sb-border)' }}>
                 <div className="flex items-center gap-3 mb-2">
                   <div className="p-1.5 rounded-lg bg-emerald-100 dark:bg-emerald-500/20">
-                    <TrendingUp className="text-emerald-600 dark:text-emerald-400" size={16} />
+                    <TrendUp className="text-emerald-600 dark:text-emerald-400" size={16} weight="bold" />
                   </div>
                   <span className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--sb-text)' }}>Insight Mensual</span>
                 </div>

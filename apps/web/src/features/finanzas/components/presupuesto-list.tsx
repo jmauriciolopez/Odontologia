@@ -1,9 +1,20 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Presupuesto } from '../types';
-import { CheckCircle2, Clock, AlertCircle, FileText, ArrowRight, User, Play, Printer, FileDown } from 'lucide-react';
+import { 
+  CheckCircle, 
+  Clock, 
+  WarningCircle, 
+  FileText, 
+  CaretRight, 
+  User, 
+  Play, 
+  Printer, 
+  FileArrowDown 
+} from '@phosphor-icons/react';
 import { useFinanzasMutations } from '../hooks/use-presupuestos';
 import { cn } from '@/lib/utils';
+import { Skeleton } from '@/components/ui/skeleton';
 import { printPresupuesto } from './PresupuestoPrint';
 import { httpClient } from '@/lib/Httpclient';
 import { toast } from 'sonner';
@@ -19,9 +30,38 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
   const { iniciarTratamiento } = useFinanzasMutations();
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 gap-4">
-        <div className="h-10 w-10 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
-        <p className="text-slate-500 font-medium">Sincronizando presupuestos clínicos...</p>
+      <div className="rounded-3xl border border-[var(--sb-border)] overflow-hidden bg-[var(--card-bg)]">
+        <div className="p-5 border-b border-[var(--sb-border)] bg-[var(--sb-active-bg)] flex justify-between">
+            <Skeleton className="h-3 w-20" />
+            <Skeleton className="h-3 w-32" />
+            <Skeleton className="h-3 w-16" />
+            <Skeleton className="h-3 w-20" />
+            <div className="w-40" />
+        </div>
+        <div className="divide-y divide-[var(--sb-border)]/50">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-6 px-6 py-5">
+              <div className="flex items-center gap-3 w-[20%]">
+                <Skeleton className="h-10 w-10 rounded-xl shrink-0" />
+                <div className="space-y-2 flex-1">
+                  <Skeleton className="h-4 w-full rounded-lg" />
+                  <Skeleton className="h-2 w-2/3 rounded-lg opacity-60" />
+                </div>
+              </div>
+              <div className="flex items-center gap-3 w-[25%]">
+                <Skeleton className="h-8 w-8 rounded-xl shrink-0" />
+                <Skeleton className="h-4 w-full rounded-lg" />
+              </div>
+              <Skeleton className="h-5 w-24 rounded-lg" />
+              <Skeleton className="h-8 w-20 rounded-lg" />
+              <div className="flex-1 flex justify-end gap-2">
+                <Skeleton className="h-9 w-10 rounded-xl" />
+                <Skeleton className="h-9 w-10 rounded-xl" />
+                <Skeleton className="h-9 w-24 rounded-xl" />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
@@ -30,7 +70,7 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
     switch (estado) {
       case 'pagado':
         return {
-          icon: CheckCircle2,
+          icon: CheckCircle,
           label: 'Pagado',
           bg: 'bg-emerald-50 dark:bg-emerald-500/10',
           text: 'text-emerald-600 dark:text-emerald-400',
@@ -46,7 +86,7 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
         };
       case 'rechazado':
         return {
-          icon: AlertCircle,
+          icon: WarningCircle,
           label: 'Rechazado',
           bg: 'bg-rose-50 dark:bg-rose-500/10',
           text: 'text-rose-600 dark:text-rose-400',
@@ -111,10 +151,10 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
                 >
                   <td className="p-5">
                     <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-xl flex items-center justify-center transition-colors group-hover:text-blue-500"
-                        style={{ background: 'var(--sb-active-bg)', color: 'var(--sb-text-muted)' }}>
-                        <FileText size={20} />
-                      </div>
+                        <div className="h-10 w-10 rounded-xl flex items-center justify-center transition-colors group-hover:text-blue-500 border border-transparent group-hover:border-blue-500/20"
+                          style={{ background: 'var(--sb-active-bg)', color: 'var(--sb-text-muted)' }}>
+                          <FileText size={20} weight="bold" />
+                        </div>
                       <div className="flex flex-col">
                         <span className="font-bold text-[var(--sb-text)]">#{p.folio || p.id.slice(0, 8).toUpperCase()}</span>
                         <span className="text-[10px] font-bold text-[var(--sb-text-muted)] uppercase tracking-wide">
@@ -125,25 +165,25 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
                   </td>
                   <td className="p-5">
                     <div className="flex items-center gap-3">
-                      <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400">
-                        <User size={14} />
+                      <div className="h-8 w-8 rounded-xl bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 border border-blue-200/50 dark:border-blue-500/20">
+                        <User size={16} weight="bold" />
                       </div>
-                      <span className="font-semibold text-sm text-[var(--sb-text)]">
+                      <span className="font-bold text-sm text-[var(--sb-text)] tracking-tight">
                         {p.paciente ? `${p.paciente.apellido}, ${p.paciente.nombre}` : 'Paciente Clínica'}
                       </span>
                     </div>
                   </td>
                   <td className="p-5">
-                    <span className="font-black text-[var(--sb-text)] tracking-tight">
+                    <span className="font-mono font-bold text-[var(--sb-text)] tracking-tighter text-base">
                       {formatCurrency(p.total)}
                     </span>
                   </td>
                   <td className="p-5">
                     <div className={cn(
-                      "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-[11px] font-bold tracking-tight",
+                      "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-[10px] font-black tracking-widest",
                       status.bg, status.text, status.border
                     )}>
-                      <status.icon size={14} />
+                      <status.icon size={14} weight="fill" />
                       {status.label.toUpperCase()}
                     </div>
                   </td>
@@ -173,25 +213,25 @@ export const PresupuestoList: React.FC<PresupuestoListProps> = ({ presupuestos, 
                         }
                       }}
                       title="Descargar PDF Oficial"
-                      className="inline-flex items-center gap-2 border-2 border-blue-100 dark:border-blue-500/20 hover:border-blue-500 px-3 py-2 rounded-xl text-xs font-bold transition-all text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-500/5"
+                      className="inline-flex items-center gap-2 border-2 border-blue-100 dark:border-blue-500/20 hover:border-blue-500 px-3 py-2 rounded-xl text-xs font-bold transition-all text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-500/5 shadow-sm"
                     >
-                      <FileDown size={14} />
+                      <FileArrowDown size={18} weight="bold" />
                     </button>
                     <button
                       onClick={(e) => { e.stopPropagation(); printPresupuesto(p, undefined, pacienteNombre); }}
                       title="Imprimir Rápido (Navegador)"
-                      className="inline-flex items-center gap-2 border-2 border-[var(--sb-border)] hover:border-slate-400 px-3 py-2 rounded-xl text-xs font-bold transition-all hover:text-slate-600"
+                      className="inline-flex items-center gap-2 border-2 border-[var(--sb-border)] hover:border-slate-400 px-3 py-2 rounded-xl text-xs font-bold transition-all hover:text-slate-600 shadow-sm"
                       style={{ background: 'var(--sb-active-bg)', color: 'var(--sb-text-muted)' }}
                     >
-                      <Printer size={14} />
+                      <Printer size={18} weight="bold" />
                     </button>
                     <button
                       onClick={() => onSelect(p)}
-                      className="inline-flex items-center gap-2 border-2 border-[var(--sb-border)] hover:border-blue-500 px-4 py-2 rounded-xl text-xs font-bold transition-all hover:text-blue-600 group/btn"
+                      className="inline-flex items-center gap-2 border-2 border-[var(--sb-border)] hover:border-blue-500 px-4 py-2 rounded-xl text-xs font-bold transition-all hover:text-blue-600 group/btn shadow-sm"
                       style={{ background: 'var(--sb-active-bg)', color: 'var(--sb-text-muted)' }}
                     >
                       Gestionar
-                      <ArrowRight size={14} className="transition-transform group-hover/btn:translate-x-0.5" />
+                      <CaretRight size={18} weight="bold" className="transition-transform group-hover/btn:translate-x-0.5" />
                     </button>
                   </td>
                 </motion.tr>

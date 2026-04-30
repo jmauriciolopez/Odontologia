@@ -3,7 +3,7 @@ import { IsString, IsNotEmpty, IsOptional, IsUUID } from 'class-validator';
 export class CreateFichaClinicaDto {
   @IsUUID()
   @IsNotEmpty()
-  pacienteId: string;
+  pacienteId!: string;
 
   @IsString()
   @IsOptional()

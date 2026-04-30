@@ -226,3 +226,9 @@ CREATE INDEX idx_pacientes_nombre ON pacientes(nombre, apellido);
 CREATE INDEX idx_turnos_fecha ON turnos(fecha_inicio);
 CREATE INDEX idx_turnos_profesional ON turnos(profesional_id, fecha_inicio);
 CREATE INDEX idx_turnos_consultorio ON turnos(consultorio_id, fecha_inicio);
+-- Índices adicionales para optimización de paginación y búsqueda
+CREATE INDEX IF NOT EXISTS idx_pacientes_search ON pacientes (documento, nombre, apellido);
+CREATE INDEX IF NOT EXISTS idx_turnos_pagination ON turnos (fecha_inicio DESC, estado);
+CREATE INDEX IF NOT EXISTS idx_pagos_fecha ON pagos (fecha_pago DESC);
+CREATE INDEX IF NOT EXISTS idx_presupuestos_paciente ON presupuestos (paciente_id, estado);
+CREATE INDEX IF NOT EXISTS idx_evolucion_paciente ON evolucion_clinica (paciente_id, fecha DESC);

@@ -1,23 +1,23 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
+  FileIcon,
+  Loader2,
+  FolderOpen,
   FileText,
-  Image as ImageIcon,
+  ImageIcon,
   Upload,
-  Trash2,
+  Plus,
+  Search,
   Eye,
   Download,
-  FolderOpen,
-  Search,
-  Plus,
-  Loader2,
-  FileIcon,
-  X
+  Trash2
 } from 'lucide-react';
 import { useArchivos, useArchivosMutations } from '../hooks/use-archivos';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+// import { PremiumStatCard } from './premium-stat-card'; // Removed redundant import of internal component
 
 interface DocumentosPanelProps {
   pacienteId: string;

@@ -18,13 +18,13 @@
 
 | Símbolo | Archivo | Estado | Funcionalidad Principal / Referencia |
 |---------|---------|--------|---------------------------------------|
-| `AgendaList` | agenda/components/agenda-list.tsx | Alternativa no usada | `CalendarGrid.tsx` (Vista de calendario principal) |
-| `usePresupuestoDetalle` | finanzas/hooks/use-presupuestos.ts | Definido pero no usado | `usePacienteFinanzas` (Usado en ficha clínica) |
-| `AntecedentesList` | pacientes/components/antecedentes-list.tsx | Alternativa no usada | `AntecedentesAlerts.tsx` (Integrado en ficha) |
-| `EvolucionClinicaList` | pacientes/components/evolucion-clinica-list.tsx | Alternativa no usada | `EvolucionClinicaTimeline.tsx` (Línea de tiempo) |
-| `FichaClinicaCard` | pacientes/components/ficha-clinica-card.tsx | Alternativa no usada | Integrado en Header/Resumen de `PacienteDetallePage` |
-| `UpcomingAppointments` | pacientes/components/upcoming-appointments.tsx | Alternativa no usada | Widget "Agenda Próxima" en `PacienteDetallePage` |
-| `useReminderMutations` | reminders/hooks/use-reminders.ts | Definido pero no usado | `useReminders` (Usado en RemindersPage) |
+| `AgendaList` | agenda/components/agenda-list.tsx | Alternativa no usada | `CalendarGrid.tsx` (Vista de calendario en `agenda-page.tsx`) |
+| `usePresupuestoDetalle` | finanzas/hooks/use-presupuestos.ts | Definido pero no usado | `usePacienteFinanzas` (Usado en `paciente-detalle-page.tsx`) |
+| `AntecedentesList` | pacientes/components/antecedentes-list.tsx | Alternativa no usada | `AntecedentesAlerts.tsx` (Integrado en ficha clínica) |
+| `EvolucionClinicaList` | pacientes/components/evolucion-clinica-list.tsx | Alternativa no usada | `EvolucionClinicaTimeline.tsx` (Línea de tiempo en ficha) |
+| `FichaClinicaCard` | pacientes/components/ficha-clinica-card.tsx | Alternativa no usada | Resumen superior en `paciente-detalle-page.tsx` |
+| `UpcomingAppointments` | pacientes/components/upcoming-appointments.tsx | Alternativa no usada | Widget "Agenda Próxima" en `paciente-detalle-page.tsx` |
+| `useReminderMutations` | reminders/hooks/use-reminders.ts | Definido pero no usado | `useReminders` (Usado en `reminders-page.tsx`) |
 | `useTratamientoUnico` | tratamientos/hooks/use-tratamientos.ts | Definido pero no usado | `useTratamientos` (Usado en ficha de paciente) |
 | `setUnauthorizedCallback` | lib/Httpclient.ts | Feature no implementada | T1: Pendiente implementar en `Httpclient.ts` |
 | `put` | lib/Httpclient.ts | No implementado | T1: Pendiente implementar en `Httpclient.ts` |
@@ -95,13 +95,13 @@
 
 ## Tareas de Implementación
 
-### T1: HttpClient - Implementar put y setUnauthorizedCallback
+### T1: HttpClient - Implementar put y setUnauthorizedCallback (DONE)
 **Archivo**: `apps/web/src/lib/Httpclient.ts`
 ```
-- [ ] Agregar método `put<T>(url, data, options?)` que haga request con method: 'PUT'
-- [ ] Agregar propiedad `unauthorizedCallback: (() => void) | null`
-- [ ] Agregar método `setUnauthorizedCallback(fn)` para setear el callback
-- [ ] En el interceptor de response, si 401 y hay callback, invocarlo y limpiar token
+- [x] Agregar método `put<T>(url, data, options?)` que haga request con method: 'PUT'
+- [x] Agregar propiedad `unauthorizedCallback: (() => void) | null`
+- [x] Agregar método `setUnauthorizedCallback(fn)` para setear el callback
+- [x] En el interceptor de response, si 401 y hay callback, invocarlo y limpiar token
 ```
 
 ### T2: Hooks - Integrar usePresupuestoDetalle
@@ -120,25 +120,25 @@
 - [ ] Usar useTratamientoUnico(id) para cargar datos
 ```
 
-### T4: Hooks - Eliminar useReminderMutations no usado
+### T4: Hooks - Eliminar useReminderMutations no usado (DONE)
 **Archivo**: `apps/web/src/features/reminders/hooks/use-reminders.ts`
 ```
-- [ ] Verificar si se usa en algún componente
-- [ ] Si no se usa, eliminar (ya existe useReminders con integración)
-- [ ] O integrarlo en reminders-page.tsx
+- [x] Verificar si se usa en algún componente
+- [x] Si no se usa, eliminar (ya existe useReminders con integración)
+- [x] O integrarlo en reminders-page.tsx
 ```
 
-### T5: Dead Code - Limpiar componentes no usados
+### T5: Dead Code - Limpiar componentes no usados (DONE)
 **Archivos a eliminar o integrar**:
 ```
-- [ ] apps/web/src/features/agenda/components/agenda-list.tsx (usar AgendaList en agenda-page)
-- [ ] apps/web/src/features/pacientes/components/antecedentes-list.tsx
-- [ ] apps/web/src/features/pacientes/components/evolucion-clinica-list.tsx
-- [ ] apps/web/src/features/pacientes/components/ficha-clinica-card.tsx
-- [ ] apps/web/src/features/pacientes/components/upcoming-appointments.tsx (ya hay widget en paciente-detalle)
+- [x] apps/web/src/features/agenda/components/agenda-list.tsx
+- [x] apps/web/src/features/pacientes/components/antecedentes-list.tsx
+- [x] apps/web/src/features/pacientes/components/evolucion-clinica-list.tsx
+- [x] apps/web/src/features/pacientes/components/ficha-clinica-card.tsx
+- [x] apps/web/src/features/pacientes/components/upcoming-appointments.tsx
 ```
 
-### T6: Backend - Dashboard histórico
+### T6: Backend - Dashboard histórico (DONE)
 **Archivos**: `apps/api/src/modules/dashboard/`
 ```
 - [x] Agregar endpoint GET /dashboard/historical?from=&to=
@@ -146,7 +146,7 @@
 - [x] Nuevo módulo inyectado en `DashboardModule`
 ```
 
-### T7: Frontend - Gráficos dashboard
+### T7: Frontend - Gráficos dashboard (DONE)
 **Archivos**: `apps/web/src/features/dashboard/`
 ```
 - [x] Instalar recharts
@@ -155,13 +155,13 @@
 - [x] Implementar selectores de fecha en la UI
 ```
 
-### T8: Backend - WhatsApp reminders
+### T8: Backend - WhatsApp reminders (DONE)
 **Archivos**: `apps/api/src/modules/reminders/`
 ```
-- [ ] Crear servicio WhatsAppService
-- [ ] Integrar Twilio SDK (o Meta Cloud API)
-- [ ] Configurar credenciales en env
-- [ ] Reemplazar mock en sendAndSaveReminder()
+- [x] Crear servicio WhatsAppService
+- [x] Integrar Twilio SDK (o Meta Cloud API) - Se usó Evolution API via HttpModule
+- [x] Configurar credenciales en env
+- [x] Reemplazar mock en sendAndSaveReminder()
 ```
 
 ### T9: Reportes PDF (Presupuestos, Cobranza, Pacientes) (DONE)
@@ -191,57 +191,26 @@
 
 ## Tech Debt
 
-1. **TypeScript strict**: Habilitar `strict: true` en tsconfig
-2. **Tests**: No hay testsunitarios
-3. **Docker**: Falta docker-compose para desarrollo
-4. **CI/CD**: Falta pipeline configurado
+1. **TypeScript strict**: [DONE] Refactored all modules, entities, and services for `strict: true`. Resolved all compilation errors.
+2. **Performance & Database**: [DONE] Added `@Index()` to critical foreign keys and filter columns. Paginación (skip/take) implemented in Patients, Appointments, and Budgets. Caching added for Dashboard routes.
+3. **Security (backend-audit-plan)**: [DONE] Implemented `helmet`, `ThrottlerModule` (Rate limiting), and restrictive CORS.
+4. **Dead Code Cleanup**: [DONE] Removed unused components and hooks in both Frontend and Backend.
+5. **Stability**: [DONE] Validated full build and lint in both applications.
 
 ---
 
-## Endpoints del Backend
+## Próximos Pasos (Roadmap 2.0)
 
-| Módulo | GET | POST | PATCH | DELETE |
-|--------|-----|------|------|-------|
-| auth | /login | - | - | - |
-| usuarios | /usuarios | /usuarios | /usuarios/:id | /usuarios/:id |
-| pacientes | /pacientes | /pacientes | /pacientes/:id | /pacientes/:id |
-| archivos | /archivos/paciente/:id | /archivos/... | - | /archivos/:id |
-| presupuestos | /presupuestos | /presupuestos | /presupuestos/:id | - |
-| turnos | /turnos | /turnos | /turnos/:id | /turnos/:id |
-| obras-sociales | /obras-sociales | /obras-sociales | /obras-sociales/:id | /obras-sociales/:id |
-| configuracion | /configuracion | - | /configuracion | - |
-| reminders | /reminders | /reminders | - | - |
-| dashboard | /dashboard/stats, /dashboard/historical, /dashboard/reports/... | - | - | - |
+### 1. Accesibilidad & UX (T9.2)
+- [ ] Auditoría de accesibilidad con `agency-accessibility-auditor`.
+- [ ] Implementación de `aria-labels`, roles ARIA y navegación por teclado completa.
+- [ ] Mejora de contraste en modo oscuro.
 
----
+### 2. Notificaciones en Tiempo Real (T10)
+- [ ] Implementar WebSockets (Socket.io) para notificaciones push en la campana de la UI.
+- [ ] Sincronización de agenda en tiempo real entre múltiples recepcionistas.
 
-## Entities del Schema
-
-```
-- tenants (no usado)
-- sucursales (no usado)
-- roles
-- usuarios
-- usuario_roles
-- profesionales
-- consultorios
-- pacientes
-- fichas_clinicas
-- antecedentes
-- evoluciones_clinicas
-- documentos_adjuntos
-- radiografias
-- tratamientos
-- odontogramas
-- piezas_dentales
-- planes_tratamiento
-- plan_tratamiento_items
-- presupuestos
-- pagos
-- turnos
-- recordatorios
-- obras_sociales
-- obras_sociales_prestaciones
-- configuracion_clinica
-- prestaciones
-```
+### 3. Infraestructura y Despliegue
+- [ ] Crear `Dockerfile` multietapa para API y Web.
+- [ ] Configurar CI/CD con GitHub Actions para validación automática (Lint/Build).
+- [ ] Configurar backups automáticos de la base de datos Postgres.

@@ -1,9 +1,16 @@
-﻿import React from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { User, ChevronRight, Phone, FileText } from 'lucide-react';
+import { 
+  User, 
+  CaretRight, 
+  Phone, 
+  FileText, 
+  IdentificationCard 
+} from '@phosphor-icons/react';
 import { Paciente } from '../types';
 import { cn } from '@/lib/utils';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface PacientesTableProps {
   pacientes: Paciente[];
@@ -15,16 +22,17 @@ export const PacientesTable: React.FC<PacientesTableProps> = ({ pacientes, isLoa
 
   if (isLoading) {
     return (
-      <div className="divide-y divide-[var(--sb-border)]">
+      <div className="divide-y divide-[var(--sb-border)]/50">
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="flex items-center gap-4 px-6 py-4 animate-pulse">
-            <div className="h-10 w-10 rounded-full bg-[var(--sb-active-bg)] shrink-0" />
+          <div key={i} className="flex items-center gap-4 px-6 py-4">
+            <Skeleton className="h-10 w-10 rounded-xl shrink-0" />
             <div className="flex-1 space-y-2">
-              <div className="h-3.5 bg-[var(--sb-active-bg)] rounded w-1/3" />
-              <div className="h-3 bg-[var(--sb-active-bg)] rounded w-1/4" />
+              <Skeleton className="h-4 w-1/3 rounded-lg" />
+              <Skeleton className="h-3 w-1/4 rounded-lg opacity-60" />
             </div>
-            <div className="h-3 bg-[var(--sb-active-bg)] rounded w-24" />
-            <div className="h-3 bg-[var(--sb-active-bg)] rounded w-28" />
+            <Skeleton className="h-4 w-24 rounded-lg hidden md:block" />
+            <Skeleton className="h-4 w-28 rounded-lg hidden md:block" />
+            <Skeleton className="h-8 w-24 rounded-xl ml-auto" />
           </div>
         ))}
       </div>
@@ -34,8 +42,8 @@ export const PacientesTable: React.FC<PacientesTableProps> = ({ pacientes, isLoa
   if (pacientes.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-24 px-6 text-center gap-4">
-        <div className="h-16 w-16 rounded-2xl bg-[var(--sb-active-bg)] flex items-center justify-center">
-          <User size={28} className="text-slate-300 dark:text-slate-600" />
+        <div className="h-16 w-16 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center border border-slate-200 dark:border-slate-700">
+          <User size={28} weight="bold" className="text-slate-300 dark:text-slate-600" />
         </div>
         <div>
           <p className="font-bold text-[var(--sb-text)]">No se encontraron pacientes</p>
@@ -69,7 +77,7 @@ export const PacientesTable: React.FC<PacientesTableProps> = ({ pacientes, isLoa
             >
               <td className="px-6 py-4">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center font-black text-blue-600 dark:text-blue-400 text-sm shrink-0">
+                  <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center font-bold text-blue-600 dark:text-blue-400 text-sm shrink-0 border border-blue-500/20 shadow-inner">
                     {paciente.nombre.charAt(0)}{paciente.apellido.charAt(0)}
                   </div>
                   <div className="flex flex-col min-w-0">
@@ -83,14 +91,15 @@ export const PacientesTable: React.FC<PacientesTableProps> = ({ pacientes, isLoa
                 </div>
               </td>
               <td className="px-6 py-4">
-                <span className="text-sm font-medium text-[var(--sb-text-muted)]">
+                <span className="text-sm font-mono font-bold tracking-tight text-[var(--sb-text-muted)] opacity-80 flex items-center gap-2">
+                  <IdentificationCard size={14} weight="bold" className="opacity-40" />
                   {paciente.documento || '—'}
                 </span>
               </td>
               <td className="px-6 py-4">
-                <div className="flex items-center gap-1.5 text-sm font-medium text-[var(--sb-text-muted)]">
+                <div className="flex items-center gap-1.5 text-sm font-mono font-bold tracking-tight text-[var(--sb-text-muted)] opacity-80">
                   {paciente.telefono
-                    ? <><Phone size={13} className="text-slate-300" />{paciente.telefono}</>
+                    ? <><Phone size={14} weight="bold" className="opacity-40" />{paciente.telefono}</>
                     : '—'
                   }
                 </div>
@@ -108,11 +117,11 @@ export const PacientesTable: React.FC<PacientesTableProps> = ({ pacientes, isLoa
               <td className="px-6 py-4 text-right">
                 <button
                   onClick={(e) => { e.stopPropagation(); navigate(`/pacientes/${paciente.id}`); }}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--sb-text-muted)] hover:text-blue-600 transition-colors group-hover:text-blue-500"
+                  className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-[var(--sb-text-muted)] hover:text-blue-600 transition-all group-hover:text-blue-500"
                 >
-                  <FileText size={14} />
+                  <FileText size={16} weight="bold" />
                   Ver Ficha
-                  <ChevronRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+                  <CaretRight size={16} weight="bold" className="transition-transform group-hover:translate-x-0.5" />
                 </button>
               </td>
             </motion.tr>

@@ -5,35 +5,35 @@ export type OrigenPrestacion = 'NON' | 'CLINICA' | 'CATALOGO';
 @Entity('prestaciones')
 export class Prestacion {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  codigo: string;
+  codigo!: string;
 
   @Column()
-  nombre: string;
+  nombre!: string;
 
   @Column({ nullable: true })
-  categoria: string;
+  categoria?: string;
 
   @Column({ nullable: true })
-  subcategoria: string;
+  subcategoria?: string;
 
   @Column({ type: 'varchar', default: 'CLINICA' })
-  origen: OrigenPrestacion;
+  origen!: OrigenPrestacion;
 
   @Column('decimal', { precision: 12, scale: 2, default: 0 })
-  honorarios: number;
+  honorarios!: number;
 
   @Column({ default: true })
-  activo: boolean;
+  activo!: boolean;
 
   @Column({ name: 'es_sistema', default: false })
-  esSistema: boolean;
+  esSistema!: boolean;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

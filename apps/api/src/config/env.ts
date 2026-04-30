@@ -15,4 +15,10 @@ export const env = {
     SECRET: process.env.JWT_SECRET || 'secret-key',
     EXPIRES_IN: process.env.JWT_EXPIRES_IN || '1d',
   },
+  WHATSAPP: {
+    API_URL: process.env.WHATSAPP_API_URL || 'http://localhost:8080',
+    API_KEY: process.env.WHATSAPP_API_KEY || 'apikey',
+    INSTANCE: process.env.WHATSAPP_INSTANCE || 'Main',
+    ENABLED: process.env.WHATSAPP_ENABLED === 'true',
+  },
 };

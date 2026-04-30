@@ -5,26 +5,26 @@ import { Prestacion } from '../../configuracion/entities/prestacion.entity';
 @Entity('obras_sociales_prestaciones')
 export class ObraSocialPrestacion {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ name: 'obra_social_id' })
-  obraSocialId: string;
+  obraSocialId!: string;
 
   @ManyToOne(() => ObraSocial, (os) => os.prestaciones, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'obra_social_id' })
-  obraSocial: ObraSocial;
+  obraSocial!: ObraSocial;
 
   @Column({ name: 'prestacion_id' })
-  prestacionId: string;
+  prestacionId!: string;
 
   @ManyToOne(() => Prestacion, { eager: true })
   @JoinColumn({ name: 'prestacion_id' })
-  prestacion: Prestacion;
+  prestacion!: Prestacion;
 
   // Precio específico para esta obra social (override del honorario base)
   @Column('decimal', { precision: 12, scale: 2 })
-  precio: number;
+  precio!: number;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 }

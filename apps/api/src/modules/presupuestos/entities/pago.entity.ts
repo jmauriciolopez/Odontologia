@@ -1,25 +1,26 @@
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity';
 import { Presupuesto } from './presupuesto.entity';
 
 @Entity('pagos')
 export class Pago extends BaseEntity {
+  @Index()
   @Column({ name: 'presupuesto_id' })
-  presupuestoId: string;
+  presupuestoId!: string;
 
   @ManyToOne(() => Presupuesto, (presupuesto) => presupuesto.pagos)
   @JoinColumn({ name: 'presupuesto_id' })
-  presupuesto: Presupuesto;
+  presupuesto!: Presupuesto;
 
   @Column({ type: 'decimal', precision: 12, scale: 2 })
-  monto: number;
+  monto!: number;
 
   @Column({ name: 'metodo_pago' })
-  metodoPago: string; // efectivo, tarjeta, transferencia
+  metodoPago!: string; // efectivo, tarjeta, transferencia
 
   @Column({ type: 'text', nullable: true })
-  notas: string;
+  notas?: string;
 
   @Column({ type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP' })
-  fechaPago: Date;
+  fechaPago!: Date;
 }

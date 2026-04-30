@@ -59,7 +59,7 @@ export class OdontogramaService {
     if (!pieza) throw new NotFoundException('Pieza no encontrada');
 
     if (dto.caras) {
-      pieza.caras = { ...pieza.caras, ...dto.caras };
+      pieza.caras = { ...(pieza.caras || {}), ...dto.caras };
     }
 
     return await this.piezaRepository.save(pieza);

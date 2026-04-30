@@ -1,8 +1,8 @@
-﻿import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { Presupuesto, Pago } from '../../finanzas/types';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  ChevronLeft,
   Edit3,
   ExternalLink,
   User,
@@ -10,11 +10,9 @@ import {
   Contact,
   CalendarDays,
   MoreVertical,
-  Activity,
   History,
   TrendingUp,
   CreditCard,
-  Files,
   Calendar,
   Printer,
   Copy,
@@ -33,7 +31,6 @@ import { AntecedenteModal } from '../components/antecedente-modal';
 
 // Components
 import { PacienteTabs } from '../components/PacienteTabs';
-import { tabs } from '../constants';
 import { AntecedentesAlerts } from '../components/AntecedentesAlerts';
 import { EvolucionClinicaTimeline } from '../components/EvolucionClinicaTimeline';
 import { DocumentosPanel } from '../components/DocumentosPanel';
@@ -59,8 +56,10 @@ export const PacienteDetallePage: React.FC = () => {
   const { updatePaciente } = usePacienteMutations();
   const { createAntecedente } = useAntecedenteMutations();
   const { planes: planesTratamiento, updateItemEstado, createPlan, isCreating } = useTratamientos(id);
-  const { data: turnos = [] } = useTurnos({ pacienteId: id });
-  const { data: presupuestos = [] } = usePacienteFinanzas(id!);
+  const { data: turnosData } = useTurnos({ pacienteId: id });
+  const turnos = turnosData?.data || [];
+  const { data: presupuestosData } = usePacienteFinanzas(id!);
+  const presupuestos = Array.isArray(presupuestosData) ? presupuestosData : (presupuestosData as any)?.data || [];
   const [showEditModal, setShowEditModal]           = useState(false);
   const [showAntecedenteModal, setShowAntecedenteModal] = useState(false);
   const [showNuevoPlanModal, setShowNuevoPlanModal] = useState(false);
@@ -98,10 +97,10 @@ export const PacienteDetallePage: React.FC = () => {
     }
   };
 
-  const balance = presupuestos.reduce((acc, curr) => {
+  const balance = presupuestos.reduce((acc: number, curr: Presupuesto) => {
     // Presupuestos pendientes no generan deuda aún
     const total = curr.estado === 'pendiente' ? 0 : Number(curr.total || 0);
-    const pagado = (curr.pagos || []).reduce((pAcc, pCurr) => pAcc + Number(pCurr.monto), 0);
+    const pagado = (curr.pagos || []).reduce((pAcc: number, pCurr: Pago) => pAcc + Number(pCurr.monto), 0);
     return acc + (total - pagado);
   }, 0);
 

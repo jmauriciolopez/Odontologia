@@ -1,47 +1,50 @@
-import { Entity, Column, OneToOne, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, OneToOne, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity';
 import { FichaClinica } from '../../fichas-clinicas/entities/ficha-clinica.entity';
 import { ObraSocial } from '../../obras-sociales/entities/obra-social.entity';
 
 @Entity('pacientes')
 export class Paciente extends BaseEntity {
+  @Index()
   @Column()
-  nombre: string;
+  nombre!: string;
 
+  @Index()
   @Column()
-  apellido: string;
+  apellido!: string;
 
   @Column({ unique: true, nullable: true })
-  documento: string;
+  documento?: string;
 
   @Column({ name: 'fecha_nacimiento', type: 'date', nullable: true })
-  fechaNacimiento: Date;
+  fechaNacimiento?: Date;
 
   @Column({ nullable: true })
-  genero: string;
+  genero?: string;
 
   @Column({ nullable: true })
-  telefono: string;
+  telefono?: string;
 
   @Column({ nullable: true })
-  email: string;
+  email?: string;
 
   @Column({ type: 'text', nullable: true })
-  direccion: string;
+  direccion?: string;
 
   @Column({ name: 'obra_social', nullable: true })
-  obraSocial: string;
+  obraSocial?: string;
 
   @Column({ name: 'nro_afiliado', nullable: true })
-  nroAfiliado: string;
+  nroAfiliado?: string;
 
+  @Index()
   @Column({ name: 'obra_social_id', nullable: true })
-  obraSocialId: string;
+  obraSocialId?: string;
 
   @ManyToOne(() => ObraSocial, { nullable: true, eager: false })
   @JoinColumn({ name: 'obra_social_id' })
-  obraSocialData: ObraSocial;
+  obraSocialData?: ObraSocial;
 
   @OneToOne(() => FichaClinica, (ficha) => ficha.paciente)
-  ficha: FichaClinica;
+  ficha!: FichaClinica;
 }

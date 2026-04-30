@@ -4,10 +4,13 @@ import { Turno } from './entities/turno.entity';
 import { TurnosService } from './turnos.service';
 import { TurnosController } from './turnos.controller';
 import { ConfiguracionClinica } from '../configuracion/entities/configuracion-clinica.entity';
-import { Consultorio } from '../consultorios/entities/consultorio.entity';
+import { ConsultoriosModule } from '../consultorios/consultorios.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Turno, ConfiguracionClinica, Consultorio])],
+  imports: [
+    TypeOrmModule.forFeature([Turno, ConfiguracionClinica]),
+    ConsultoriosModule
+  ],
   controllers: [TurnosController],
   providers: [TurnosService],
   exports: [TurnosService, TypeOrmModule],

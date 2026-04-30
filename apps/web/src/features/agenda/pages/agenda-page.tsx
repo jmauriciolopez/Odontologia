@@ -35,13 +35,14 @@ export const AgendaPage: React.FC = () => {
   const weekStart = startOfWeek(currentDate, { weekStartsOn: 1 });
   const weekEnd   = endOfWeek(currentDate,   { weekStartsOn: 1 });
 
-  const { data: turnos = [], isLoading } = useTurnos({
+  const { data: turnosData, isLoading } = useTurnos({
     fecha: view === 'day' ? format(currentDate, 'yyyy-MM-dd') : undefined,
     desde: view === 'week' ? format(weekStart, 'yyyy-MM-dd') : undefined,
     hasta: view === 'week' ? format(weekEnd, 'yyyy-MM-dd') : undefined,
     profesionalId: profesionalId || undefined,
     consultorioId: consultorioId || undefined,
   });
+  const turnos = turnosData?.data || [];
   const { data: profesionales = [] } = useProfesionales();
   const { data: consultorios  = [] } = useConsultorios();
 

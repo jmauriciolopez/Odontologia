@@ -5,34 +5,34 @@ import { Turno } from '../../turnos/entities/turno.entity';
 @Entity('reminders')
 export class Reminder {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @ManyToOne(() => Paciente)
   @JoinColumn({ name: 'pacienteId' })
-  paciente: Paciente;
+  paciente!: Paciente;
 
   @Column()
-  pacienteId: string;
+  pacienteId!: string;
 
   @ManyToOne(() => Turno, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'turnoId' })
-  turno: Turno;
+  turno!: Turno;
 
   @Column()
-  turnoId: string;
+  turnoId!: string;
 
   @Column({ type: 'timestamp' })
-  scheduledFor: Date;
+  scheduledFor!: Date;
 
   @Column({ default: 'sent' })
-  status: 'pending' | 'sent' | 'failed' | 'confirmed' | 'cancelled';
+  status!: 'pending' | 'sent' | 'failed' | 'confirmed' | 'cancelled';
 
   @Column({ nullable: true })
-  sentAt: Date;
+  sentAt?: Date;
 
   @Column({ nullable: true })
-  type: string; // 'whatsapp' | 'email'
+  type?: string; // 'whatsapp' | 'email'
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 }

@@ -1,24 +1,24 @@
-import { Entity, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity';
 import { UsuarioRol } from './usuario-rol.entity';
 
 @Entity('usuarios')
 export class Usuario extends BaseEntity {
   @Column({ unique: true })
-  email: string;
+  email!: string;
 
   @Column({ name: 'password_hash', select: false })
-  passwordHash: string;
+  passwordHash!: string;
 
   @Column({ nullable: true })
-  nombre: string;
+  nombre?: string;
 
   @Column({ nullable: true })
-  apellido: string;
+  apellido?: string;
 
   @Column({ default: true })
-  activo: boolean;
+  activo!: boolean;
 
   @OneToMany(() => UsuarioRol, (usuarioRol) => usuarioRol.usuario)
-  usuarioRoles: UsuarioRol[];
+  usuarioRoles!: UsuarioRol[];
 }

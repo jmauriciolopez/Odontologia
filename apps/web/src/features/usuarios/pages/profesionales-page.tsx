@@ -1,13 +1,10 @@
-﻿import React from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import {
-  Users,
   Stethoscope,
   Award,
   Trash2,
-  ExternalLink,
-  ChevronRight,
   Filter,
   MoreVertical,
   Edit3,
@@ -18,7 +15,6 @@ import { useProfesionales, useProfesionalMutations } from '../hooks/use-admin';
 import { AnimatePresence } from 'framer-motion';
 import { Profesional } from '../types';
 import { PremiumCard } from '@/components/ui/premium-card';
-import { cn } from '@/lib/utils';
 
 export const ProfesionalesPage: React.FC = () => {
   const { data: profesionales = [], isLoading } = useProfesionales();

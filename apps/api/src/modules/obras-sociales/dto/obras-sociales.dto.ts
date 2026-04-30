@@ -3,7 +3,7 @@ import { Type } from 'class-transformer';
 
 export class CreateObraSocialDto {
   @IsString()
-  nombre: string;
+  nombre!: string;
 
   @IsString()
   @IsOptional()
@@ -34,15 +34,15 @@ export class UpdateObraSocialDto {
 
 export class UpsertPrestacionPrecioDto {
   @IsUUID()
-  prestacionId: string;
+  prestacionId!: string;
 
   @IsNumber()
-  precio: number;
+  precio!: number;
 }
 
 export class BulkUpsertPreciosDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => UpsertPrestacionPrecioDto)
-  precios: UpsertPrestacionPrecioDto[];
+  precios!: UpsertPrestacionPrecioDto[];
 }

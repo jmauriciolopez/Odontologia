@@ -19,13 +19,13 @@ export interface HorarioOperativo {
 @Entity('configuracion_clinica')
 export class ConfiguracionClinica {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ default: 'FDI' })
-  sistemaDental: string;
+  sistemaDental!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  coloresEstados: {
+  coloresEstados?: {
     sano: string;
     caries: string;
     restauracion: string;
@@ -36,14 +36,14 @@ export class ConfiguracionClinica {
   };
 
   @Column({ type: 'jsonb', nullable: true })
-  horarioOperativo: HorarioOperativo;
+  horarioOperativo?: HorarioOperativo;
 
   @Column({ default: true })
-  isActive: boolean;
+  isActive!: boolean;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

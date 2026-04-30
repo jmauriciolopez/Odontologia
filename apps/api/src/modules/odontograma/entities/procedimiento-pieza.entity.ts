@@ -5,21 +5,21 @@ import { PiezaDental } from './pieza-dental.entity';
 @Entity('procedimientos_piezas')
 export class ProcedimientoPieza extends BaseEntity {
   @Column({ name: 'pieza_id' })
-  piezaId: string;
+  piezaId!: string;
 
   @ManyToOne(() => PiezaDental, (pieza) => pieza.procedimientos)
   @JoinColumn({ name: 'pieza_id' })
-  pieza: PiezaDental;
+  pieza!: PiezaDental;
 
   @Column()
-  tipo: string; // extraccion, corona, caries, etc
+  tipo!: string; // extraccion, corona, caries, etc
 
   @Column({ nullable: true })
-  cara: string; // V, L, O, D, M o GENERAL
+  cara?: string; // V, L, O, D, M o GENERAL
 
   @Column({ type: 'text', nullable: true })
-  observaciones: string;
+  observaciones?: string;
 
   @Column({ name: 'fecha_realizacion', type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP' })
-  fechaRealizacion: Date;
+  fechaRealizacion!: Date;
 }

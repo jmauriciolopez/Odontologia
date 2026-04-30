@@ -7,7 +7,7 @@ export class CreateConsultorioDto {
 
   @IsString()
   @IsNotEmpty()
-  nombre: string;
+  nombre!: string;
 
   @IsString()
   @IsOptional()

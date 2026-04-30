@@ -3,7 +3,7 @@ import { IsNotEmpty, IsInt, IsUUID, IsObject, IsOptional, IsString } from 'class
 export class UpdatePiezaDto {
   @IsUUID()
   @IsNotEmpty()
-  piezaId: string;
+  piezaId!: string;
 
   @IsObject()
   @IsOptional()
@@ -19,11 +19,11 @@ export class UpdatePiezaDto {
 export class AddProcedimientoDto {
   @IsUUID()
   @IsNotEmpty()
-  piezaId: string;
+  piezaId!: string;
 
   @IsString()
   @IsNotEmpty()
-  tipo: string;
+  tipo!: string;
 
   @IsString()
   @IsOptional()

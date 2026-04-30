@@ -1,14 +1,12 @@
-﻿import React from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Bell,
   CheckCircle2,
   XCircle,
   Clock,
   Send,
   MessageSquare,
   Calendar,
-  User as UserIcon,
   Filter,
   X,
 } from 'lucide-react';

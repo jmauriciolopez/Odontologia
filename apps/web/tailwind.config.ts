@@ -70,7 +70,9 @@ const config: Config = {
                 '2xl':  "calc(var(--radius) + 8px)",
             },
             fontFamily: {
-                sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                sans: ['Geist', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                mono: ['Geist Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+                heading: ['Outfit', 'sans-serif'],
             },
             boxShadow: {
                 'medical':      '0 4px 20px -2px rgba(14,165,233,.08)',

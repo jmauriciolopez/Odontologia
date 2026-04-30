@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, JoinColumn, OneToMany, Generated } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, OneToMany, Generated, Index } from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity';
 import { Paciente } from '../../pacientes/entities/paciente.entity';
 import { PlanTratamiento } from '../../planes-tratamiento/entities/plan-tratamiento.entity';
@@ -9,37 +9,39 @@ import { Pago } from './pago.entity';
 export class Presupuesto extends BaseEntity {
   @Column()
   @Generated('increment')
-  folio: number;
+  folio!: number;
 
+  @Index()
   @Column({ name: 'paciente_id' })
-  pacienteId: string;
+  pacienteId!: string;
 
   @ManyToOne(() => Paciente)
   @JoinColumn({ name: 'paciente_id' })
-  paciente: Paciente;
+  paciente!: Paciente;
 
+  @Index()
   @Column({ name: 'plan_id', nullable: true })
-  planId: string;
+  planId?: string;
 
   @ManyToOne(() => PlanTratamiento)
   @JoinColumn({ name: 'plan_id' })
-  plan: PlanTratamiento;
+  plan?: PlanTratamiento;
 
   @Column({ type: 'decimal', precision: 12, scale: 2, default: 0 })
-  total: number;
+  total!: number;
 
   @Column({ type: 'decimal', precision: 12, scale: 2, default: 0 })
-  totalPagado: number;
+  totalPagado!: number;
 
   @Column({ default: 'pendiente' })
-  estado: string; // pendiente, aceptado, rechazado, pagado, pagado_parcial
+  estado!: string; // pendiente, aceptado, rechazado, pagado, pagado_parcial
 
   @Column({ type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP' })
-  fechaPresupuesto: Date;
+  fechaPresupuesto!: Date;
 
   @OneToMany(() => PresupuestoItem, (item) => item.presupuesto)
-  items: PresupuestoItem[];
+  items!: PresupuestoItem[];
 
   @OneToMany(() => Pago, (pago) => pago.presupuesto)
-  pagos: Pago[];
+  pagos!: Pago[];
 }

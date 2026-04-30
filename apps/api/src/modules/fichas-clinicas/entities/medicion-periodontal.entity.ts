@@ -1,61 +1,62 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { FichaClinica } from './ficha-clinica.entity';
 
 @Entity('mediciones_periodontales')
 export class MedicionPeriodontal {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @ManyToOne(() => FichaClinica, (ficha) => ficha.medicionesPeriodontales, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'fichaId' })
-  ficha: FichaClinica;
+  ficha!: FichaClinica;
+
+  @Index()
+  @Column()
+  fichaId!: string;
 
   @Column()
-  fichaId: string;
-
-  @Column()
-  posicionDiente: number; // 11-48
+  posicionDiente!: number; // 11-48
 
   // Vestibular (3 puntos)
   @Column({ type: 'int', default: 0 })
-  profundidadVestibularDistal: number;
+  profundidadVestibularDistal!: number;
   @Column({ type: 'int', default: 0 })
-  profundidadVestibularMedio: number;
+  profundidadVestibularMedio!: number;
   @Column({ type: 'int', default: 0 })
-  profundidadVestibularMesial: number;
+  profundidadVestibularMesial!: number;
 
   @Column({ type: 'int', default: 0 })
-  recesionVestibularDistal: number;
+  recesionVestibularDistal!: number;
   @Column({ type: 'int', default: 0 })
-  recesionVestibularMedio: number;
+  recesionVestibularMedio!: number;
   @Column({ type: 'int', default: 0 })
-  recesionVestibularMesial: number;
+  recesionVestibularMesial!: number;
 
   // Lingual/Palatino (3 puntos)
   @Column({ type: 'int', default: 0 })
-  profundidadLingualDistal: number;
+  profundidadLingualDistal!: number;
   @Column({ type: 'int', default: 0 })
-  profundidadLingualMedio: number;
+  profundidadLingualMedio!: number;
   @Column({ type: 'int', default: 0 })
-  profundidadLingualMesial: number;
+  profundidadLingualMesial!: number;
 
   @Column({ type: 'int', default: 0 })
-  recesionLingualDistal: number;
+  recesionLingualDistal!: number;
   @Column({ type: 'int', default: 0 })
-  recesionLingualMedio: number;
+  recesionLingualMedio!: number;
   @Column({ type: 'int', default: 0 })
-  recesionLingualMesial: number;
+  recesionLingualMesial!: number;
 
   // Otros parámetros
   @Column({ default: false })
-  sangrado: boolean;
+  sangrado!: boolean;
 
   @Column({ default: false })
-  placa: boolean;
+  placa!: boolean;
 
   @Column({ type: 'int', default: 0 }) // 0-3
-  movilidad: number;
+  movilidad!: number;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 }

@@ -7,28 +7,28 @@ import { PlanTratamientoItem } from './plan-tratamiento-item.entity';
 @Entity('planes_tratamiento')
 export class PlanTratamiento extends BaseEntity {
   @Column({ name: 'paciente_id' })
-  pacienteId: string;
+  pacienteId!: string;
 
   @ManyToOne(() => Paciente)
   @JoinColumn({ name: 'paciente_id' })
-  paciente: Paciente;
+  paciente!: Paciente;
 
   @Column({ name: 'profesional_id' })
-  profesionalId: string;
+  profesionalId!: string;
 
   @ManyToOne(() => Profesional)
   @JoinColumn({ name: 'profesional_id' })
-  profesional: Profesional;
+  profesional!: Profesional;
 
   @Column()
-  nombre: string;
+  nombre!: string;
 
   @Column({ type: 'text', nullable: true })
-  notas: string;
+  notas?: string;
 
   @Column({ default: 'borrador' })
-  estado: string; // borrador, activo, completado, cancelado
+  estado!: string; // borrador, activo, completado, cancelado
 
   @OneToMany(() => PlanTratamientoItem, (item) => item.plan)
-  items: PlanTratamientoItem[];
+  items!: PlanTratamientoItem[];
 }

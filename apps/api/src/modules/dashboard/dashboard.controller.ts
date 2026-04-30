@@ -1,4 +1,5 @@
-import { Controller, Get, UseGuards, Query, Res } from '@nestjs/common';
+import { Controller, Get, UseGuards, Query, Res, UseInterceptors } from '@nestjs/common';
+import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 import { Response } from 'express';
 import { DashboardService } from './dashboard.service';
 import { PdfService } from '../reports/pdf.service';
@@ -17,12 +18,16 @@ export class DashboardController {
 
   @Get('stats')
   @Roles(Role.ADMIN, Role.ODONTOLOGO, Role.RECEPCIONISTA)
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(300) // 5 minutes
   async getStats() {
     return this.dashboardService.getStats();
   }
 
   @Get('historical')
   @Roles(Role.ADMIN, Role.ODONTOLOGO, Role.RECEPCIONISTA)
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(600) // 10 minutes
   async getHistoricalStats(
     @Query('from') from: string,
     @Query('to') to: string,

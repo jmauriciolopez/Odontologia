@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Param, UseGuards, ParseUUIDPipe, Patch, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, ParseUUIDPipe, Patch, Res, Query } from '@nestjs/common';
 import { Response } from 'express';
 import { PresupuestosService } from './presupuestos.service';
 import { PdfService } from '../reports/pdf.service';
 import { CreatePresupuestoDto, RegisterPagoDto } from './dto/presupuesto.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { PaginationDto } from '../../common/dto/pagination.dto';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { Role } from '../../common/constants/roles.constants';
@@ -24,8 +25,8 @@ export class PresupuestosController {
 
   @Get()
   @Roles(Role.ADMIN, Role.RECEPCIONISTA)
-  findAll() {
-    return this.presupuestosService.findAll();
+  findAll(@Query() pagination: PaginationDto) {
+    return this.presupuestosService.findAll(pagination);
   }
 
   @Get('paciente/:id')

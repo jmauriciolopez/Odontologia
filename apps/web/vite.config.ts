@@ -29,5 +29,18 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'phosphor': ['@phosphor-icons/react'],
+            'framer': ['framer-motion'],
+            'recharts': ['recharts'],
+            'three-vendor': ['three', '@react-three/fiber', '@react-three/drei'],
+          },
+        },
+      },
+      chunkSizeWarningLimit: 1000,
+    },
   };
 });

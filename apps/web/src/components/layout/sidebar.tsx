@@ -2,20 +2,31 @@ import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/auth-context';
 import {
-  LayoutDashboard, Users, Calendar, CreditCard, LogOut,
-  Bell, Settings, Shield, Stethoscope, MapPin, Heart, Building2, BookOpen,
-} from 'lucide-react';
+  SquaresFour,
+  Users,
+  Calendar,
+  CreditCard,
+  SignOut,
+  Bell,
+  Gear,
+  Shield,
+  Stethoscope,
+  MapPin,
+  Heart,
+  Buildings,
+  BookOpen,
+} from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 
 const menuItems = [
-  { name: 'Dashboard',     path: '/',                       icon: LayoutDashboard },
+  { name: 'Dashboard',     path: '/',                       icon: SquaresFour },
   { name: 'Pacientes',     path: '/pacientes',              icon: Users },
   { name: 'Agenda',        path: '/agenda',                 icon: Calendar },
   { name: 'Recordatorios', path: '/reminders',              icon: Bell },
   { name: 'Tratamientos',  path: '/tratamientos',           icon: Stethoscope },
   { name: 'Presupuestos',  path: '/presupuestos',           icon: CreditCard },
-  { name: 'Obras Sociales',path: '/obras-sociales',         icon: Building2 },
+  { name: 'Obras Sociales',path: '/obras-sociales',         icon: Buildings },
   { name: 'Usuarios',      path: '/usuarios',               icon: Shield },
   { name: 'Profesionales', path: '/usuarios/profesionales', icon: Heart },
   { name: 'Consultorios',  path: '/usuarios/consultorios',  icon: MapPin },
@@ -29,7 +40,7 @@ export const Sidebar: React.FC = () => {
 
   return (
     <aside
-      className="hidden lg:flex w-72 flex-col shrink-0 h-screen transition-all duration-300"
+      className="hidden lg:flex w-72 flex-col shrink-0 h-full transition-all duration-300"
       style={{
         background:    'var(--sb-bg)',
         color:         'var(--sb-text)',
@@ -44,9 +55,9 @@ export const Sidebar: React.FC = () => {
         style={{ borderBottom: '1px solid var(--sb-border)' }}
       >
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/20 text-white">
-          <span className="text-xl font-bold">🦷</span>
+          <Stethoscope size={24} weight="bold" />
         </div>
-        <h1 className="text-xl font-bold tracking-tight" style={{ color: 'var(--sb-text)' }}>
+        <h1 className="font-heading text-xl font-bold tracking-tighter" style={{ color: 'var(--sb-text)' }}>
           OdontoSaaS
         </h1>
       </div>
@@ -83,7 +94,7 @@ export const Sidebar: React.FC = () => {
                     }
                   }}
                 >
-                  <item.icon size={20} className="transition-transform group-hover:scale-110 shrink-0" />
+                  <item.icon size={20} weight={isActive ? "fill" : "bold"} className="transition-transform group-hover:scale-110 shrink-0" />
                   <span className="tracking-tight">{item.name}</span>
                   {isActive && (
                     <motion.div
@@ -110,7 +121,7 @@ export const Sidebar: React.FC = () => {
               color:      location.pathname === '/ajustes' ? 'var(--sb-active-text)' : 'var(--sb-text-muted)',
             }}
           >
-            <Settings size={20} />
+            <Gear size={20} weight={location.pathname === '/ajustes' ? "fill" : "bold"} />
             <span>Ajustes</span>
           </Link>
         </div>
@@ -142,7 +153,7 @@ export const Sidebar: React.FC = () => {
             style={{ color: 'var(--sb-text-muted)' }}
             title="Cerrar Sesión"
           >
-            <LogOut size={18} />
+            <SignOut size={18} weight="bold" />
           </button>
         </div>
       </div>

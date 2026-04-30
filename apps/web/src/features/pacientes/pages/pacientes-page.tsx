@@ -1,17 +1,23 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { usePacientes, usePacienteMutations } from '../hooks/use-pacientes';
 import { PacientesTable } from '../components/pacientes-table';
 import { PacienteForm } from '../components/paciente-form';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { UserPlus, Search, Users, Stethoscope, FileText, ChevronRight } from 'lucide-react';
+import { 
+  UserPlus, 
+  MagnifyingGlass, 
+  Users 
+} from '@phosphor-icons/react';
 import { PremiumCard } from '@/components/ui/premium-card';
 
 export const PacientesPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
 
-  const { data: pacientes = [], isLoading } = usePacientes({ query: searchTerm });
+  const { data, isLoading } = usePacientes({ query: searchTerm });
+  const pacientes = data?.data || [];
+  const meta = data?.meta;
   const { createPaciente } = usePacienteMutations();
 
   const handleCreate = async (data: any) => {
@@ -38,27 +44,27 @@ export const PacientesPage: React.FC = () => {
         </motion.div>
 
         <button
-          className="flex items-center gap-2 btn-primary px-6 py-3 rounded-2xl"
+          className="flex items-center gap-2 btn-primary px-6 py-3 rounded-2xl shadow-lg shadow-blue-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
           onClick={() => setShowModal(true)}
         >
-          <UserPlus size={20} />
-          <span>Nuevo Paciente</span>
+          <UserPlus size={20} weight="bold" />
+          <span className="font-bold tracking-tight">Nuevo Paciente</span>
         </button>
       </header>
 
       <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
         <div className="relative w-full md:max-w-md group">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--sb-text-muted)] group-focus-within:text-blue-500 transition-colors" size={20} />
+          <MagnifyingGlass className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--sb-text-muted)] group-focus-within:text-blue-500 transition-colors" size={20} weight="bold" />
           <input
-            className="input-premium py-3 pl-12 pr-4 rounded-2xl text-sm font-medium w-full"
+            className="input-premium py-3 pl-12 pr-4 rounded-2xl text-sm font-medium w-full shadow-sm"
             placeholder="Buscar por nombre, documento o teléfono..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div className="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest"
+          <div className="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest"
           style={{ background: 'var(--sb-active-bg)', color: 'var(--sb-text-muted)' }}>
-          {pacientes.length} Registros Encontrados
+          {meta?.total || 0} Registros Encontrados
         </div>
       </div>
 

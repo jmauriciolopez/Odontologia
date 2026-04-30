@@ -3,15 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search,
   UserPlus,
-  Plus,
   Calendar,
   User,
   CreditCard,
-  Stethoscope,
   Command,
-  ChevronRight,
-  TrendingUp,
-  Clock
+  ChevronRight
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { usePacientes } from '../../features/pacientes/hooks/use-pacientes';
@@ -25,7 +21,8 @@ interface CommandPaletteProps {
 export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose }) => {
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
-  const { data: pacientes = [] } = usePacientes({ query });
+  const { data: pacientesData } = usePacientes({ query });
+  const pacientes = pacientesData?.data || [];
 
   const actions = [
     { id: 'new-patient', label: 'Nuevo Paciente', icon: <UserPlus size={16}/>, path: '/pacientes', color: 'blue' },
@@ -118,7 +115,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
                     {query ? 'Resultados de la búsqueda' : 'Pacientes Recientes'}
                   </h4>
                   <div className="space-y-1">
-                     {(pacientes || []).slice(0, 8).map((p) => (
+                     {pacientes.slice(0, 8).map((p: any) => (
                        <button
                          key={p.id}
                          onClick={() => handleSelect(`/pacientes/${p.id}`)}

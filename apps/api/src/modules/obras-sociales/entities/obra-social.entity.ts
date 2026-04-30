@@ -4,26 +4,26 @@ import { ObraSocialPrestacion } from './obra-social-prestacion.entity';
 @Entity('obras_sociales')
 export class ObraSocial {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  nombre: string;
+  nombre!: string;
 
   @Column({ nullable: true })
-  codigo: string;
+  codigo?: string;
 
   @Column({ nullable: true })
-  descripcion: string;
+  descripcion?: string;
 
   @Column({ default: true })
-  activo: boolean;
+  activo!: boolean;
 
   @OneToMany(() => ObraSocialPrestacion, (osp) => osp.obraSocial, { cascade: true })
-  prestaciones: ObraSocialPrestacion[];
+  prestaciones!: ObraSocialPrestacion[];
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

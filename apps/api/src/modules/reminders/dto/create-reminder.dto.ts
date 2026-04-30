@@ -3,15 +3,15 @@ import { IsUUID, IsNotEmpty, IsString, IsOptional, IsDateString } from 'class-va
 export class CreateReminderDto {
   @IsUUID()
   @IsNotEmpty()
-  pacienteId: string;
+  pacienteId!: string;
 
   @IsUUID()
   @IsNotEmpty()
-  turnoId: string;
+  turnoId!: string;
 
   @IsDateString()
   @IsNotEmpty()
-  scheduledFor: string;
+  scheduledFor!: string;
 
   @IsString()
   @IsOptional()

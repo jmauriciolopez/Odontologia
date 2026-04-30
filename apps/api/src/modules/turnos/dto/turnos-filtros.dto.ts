@@ -1,6 +1,7 @@
 import { IsDateString, IsOptional, IsUUID, IsString } from 'class-validator';
+import { PaginationDto } from '../../../common/dto/pagination.dto';
 
-export class TurnoFiltrosDto {
+export class TurnoFiltrosDto extends PaginationDto {
   @IsDateString()
   @IsOptional()
   fecha?: string;

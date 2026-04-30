@@ -4,7 +4,7 @@ import { Type } from 'class-transformer';
 export class PlanTratamientoItemDto {
   @IsString()
   @IsNotEmpty()
-  tipo: string;
+  tipo!: string;
 
   @IsInt()
   @IsOptional()
@@ -16,21 +16,21 @@ export class PlanTratamientoItemDto {
 
   @IsNumber()
   @IsNotEmpty()
-  precioRef: number;
+  precioRef!: number;
 }
 
 export class CreatePlanTratamientoDto {
   @IsUUID()
   @IsNotEmpty()
-  pacienteId: string;
+  pacienteId!: string;
 
   @IsUUID()
   @IsNotEmpty()
-  profesionalId: string;
+  profesionalId!: string;
 
   @IsString()
   @IsNotEmpty()
-  nombre: string;
+  nombre!: string;
 
   @IsString()
   @IsOptional()
@@ -39,5 +39,5 @@ export class CreatePlanTratamientoDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => PlanTratamientoItemDto)
-  items: PlanTratamientoItemDto[];
+  items!: PlanTratamientoItemDto[];
 }

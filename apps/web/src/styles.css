@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -132,6 +130,9 @@
     --card-border: rgba(255,255,255,.5);
     --card-shadow: var(--shadow-glass);
     --card-blur:   14px;
+    /* Liquid Glass Refraction */
+    --glass-inner-border: rgba(255,255,255,0.2);
+    --glass-inner-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
   }
   .dark.style-glass {
     --sb-bg:          rgba(15,23,42,.88);
@@ -218,8 +219,8 @@
 
   body {
     @apply bg-background text-foreground transition-colors duration-300;
-    font-family: 'Inter', sans-serif;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-family: 'Geist', sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
     background-image:
       radial-gradient(at 0% 0%, rgba(109,123,255,.03) 0, transparent 50%),
       radial-gradient(at 50% 0%, rgba(109,123,255,.02) 0, transparent 50%);
@@ -230,7 +231,7 @@
       radial-gradient(at 50% 0%, rgba(15,23,42,1) 0, transparent 50%);
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold tracking-tight text-[var(--sb-text)];
+    @apply font-heading font-bold tracking-tighter text-[var(--sb-text)];
   }
 
   /* Scrollbar */
@@ -244,7 +245,7 @@
 
   /* ── Sidebar ── */
   .sidebar {
-    @apply w-64 h-screen flex flex-col flex-shrink-0 z-30 transition-all duration-300;
+    @apply w-64 h-full flex flex-col flex-shrink-0 z-30 transition-all duration-300;
     background: var(--sb-bg);
     color: var(--sb-text);
     border-right: 1px solid var(--sb-border);
@@ -316,9 +317,11 @@
     border: 1px solid var(--card-border);
     border-radius: 1.5rem;
     padding: 1.5rem;
-    transition: all .3s ease;
+    transition: all .3s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow: var(--card-shadow);
     backdrop-filter: blur(var(--card-blur));
+    box-shadow: var(--glass-inner-shadow);
+    border: 1px solid var(--glass-inner-border, var(--card-border));
   }
   .style-liquid .card-premium  { border-radius: 3rem; }
   .style-bento  .card-premium  { border-radius: .5rem; border-width: 2px; }

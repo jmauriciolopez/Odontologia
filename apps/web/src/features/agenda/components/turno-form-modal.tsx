@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
-import { X, Save, Trash2, AlertCircle, Loader2, Search, User } from 'lucide-react';
+import { X, Save, Trash2, Loader2, Search, User } from 'lucide-react';
 import { format, addMinutes, addMonths, parseISO } from 'date-fns';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -91,11 +91,12 @@ export const TurnoFormModal: React.FC<TurnoFormModalProps> = ({
     return () => document.removeEventListener('mousedown', cerrar);
   }, []);
 
-  const { data: pacientesResultado = [], isFetching: buscandoPacientes } = useQuery({
+  const { data: pacientesData, isFetching: buscandoPacientes } = useQuery({
     queryKey: ['pacientes', 'busqueda-turno', debouncedBusqueda],
     queryFn: () => pacientesApi.getPacientes({ query: debouncedBusqueda }),
     enabled: debouncedBusqueda.length >= 2,
   });
+  const pacientesResultado = pacientesData?.data || [];
 
   const { data: pacientePrecargado } = useQuery({
     queryKey: ['paciente', initialPacienteId],
@@ -308,7 +309,7 @@ export const TurnoFormModal: React.FC<TurnoFormModalProps> = ({
                       </li>
                     )}
                     {!buscandoPacientes &&
-                      pacientesResultado.map(p => (
+                      pacientesResultado.map((p: any) => (
                         <li key={p.id}>
                           <button
                             type="button"
@@ -527,14 +528,14 @@ export const TurnoFormModal: React.FC<TurnoFormModalProps> = ({
           {/* Conflict warning */}
           {submitError && (
             <div className="flex items-start gap-2 p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium">
-              <AlertCircle size={15} className="shrink-0 mt-0.5" />
+              <span className="shrink-0 mt-0.5">⚠️</span>
               {submitError}
             </div>
           )}
 
           {hasConflict && (
             <div className="flex items-start gap-2 p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium">
-              <AlertCircle size={15} className="shrink-0 mt-0.5" />
+              <span className="shrink-0 mt-0.5">⚠️</span>
               Conflicto de horario detectado para este profesional o consultorio.
             </div>
           )}

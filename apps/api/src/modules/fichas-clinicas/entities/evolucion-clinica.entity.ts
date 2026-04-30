@@ -1,25 +1,28 @@
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity';
 import { FichaClinica } from './ficha-clinica.entity';
 
 @Entity('evoluciones_clinicas')
 export class EvolucionClinica extends BaseEntity {
+  @Index()
   @Column({ name: 'ficha_id' })
-  fichaId: string;
+  fichaId!: string;
 
   @ManyToOne(() => FichaClinica, (ficha) => ficha.evoluciones)
   @JoinColumn({ name: 'ficha_id' })
-  ficha: FichaClinica;
+  ficha!: FichaClinica;
 
+  @Index()
   @Column({ name: 'profesional_id', type: 'uuid', nullable: true })
-  profesionalId: string | null;
+  profesionalId?: string | null;
 
   @Column({ type: 'text' })
-  descripcion: string;
+  descripcion!: string;
 
   @Column({ name: 'categoria', type: 'varchar', length: 50, nullable: true, default: 'General' })
-  categoria: string;
+  categoria?: string;
 
+  @Index()
   @Column({ type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP' })
-  fecha: Date;
+  fecha!: Date;
 }

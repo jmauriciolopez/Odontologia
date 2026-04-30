@@ -9,7 +9,7 @@ export class UploadDocumentoDto {
 export class UploadRadiografiaDto {
   @IsString()
   @IsNotEmpty()
-  tipo: string; // panoramica, periapical, bitewing, cefalometrica
+  tipo!: string; // panoramica, periapical, bitewing, cefalometrica
 
   @IsDateString()
   @IsOptional()

@@ -1,32 +1,42 @@
 import { Injectable } from '@nestjs/common';
 import PDFDocument from 'pdfkit';
 import { Buffer } from 'buffer';
+import * as path from 'path';
+import * as fs from 'fs';
 
 @Injectable()
 export class PdfService {
   private drawHeader(doc: any, title: string) {
-    // Background for header
+    // Background for header (Subtle gray)
     doc.rect(0, 0, 612, 100).fillColor('#f8fafc').fill();
 
-    // Logo Placeholder (Premium Stylized)
-    doc.save();
-    doc.translate(50, 30);
-    
-    // Tooth-like shape or abstract dental logo
-    doc.fillColor('#2563eb'); // Primary Blue
-    doc.path('M 0 10 C 0 0 10 0 10 0 C 20 0 20 10 20 10 C 20 20 10 25 10 25 C 10 25 0 20 0 10 Z')
-       .fill();
-    
-    doc.restore();
+    // Real Logo (Premium)
+    try {
+      const logoPath = path.join(process.cwd(), 'src/assets/logo.png');
+      if (fs.existsSync(logoPath)) {
+        doc.image(logoPath, 50, 20, { width: 50 });
+      } else {
+        // Fallback stylized icon if image fails
+        doc.save();
+        doc.translate(50, 30);
+        doc.fillColor('#2563eb');
+        doc.path('M 0 10 C 0 0 10 0 10 0 C 20 0 20 10 20 10 C 20 20 10 25 10 25 C 10 25 0 20 0 10 Z').fill();
+        doc.restore();
+      }
+    } catch (e) {
+      console.error('Error loading PDF logo:', e);
+    }
 
+    doc.fillColor('#0f172a');
+    doc.fontSize(18).font('Helvetica-Bold').text('SMILE DENTAL', 115, 35);
+    doc.fontSize(9).font('Helvetica').fillColor('#64748b').text('Excelencia en Odontología Digital', 115, 55);
+    
     doc.fillColor('#1e293b');
-    doc.fontSize(20).font('Helvetica-Bold').text('SMILE DENTAL', 80, 35);
-    doc.fontSize(10).font('Helvetica').text('Clínica Odontológica Integral', 80, 55);
-    
     doc.fontSize(12).font('Helvetica-Bold').text(title, 400, 35, { align: 'right' });
-    doc.fontSize(9).font('Helvetica').text(`Generado: ${new Date().toLocaleString('es-AR')}`, 400, 55, { align: 'right' });
+    doc.fontSize(8).font('Helvetica').fillColor('#94a3b8').text(`Generado: ${new Date().toLocaleString('es-AR')}`, 400, 52, { align: 'right' });
     
-    doc.moveTo(50, 90).lineTo(562, 90).strokeColor('#e2e8f0').lineWidth(1).stroke();
+    // Gradient-like line
+    doc.moveTo(50, 90).lineTo(562, 90).strokeColor('#e2e8f0').lineWidth(0.5).stroke();
     doc.moveDown(4);
   }
 

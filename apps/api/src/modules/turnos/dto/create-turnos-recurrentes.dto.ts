@@ -21,23 +21,23 @@ export class CreateTurnosRecurrentesDto {
 
   @IsUUID()
   @IsNotEmpty()
-  pacienteId: string;
+  pacienteId!: string;
 
   @IsUUID()
   @IsNotEmpty()
-  profesionalId: string;
+  profesionalId!: string;
 
   @IsUUID()
   @IsNotEmpty()
-  consultorioId: string;
+  consultorioId!: string;
 
   @IsDateString()
   @IsNotEmpty()
-  fechaInicio: string;
+  fechaInicio!: string;
 
   @IsDateString()
   @IsNotEmpty()
-  fechaFin: string;
+  fechaFin!: string;
 
   @IsString()
   @IsOptional()
@@ -48,10 +48,10 @@ export class CreateTurnosRecurrentesDto {
   motivo?: string;
 
   @IsIn(['diaria', 'semanal', 'quincenal', 'mensual'])
-  frecuencia: FrecuenciaRecurrencia;
+  frecuencia!: FrecuenciaRecurrencia;
 
   @IsIn(['fecha', 'cantidad'])
-  finSerie: FinSerieRecurrencia;
+  finSerie!: FinSerieRecurrencia;
 
   @ValidateIf((o: CreateTurnosRecurrentesDto) => o.finSerie === 'fecha')
   @IsNotEmpty({ message: 'hastaFecha es obligatorio cuando el fin de serie es por fecha' })

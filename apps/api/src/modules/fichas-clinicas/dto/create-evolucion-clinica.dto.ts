@@ -3,7 +3,7 @@ import { IsString, IsNotEmpty, IsUUID, IsOptional } from 'class-validator';
 export class CreateEvolucionClinicaDto {
   @IsUUID()
   @IsNotEmpty()
-  fichaId: string;
+  fichaId!: string;
 
   @IsUUID()
   @IsOptional()
@@ -11,7 +11,7 @@ export class CreateEvolucionClinicaDto {
 
   @IsString()
   @IsNotEmpty()
-  descripcion: string;
+  descripcion!: string;
 
   @IsString()
   @IsOptional()

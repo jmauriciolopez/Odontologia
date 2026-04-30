@@ -5,6 +5,7 @@ import { Repository, Between } from 'typeorm';
 import { Turno } from '../turnos/entities/turno.entity';
 import { Reminder } from './entities/reminder.entity';
 import { CreateReminderDto } from './dto/create-reminder.dto';
+import { WhatsAppService } from './whatsapp.service';
 
 @Injectable()
 export class RemindersService {
@@ -15,6 +16,7 @@ export class RemindersService {
     private readonly turnosRepository: Repository<Turno>,
     @InjectRepository(Reminder)
     private readonly remindersRepository: Repository<Reminder>,
+    private readonly whatsappService: WhatsAppService,
   ) {}
 
   @Cron(CronExpression.EVERY_DAY_AT_9AM)
@@ -43,19 +45,32 @@ export class RemindersService {
 
   private async sendAndSaveReminder(turno: Turno) {
     const { paciente, fechaInicio } = turno;
+    if (!paciente.telefono) {
+      this.logger.warn(`Paciente ${paciente.nombre} ${paciente.apellido} no tiene teléfono.`);
+      return;
+    }
 
-    // Simulate WhatsApp send
+    const message = this.generateMessage(paciente.nombre, fechaInicio);
+    const sent = await this.whatsappService.sendMessage(paciente.telefono, message);
+
     const reminder = this.remindersRepository.create({
       pacienteId: paciente.id,
       turnoId: turno.id,
       scheduledFor: fechaInicio,
-      status: 'sent',
-      sentAt: new Date(),
+      status: sent ? 'sent' : 'failed',
+      sentAt: sent ? new Date() : undefined,
       type: 'whatsapp'
     });
 
     await this.remindersRepository.save(reminder);
-    this.logger.log(`Recordatorio enviado y guardado para: ${paciente.nombre} ${paciente.apellido}`);
+  }
+
+  private generateMessage(nombre: string, fecha: Date): string {
+    const f = new Date(fecha);
+    const dia = f.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' });
+    const hora = f.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+    
+    return `Hola ${nombre}! Te recordamos tu turno para el día ${dia} a las ${hora} hs. Por favor, confirma tu asistencia. ¡Te esperamos!`;
   }
 
   findAll() {
@@ -87,11 +102,15 @@ export class RemindersService {
       throw new NotFoundException(`Reminder ${id} no encontrado`);
     }
 
-    // Mock send — reemplazar con provider real (WhatsApp/email)
-    this.logger.log(`[MOCK] Enviando recordatorio a paciente ${reminder.pacienteId} via ${reminder.type}`);
+    if (!reminder.paciente?.telefono) {
+      throw new Error('El paciente no tiene un número de teléfono registrado');
+    }
 
-    reminder.status = 'sent';
-    reminder.sentAt = new Date();
+    const message = this.generateMessage(reminder.paciente.nombre, reminder.scheduledFor);
+    const sent = await this.whatsappService.sendMessage(reminder.paciente.telefono, message);
+
+    reminder.status = sent ? 'sent' : 'failed';
+    reminder.sentAt = sent ? new Date() : undefined;
     return await this.remindersRepository.save(reminder);
   }
 }

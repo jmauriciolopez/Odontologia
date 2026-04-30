@@ -2,18 +2,18 @@ import { Injectable, NotFoundException, ConflictException } from '@nestjs/common
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Paciente } from './entities/paciente.entity';
-import { FichaClinica } from '../fichas-clinicas/entities/ficha-clinica.entity';
+import { FichasClinicasService } from '../fichas-clinicas/fichas-clinicas.service';
 import { CreatePacienteDto } from './dto/create-paciente.dto';
 import { UpdatePacienteDto } from './dto/update-paciente.dto';
 import { PacienteFiltrosDto } from './dto/paciente-filtros.dto';
+import { PaginatedResponse } from '../../common/interfaces/paginated-response.interface';
 
 @Injectable()
 export class PacientesService {
   constructor(
     @InjectRepository(Paciente)
     private readonly pacientesRepository: Repository<Paciente>,
-    @InjectRepository(FichaClinica)
-    private readonly fichaRepository: Repository<FichaClinica>,
+    private readonly fichasClinicasService: FichasClinicasService,
   ) {}
 
   async create(createPacienteDto: CreatePacienteDto): Promise<Paciente> {
@@ -30,8 +30,8 @@ export class PacientesService {
     return await this.pacientesRepository.save(paciente);
   }
 
-  async findAll(filtros: PacienteFiltrosDto): Promise<Paciente[]> {
-    const { query } = filtros;
+  async findAll(filtros: PacienteFiltrosDto): Promise<PaginatedResponse<Paciente>> {
+    const { query, page = 1, limit = 10 } = filtros;
     const qb = this.pacientesRepository.createQueryBuilder('paciente');
 
     if (query) {
@@ -41,7 +41,20 @@ export class PacientesService {
       );
     }
 
-    return await qb.getMany();
+    qb.skip((page - 1) * limit).take(limit);
+    qb.orderBy('paciente.createdAt', 'DESC');
+
+    const [data, total] = await qb.getManyAndCount();
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 
   async findOne(id: string): Promise<Paciente> {
@@ -56,10 +69,9 @@ export class PacientesService {
 
     // Si no tiene ficha, crearla automáticamente
     if (!paciente.ficha) {
-      const newFicha = this.fichaRepository.create({
+      paciente.ficha = await this.fichasClinicasService.createFicha({
         pacienteId: paciente.id,
       });
-      paciente.ficha = await this.fichaRepository.save(newFicha);
     }
 
     // Ordenar evoluciones por fecha descendente
@@ -83,15 +95,7 @@ export class PacientesService {
     ) as UpdatePacienteDto;
 
     this.pacientesRepository.merge(paciente, sanitized);
-
-    try {
-      return await this.pacientesRepository.save(paciente);
-    } catch (err: any) {
-      if (err.code === '23505') {
-        throw new ConflictException('El documento ingresado ya pertenece a otro paciente');
-      }
-      throw err;
-    }
+    return await this.pacientesRepository.save(paciente);
   }
 
   async remove(id: string): Promise<void> {
