@@ -41,8 +41,8 @@ export class ArchivosController {
     @Param('pacienteId', ParseUUIDPipe) pacienteId: string,
     @UploadedFile() file: Express.Multer.File,
     @Body('tipo') tipo: string,
-    @Body('fechaToma') fechaToma?: string,
     @CurrentUser('id') userId: string,
+    @Body('fechaToma') fechaToma?: string,
   ) {
     return await this.archivosService.saveRadiografia(file, pacienteId, tipo, fechaToma, userId);
   }

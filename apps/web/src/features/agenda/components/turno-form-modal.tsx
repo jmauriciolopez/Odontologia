@@ -16,6 +16,7 @@ import { useDisponibilidad } from '../hooks/use-disponibilidad';
 import { pacientesApi } from '../../pacientes/api/pacientes-api';
 import { Paciente } from '../../pacientes/types';
 import { cn } from '@/lib/utils';
+import { useFocusTrap } from '../../../hooks/use-focus-trap';
 
 interface TurnoFormModalProps {
   turno?: Turno;
@@ -36,6 +37,11 @@ export const TurnoFormModal: React.FC<TurnoFormModalProps> = ({
   onClose,
 }) => {
   const isEdit = !!turno;
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  // Trap focus within the modal
+  useFocusTrap(modalRef, true, onClose);
+
   const {
     createTurno,
     isCreating,
@@ -219,18 +225,27 @@ export const TurnoFormModal: React.FC<TurnoFormModalProps> = ({
       />
 
       <motion.div
+        ref={modalRef}
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
         className="relative w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden"
         style={{ background: 'var(--card-bg)', border: '1px solid var(--sb-border)' }}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'var(--sb-border)' }}>
-          <h2 className="text-base font-bold" style={{ color: 'var(--sb-text)' }}>
+          <h2 id="modal-title" className="text-base font-bold" style={{ color: 'var(--sb-text)' }}>
             {isEdit ? 'Editar Turno' : 'Nuevo Turno'}
           </h2>
-          <button onClick={onClose} className="p-2 rounded-xl hover:opacity-70 transition-opacity" style={{ color: 'var(--sb-text-muted)' }}>
+          <button 
+            onClick={onClose} 
+            aria-label="Cerrar modal"
+            className="p-2 rounded-xl hover:opacity-70 transition-opacity" 
+            style={{ color: 'var(--sb-text-muted)' }}
+          >
             <X size={18} />
           </button>
         </div>

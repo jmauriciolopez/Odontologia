@@ -77,6 +77,8 @@ export const AgendaPage: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowFilters(!showFilters)}
+            aria-expanded={showFilters}
+            aria-controls="agenda-filters"
             className={cn(
               'flex items-center gap-2 px-4 py-2 rounded-xl border font-bold text-xs transition-all',
               showFilters
@@ -96,6 +98,7 @@ export const AgendaPage: React.FC = () => {
           <AnimatePresence>
             {showFilters && (
               <motion.div
+                id="agenda-filters"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
@@ -104,6 +107,7 @@ export const AgendaPage: React.FC = () => {
                 <select
                   value={profesionalId}
                   onChange={(e) => setProfesionalId(e.target.value)}
+                  aria-label="Filtrar por profesional"
                   className={selectCls}
                 >
                   <option value="">Todos los Profesionales</option>
@@ -115,6 +119,7 @@ export const AgendaPage: React.FC = () => {
                 <select
                   value={consultorioId}
                   onChange={(e) => setConsultorioId(e.target.value)}
+                  aria-label="Filtrar por consultorio"
                   className={selectCls}
                 >
                   <option value="">Todos los Consultorios</option>

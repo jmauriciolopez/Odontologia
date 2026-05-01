@@ -12,11 +12,13 @@ export class ConfiguracionController {
   constructor(private readonly configService: ConfiguracionService) {}
 
   @Get()
+  @Roles(Role.ADMIN)
   getConfig() {
     return this.configService.getConfig();
   }
 
   @Patch()
+  @Roles(Role.ADMIN)
   updateConfig(@Body() dto: UpdateConfiguracionDto) {
     return this.configService.updateConfig(dto);
   }

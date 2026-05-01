@@ -9,6 +9,7 @@ import { PaginationDto } from '../../common/dto/pagination.dto';
 import { PaginatedResponse } from '../../common/interfaces/paginated-response.interface';
 import { TenantHelper } from '../../common/utils/tenant-helper';
 import { ClsService } from 'nestjs-cls';
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable()
 export class PresupuestosService {
@@ -21,6 +22,7 @@ export class PresupuestosService {
     private readonly pagoRepository: Repository<Pago>,
     private readonly dataSource: DataSource,
     private readonly cls: ClsService,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   async create(dto: CreatePresupuestoDto): Promise<Presupuesto> {
@@ -55,9 +57,9 @@ export class PresupuestosService {
   async findAll(pagination: PaginationDto = {}): Promise<PaginatedResponse<Presupuesto>> {
     const { page = 1, limit = 10 } = pagination;
     const [data, total] = await this.presupuestoRepository.findAndCount(
-      TenantHelper.withTenant(this.cls, {
+      TenantHelper.withTenant<Presupuesto>(this.cls, {
         relations: ['paciente', 'items'],
-        order: { createdAt: 'DESC' },
+        order: { createdAt: 'DESC' } as any,
         skip: (page - 1) * limit,
         take: limit,
       })
@@ -76,17 +78,17 @@ export class PresupuestosService {
 
   async findByPaciente(pacienteId: string): Promise<Presupuesto[]> {
     return await this.presupuestoRepository.find(
-      TenantHelper.withTenant(this.cls, {
+      TenantHelper.withTenant<Presupuesto>(this.cls, {
         where: { pacienteId },
         relations: ['paciente', 'items', 'pagos'],
-        order: { createdAt: 'DESC' }
+        order: { createdAt: 'DESC' } as any
       })
     );
   }
 
   async findOne(id: string): Promise<Presupuesto> {
     const presupuesto = await this.presupuestoRepository.findOne(
-      TenantHelper.withTenant(this.cls, {
+      TenantHelper.withTenantOne<Presupuesto>(this.cls, {
         where: { id },
         relations: ['items', 'pagos', 'paciente'],
       })
@@ -102,7 +104,7 @@ export class PresupuestosService {
   async registerPago(dto: RegisterPagoDto): Promise<Pago> {
     return await this.dataSource.transaction(async (manager) => {
       const presupuesto = await manager.findOne(Presupuesto, 
-        TenantHelper.withTenant(this.cls, {
+        TenantHelper.withTenantOne<Presupuesto>(this.cls, {
           where: { id: dto.presupuestoId },
         })
       );
@@ -147,6 +149,14 @@ export class PresupuestosService {
         estado: nuevoTotalPagado >= Number(presupuesto.total) ? 'pagado' : 'pagado_parcial',
       });
 
+      // Notificar cambio en finanzas
+      const clinicaId = this.cls.get('clinicaId');
+      this.notificationsService.notifyFinanzasActualizado(
+        clinicaId,
+        presupuesto.pacienteId,
+        `Se registró un pago de $${dto.monto} para el presupuesto #${presupuesto.id.substring(0, 8)}`
+      );
+
       return result.generatedMaps[0] as Pago;
     });
   }
@@ -164,9 +174,9 @@ export class PresupuestosService {
 
   async findPagosByPresupuesto(presupuestoId: string): Promise<Pago[]> {
     return await this.pagoRepository.find(
-      TenantHelper.withTenant(this.cls, {
+      TenantHelper.withTenant<Pago>(this.cls, {
         where: { presupuestoId },
-        order: { fechaPago: 'DESC' }
+        order: { fechaPago: 'DESC' } as any
       })
     );
   }

@@ -302,7 +302,7 @@ export const PacienteDetallePage: React.FC = () => {
                     <div className="medical-card p-8 bg-gradient-to-br from-white to-slate-50 border-[var(--sb-border)] shadow-md">
                        <div className="flex items-center gap-2 mb-4">
                           <div className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-                          <h4 className="text-xs font-bold text-[var(--sb-text-muted)] uppercase tracking-widest">Último Registro Clínico</h4>
+                          <h2 className="text-xs font-bold text-[var(--sb-text-muted)] uppercase tracking-widest">Último Registro Clínico</h2>
                        </div>
                        <p className="text-slate-800 font-medium leading-relaxed italic">
                          "{paciente.ficha.evoluciones[0].descripcion}"
@@ -318,10 +318,10 @@ export const PacienteDetallePage: React.FC = () => {
                 <aside className="space-y-6">
                   {/* Próximos Turnos Widget */}
                   <PremiumCard className="p-6 bg-white border-blue-100">
-                    <h3 className="text-xs font-bold text-[var(--sb-text-muted)] uppercase tracking-widest mb-6 flex items-center justify-between">
+                    <h2 className="text-xs font-bold text-[var(--sb-text-muted)] uppercase tracking-widest mb-6 flex items-center justify-between">
                       Agenda Próxima
                       <div className="px-2 py-0.5 bg-blue-50 text-blue-600 rounded-md text-[9px]">Sincronizado</div>
-                    </h3>
+                    </h2>
                     <div className="space-y-4">
                       {turnos.length > 0 ? turnos.slice(0, 3).map(t => (
                         <div key={t.id} className="flex gap-4 p-3 rounded-2xl bg-[var(--sb-active-bg)] border border-[var(--sb-border)] transition-all hover:border-blue-200">
@@ -380,7 +380,7 @@ export const PacienteDetallePage: React.FC = () => {
               <div className="space-y-10 max-w-4xl mx-auto">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-xl font-bold text-[var(--sb-text)] tracking-tight">Hoja de Ruta del Paciente</h3>
+                    <h2 className="text-xl font-bold text-[var(--sb-text)] tracking-tight">Hoja de Ruta del Paciente</h2>
                     <p className="text-xs text-[var(--sb-text-muted)] font-bold uppercase tracking-widest">Progreso de Planes Clínicos</p>
                   </div>
                   <button

@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sidebar } from './sidebar';
 import { Header } from './header';
 import { CommandPalette } from './CommandPalette';
+import { useFocusTrap } from '../../hooks/use-focus-trap';
 
 export const AppLayout: React.FC = () => {
   const location = useLocation();
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = React.useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = React.useState(false);
+  const mobileSidebarRef = useRef<HTMLDivElement>(null);
+
+  // Apply focus trap to mobile sidebar
+  useFocusTrap(mobileSidebarRef, isMobileSidebarOpen, () => setIsMobileSidebarOpen(false));
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -31,6 +36,14 @@ export const AppLayout: React.FC = () => {
       className="flex min-h-[100dvh] overflow-hidden font-sans transition-colors duration-300"
       style={{ background: 'var(--card-bg)', color: 'var(--sb-text)' }}
     >
+      {/* Accessibility: Skip to Content */}
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-white focus:rounded-lg focus:shadow-xl focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+      >
+        Saltar al contenido principal
+      </a>
+
       {/* Mobile sidebar overlay */}
       <AnimatePresence>
         {isMobileSidebarOpen && (
@@ -43,6 +56,7 @@ export const AppLayout: React.FC = () => {
               onClick={() => setIsMobileSidebarOpen(false)}
             />
             <motion.div
+              ref={mobileSidebarRef}
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
@@ -57,7 +71,7 @@ export const AppLayout: React.FC = () => {
 
       <Sidebar />
 
-      <main className="flex-1 flex flex-col min-w-0">
+      <main id="main-content" className="flex-1 flex flex-col min-w-0">
         <Header
           onSearchClick={() => setIsCommandPaletteOpen(true)}
           onMenuClick={() => setIsMobileSidebarOpen(true)}

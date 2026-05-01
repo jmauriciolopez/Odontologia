@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Receipt, Loader2, TrendingUp } from 'lucide-react';
 
@@ -135,7 +135,7 @@ export const FinanzasTabContent: React.FC<FinanzasTabContentProps> = ({ paciente
 
         {showPagoModal && selectedPresupuesto && (
           <PagoModal
-            presupuesto={selectedPresupuesto}
+            presupuestoId={selectedPresupuesto.id}
             onClose={() => {
               setShowPagoModal(false);
               setSelectedPresupuesto(null);

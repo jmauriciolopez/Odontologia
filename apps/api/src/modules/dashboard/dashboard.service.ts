@@ -6,6 +6,8 @@ import { Turno } from '../turnos/entities/turno.entity';
 import { Presupuesto } from '../presupuestos/entities/presupuesto.entity';
 import { Pago } from '../presupuestos/entities/pago.entity';
 import { PlanTratamientoItem } from '../planes-tratamiento/entities/plan-tratamiento-item.entity';
+import { Profesional } from '../profesionales/entities/profesional.entity';
+import { Consultorio } from '../consultorios/entities/consultorio.entity';
 
 @Injectable()
 export class DashboardService {
@@ -20,6 +22,10 @@ export class DashboardService {
     private readonly pagoRepository: Repository<Pago>,
     @InjectRepository(PlanTratamientoItem)
     private readonly planTratamientoItemRepository: Repository<PlanTratamientoItem>,
+    @InjectRepository(Profesional)
+    private readonly profesionalRepository: Repository<Profesional>,
+    @InjectRepository(Consultorio)
+    private readonly consultorioRepository: Repository<Consultorio>,
   ) {}
 
   async getHistoricalStats(from: string, to: string) {
@@ -68,7 +74,9 @@ export class DashboardService {
       turnosHoy,
       presupuestosMes,
       pagosMes,
-      proximosTurnos
+      proximosTurnos,
+      totalProfesionales,
+      totalConsultorios
     ] = await Promise.all([
       this.pacienteRepository.count(),
       this.turnoRepository.count({
@@ -93,7 +101,9 @@ export class DashboardService {
         relations: ['paciente', 'consultorio', 'profesional'],
         order: { fechaInicio: 'ASC' },
         take: 5
-      })
+      }),
+      this.profesionalRepository.count(),
+      this.consultorioRepository.count()
     ]);
 
     return {
@@ -101,7 +111,9 @@ export class DashboardService {
       turnosHoy,
       facturacionProyectada: parseFloat(presupuestosMes?.total || '0'),
       facturacionReal: parseFloat(pagosMes?.total || '0'),
-      proximosTurnos
+      proximosTurnos,
+      totalProfesionales,
+      totalConsultorios
     };
   }
 

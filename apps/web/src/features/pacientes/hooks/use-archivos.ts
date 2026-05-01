@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { archivosApi, PatientFile, Radiografia } from '../api/archivos-api';
+import { archivosApi, Archivo } from '../api/archivos-api';
 
 export const useArchivos = (pacienteId: string) => {
   return useQuery({

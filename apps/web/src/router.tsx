@@ -5,6 +5,7 @@ import { useAuth } from './context/auth-context';
 
 // Lazy load components
 const LoginPage = lazy(() => import('./features/auth/pages/login-page').then(m => ({ default: m.LoginPage })));
+const RegisterPage = lazy(() => import('./features/auth/pages/register-page').then(m => ({ default: m.RegisterPage })));
 const DashboardPage = lazy(() => import('./features/dashboard/pages/dashboard-page').then(m => ({ default: m.DashboardPage })));
 const PacientesPage = lazy(() => import('./features/pacientes/pages/pacientes-page').then(m => ({ default: m.PacientesPage })));
 const PacienteDetallePage = lazy(() => import('./features/pacientes/pages/paciente-detalle-page').then(m => ({ default: m.PacienteDetallePage })));
@@ -56,6 +57,16 @@ export const router = createBrowserRouter([
       <PublicRoute>
         <Suspense fallback={<PageLoader />}>
           <LoginPage />
+        </Suspense>
+      </PublicRoute>
+    ),
+  },
+  {
+    path: '/register',
+    element: (
+      <PublicRoute>
+        <Suspense fallback={<PageLoader />}>
+          <RegisterPage />
         </Suspense>
       </PublicRoute>
     ),
@@ -115,11 +126,24 @@ export const router = createBrowserRouter([
       },
       {
         path: 'presupuestos',
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <PresupuestosPage />
-          </Suspense>
-        ),
+        children: [
+          {
+            index: true,
+            element: (
+              <Suspense fallback={<PageLoader />}>
+                <PresupuestosPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: ':id',
+            element: (
+              <Suspense fallback={<PageLoader />}>
+                <PresupuestosPage />
+              </Suspense>
+            ),
+          },
+        ],
       },
       {
         path: 'reminders',
@@ -131,11 +155,24 @@ export const router = createBrowserRouter([
       },
       {
         path: 'tratamientos',
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <TratamientosPage />
-          </Suspense>
-        ),
+        children: [
+          {
+            index: true,
+            element: (
+              <Suspense fallback={<PageLoader />}>
+                <TratamientosPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: ':id',
+            element: (
+              <Suspense fallback={<PageLoader />}>
+                <TratamientosPage />
+              </Suspense>
+            ),
+          },
+        ],
       },
       {
         path: 'obras-sociales',

@@ -1,29 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, DollarSign, Wallet, CreditCard, PieChart, CheckCircle2, ChevronRight, Activity } from 'lucide-react';
-import { Presupuesto } from '../types';
+import { X, DollarSign, Wallet, CreditCard, PieChart, CheckCircle2, ChevronRight, Activity, Loader2 } from 'lucide-react';
+import { usePresupuestoDetalle } from '../hooks/use-presupuestos';
 import { cn } from '@/lib/utils';
 
 interface PagoModalProps {
-  presupuesto: Presupuesto;
+  presupuestoId: string;
   onClose: () => void;
   onSubmit: (data: any) => void;
   loading: boolean;
 }
 
-export const PagoModal: React.FC<PagoModalProps> = ({ presupuesto, onClose, onSubmit, loading }) => {
-  const total = Number(presupuesto.total);
-  const totalPagado = Number(presupuesto.totalPagado || 0);
-  const saldoPendiente = total - totalPagado;
-
-  const [monto, setMonto] = useState(saldoPendiente);
+export const PagoModal: React.FC<PagoModalProps> = ({ presupuestoId, onClose, onSubmit, loading }) => {
+  const { data: presupuesto, isLoading } = usePresupuestoDetalle(presupuestoId);
+  
+  const [monto, setMonto] = useState(0);
   const [metodo, setMetodo] = useState<'efectivo' | 'transferencia' | 'tarjeta'>('efectivo');
   const [notas, setNotas] = useState('');
+
+  const total = presupuesto ? Number(presupuesto.total) : 0;
+  const totalPagado = presupuesto ? Number(presupuesto.totalPagado || 0) : 0;
+  const saldoPendiente = total - totalPagado;
+
+  useEffect(() => {
+    if (presupuesto && monto === 0) {
+      setMonto(saldoPendiente);
+    }
+  }, [presupuesto, saldoPendiente]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({
-      presupuestoId: presupuesto.id,
+      presupuestoId,
       monto: Number(monto),
       metodoPago: metodo,
       ...(notas.trim() ? { notas } : {}),
@@ -67,118 +75,149 @@ export const PagoModal: React.FC<PagoModalProps> = ({ presupuesto, onClose, onSu
             </button>
           </div>
 
-          <div className="space-y-8">
-             {/* Presupuesto Summary */}
-             <div className="rounded-3xl p-6 border border-[var(--sb-border)]"
-               style={{ background: 'var(--sb-active-bg)' }}>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-1">
-                    <span className="text-[10px] font-black uppercase tracking-wider" style={{ color: 'var(--sb-text-muted)' }}>Total Presupuesto</span>
-                    <span className="font-bold text-[var(--sb-text)]">${presupuesto.total.toLocaleString()}</span>
-                  </div>
-                  <div className="flex flex-col gap-1 items-end">
-                    <span className="text-[10px] font-black uppercase tracking-wider" style={{ color: 'var(--sb-text-muted)' }}>Saldo Pendiente</span>
-                    <span className="font-bold text-rose-500">${saldoPendiente.toLocaleString()}</span>
-                  </div>
-                </div>
-                <div className="mt-4 pt-4 border-t border-[var(--sb-border)]/60 flex items-center gap-3">
-                   <CheckCircle2 className="text-blue-500" size={16} />
-                   <span className="text-xs font-semibold text-[var(--sb-text-muted)]">
-                     Recibo: #{presupuesto.id.slice(0, 8).toUpperCase()}
-                   </span>
-                </div>
-             </div>
-
-             <form onSubmit={handleSubmit} className="space-y-8">
-                {/* Amount Input */}
-                <div className="space-y-3">
-                   <label className="text-[11px] font-black uppercase tracking-wider text-center block" style={{ color: 'var(--sb-text-muted)' }}>
-                      Monto a Cobrar
-                   </label>
-                   <div className="relative">
-                      <DollarSign className="absolute left-6 top-1/2 -translate-y-1/2" size={24} style={{ color: 'var(--sb-border)' }} />
-                      <input
-                        type="number"
-                        step="0.01"
-                        autoFocus
-                        required
-                        className={cn(inputClasses, "pl-12")}
-                        value={monto}
-                        onChange={(e) => setMonto(Number(e.target.value))}
-                        max={saldoPendiente}
-                      />
+          {isLoading || !presupuesto ? (
+            <div className="py-20 flex flex-col items-center justify-center gap-4">
+              <Loader2 className="h-10 w-10 animate-spin text-blue-500" />
+              <p className="text-xs font-bold uppercase tracking-widest text-[var(--sb-text-muted)]">Cargando detalles...</p>
+            </div>
+          ) : (
+            <div className="space-y-8">
+              {/* Presupuesto Summary */}
+              <div className="rounded-3xl p-6 border border-[var(--sb-border)]"
+                style={{ background: 'var(--sb-active-bg)' }}>
+                 <div className="grid grid-cols-2 gap-4">
+                   <div className="flex flex-col gap-1">
+                     <span className="text-[10px] font-black uppercase tracking-wider" style={{ color: 'var(--sb-text-muted)' }}>Total Presupuesto</span>
+                     <span className="font-bold text-[var(--sb-text)]">${total.toLocaleString()}</span>
                    </div>
-                   <div className="flex justify-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setMonto(saldoPendiente)}
-                        className="text-[10px] font-bold text-blue-600 hover:text-blue-500 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full transition-colors"
-                      >
-                         Cobrar Total Pendiente
-                      </button>
+                   <div className="flex flex-col gap-1 items-end">
+                     <span className="text-[10px] font-black uppercase tracking-wider" style={{ color: 'var(--sb-text-muted)' }}>Saldo Pendiente</span>
+                     <span className="font-bold text-rose-500">${saldoPendiente.toLocaleString()}</span>
                    </div>
-                </div>
+                 </div>
+                 
+                 {/* Historial de Pagos (T2 requirement) */}
+                 {presupuesto.pagos && presupuesto.pagos.length > 0 && (
+                   <div className="mt-6 pt-4 border-t border-[var(--sb-border)]/60">
+                     <p className="text-[9px] font-black uppercase tracking-[0.2em] mb-3" style={{ color: 'var(--sb-text-muted)' }}>HISTORIAL DE COBROS</p>
+                     <div className="space-y-2 max-h-[120px] overflow-y-auto pr-2 custom-scrollbar">
+                        {presupuesto.pagos.map((p) => (
+                          <div key={p.id} className="flex items-center justify-between p-2.5 rounded-xl bg-[var(--card-bg)] border border-[var(--sb-border)]/50">
+                            <div className="flex items-center gap-2">
+                              <div className="h-6 w-6 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-600">
+                                <CheckCircle2 size={14} />
+                              </div>
+                              <div className="flex flex-col">
+                                <span className="text-[10px] font-bold text-[var(--sb-text)] uppercase">{p.metodoPago}</span>
+                                <span className="text-[8px] font-bold text-[var(--sb-text-muted)]">{new Date(p.fechaPago).toLocaleDateString()}</span>
+                              </div>
+                            </div>
+                            <span className="text-[11px] font-mono font-black text-emerald-600">+${Number(p.monto).toLocaleString()}</span>
+                          </div>
+                        ))}
+                     </div>
+                   </div>
+                 )}
 
-                {/* Method selection */}
-                <div className="space-y-3">
+                 <div className="mt-4 pt-4 border-t border-[var(--sb-border)]/60 flex items-center gap-3">
+                    <Activity className="text-blue-500" size={16} />
+                    <span className="text-xs font-semibold text-[var(--sb-text-muted)]">
+                      Recibo: #{presupuesto.id.slice(0, 8).toUpperCase()}
+                    </span>
+                 </div>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-8">
+                 {/* Amount Input */}
+                 <div className="space-y-3">
+                    <label className="text-[11px] font-black uppercase tracking-wider text-center block" style={{ color: 'var(--sb-text-muted)' }}>
+                       Monto a Cobrar
+                    </label>
+                    <div className="relative">
+                       <DollarSign className="absolute left-6 top-1/2 -translate-y-1/2" size={24} style={{ color: 'var(--sb-border)' }} />
+                       <input
+                         type="number"
+                         step="0.01"
+                         autoFocus
+                         required
+                         className={cn(inputClasses, "pl-12")}
+                         value={monto}
+                         onChange={(e) => setMonto(Number(e.target.value))}
+                         max={saldoPendiente}
+                       />
+                    </div>
+                    <div className="flex justify-center gap-2">
+                       <button
+                         type="button"
+                         onClick={() => setMonto(saldoPendiente)}
+                         className="text-[10px] font-bold text-blue-600 hover:text-blue-500 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full transition-colors"
+                       >
+                          Cobrar Total Pendiente
+                       </button>
+                    </div>
+                 </div>
+
+                 {/* Method selection */}
+                 <div className="space-y-3">
+                    <label className="text-[11px] font-black uppercase tracking-wider ml-1" style={{ color: 'var(--sb-text-muted)' }}>
+                       Método de Pago
+                    </label>
+                    <div className="grid grid-cols-3 gap-3">
+                       {metodos.map((item) => (
+                         <button
+                           key={item.id}
+                           type="button"
+                           onClick={() => setMetodo(item.id as any)}
+                           className={cn(
+                             "flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all group",
+                             metodo === item.id
+                               ? "bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/20"
+                               : "border-[var(--sb-border)] text-[var(--sb-text-muted)] hover:border-blue-400"
+                           )}
+                         >
+                            <item.icon size={20} className={cn(metodo === item.id ? "text-white" : "group-hover:text-blue-500")}
+                              style={metodo !== item.id ? { color: 'var(--sb-text-muted)' } : {}} />
+                            <span className="text-[10px] font-bold uppercase tracking-wider">{item.label}</span>
+                         </button>
+                       ))}
+                    </div>
+                 </div>
+
+                 {/* Notas */}
+                 <div className="space-y-2">
                    <label className="text-[11px] font-black uppercase tracking-wider ml-1" style={{ color: 'var(--sb-text-muted)' }}>
-                      Método de Pago
+                     Notas (opcional)
                    </label>
-                   <div className="grid grid-cols-3 gap-3">
-                      {metodos.map((item) => (
-                        <button
-                          key={item.id}
-                          type="button"
-                          onClick={() => setMetodo(item.id as any)}
-                          className={cn(
-                            "flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all group",
-                            metodo === item.id
-                              ? "bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/20"
-                              : "border-[var(--sb-border)] text-[var(--sb-text-muted)] hover:border-blue-400"
-                          )}
-                        >
-                           <item.icon size={20} className={cn(metodo === item.id ? "text-white" : "group-hover:text-blue-500")}
-                             style={metodo !== item.id ? { color: 'var(--sb-text-muted)' } : {}} />
-                           <span className="text-[10px] font-bold uppercase tracking-wider">{item.label}</span>
-                        </button>
-                      ))}
-                   </div>
-                </div>
+                   <input
+                     type="text"
+                     value={notas}
+                     onChange={(e) => setNotas(e.target.value)}
+                     placeholder="Ej: Pago en cuotas, recibo nro..."
+                     className="input-premium text-sm font-medium"
+                   />
+                 </div>
 
-                {/* Notas */}
-                <div className="space-y-2">
-                  <label className="text-[11px] font-black uppercase tracking-wider ml-1" style={{ color: 'var(--sb-text-muted)' }}>
-                    Notas (opcional)
-                  </label>
-                  <input
-                    type="text"
-                    value={notas}
-                    onChange={(e) => setNotas(e.target.value)}
-                    placeholder="Ej: Pago en cuotas, recibo nro..."
-                    className="input-premium text-sm font-medium"
-                  />
-                </div>
-
-                {/* Actions */}
-                <div className="flex items-center gap-4 pt-4">
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    className="flex-1 py-4 rounded-2xl font-bold transition-all hover:opacity-80"
-                    style={{ background: 'var(--sb-active-bg)', border: '2px solid var(--sb-border)', color: 'var(--sb-text-muted)' }}
-                  >
-                    Cerrar
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={loading || monto <= 0}
-                    className="flex-3 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white py-4 rounded-2xl font-bold shadow-lg shadow-emerald-500/25 transition-all px-12"
-                  >
-                    {loading ? 'Sincronizando...' : 'Confirmar Cobro'}
-                  </button>
-                </div>
-             </form>
-          </div>
+                 {/* Actions */}
+                 <div className="flex items-center gap-4 pt-4">
+                   <button
+                     type="button"
+                     onClick={onClose}
+                     className="flex-1 py-4 rounded-2xl font-bold transition-all hover:opacity-80"
+                     style={{ background: 'var(--sb-active-bg)', border: '2px solid var(--sb-border)', color: 'var(--sb-text-muted)' }}
+                   >
+                     Cerrar
+                   </button>
+                   <button
+                     type="submit"
+                     disabled={loading || monto <= 0}
+                     className="flex-3 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white py-4 rounded-2xl font-bold shadow-lg shadow-emerald-500/25 transition-all px-12"
+                   >
+                     {loading ? 'Sincronizando...' : 'Confirmar Cobro'}
+                   </button>
+                 </div>
+              </form>
+            </div>
+          )}
         </div>
       </motion.div>
     </div>

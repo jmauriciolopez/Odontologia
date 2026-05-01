@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
@@ -6,6 +6,7 @@ import { X, Loader2, User } from 'lucide-react';
 import * as z from 'zod';
 import { cn } from '@/lib/utils';
 import { useObrasSociales } from '../../obras-sociales/hooks/use-obras-sociales';
+import { useFocusTrap } from '../../../hooks/use-focus-trap';
 
 const pacienteSchema = z.object({
   nombre:          z.string().min(2, 'Nombre requerido'),
@@ -67,6 +68,9 @@ export const PacienteForm: React.FC<PacienteFormProps> = ({
     },
   });
 
+  const modalRef = React.useRef<HTMLDivElement>(null);
+  useFocusTrap(modalRef, true, onClose);
+
   const isEdit = !!initialData?.nombre;
 
   // Strip empty strings so optional fields don't fail backend validation
@@ -90,9 +94,13 @@ export const PacienteForm: React.FC<PacienteFormProps> = ({
 
       {/* Modal */}
       <motion.div
+        ref={modalRef}
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="form-title"
         className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-[2rem] shadow-2xl"
         style={{ background: 'var(--card-bg)' }}
       >
@@ -104,7 +112,7 @@ export const PacienteForm: React.FC<PacienteFormProps> = ({
               <User size={18} />
             </div>
             <div>
-              <h2 className="text-lg font-black tracking-tight text-[var(--sb-text)] uppercase">
+              <h2 id="form-title" className="text-lg font-black tracking-tight text-[var(--sb-text)] uppercase">
                 {isEdit ? 'Editar Paciente' : 'Nuevo Paciente'}
               </h2>
               <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--sb-text-muted)]">
@@ -114,6 +122,7 @@ export const PacienteForm: React.FC<PacienteFormProps> = ({
           </div>
           <button
             onClick={onClose}
+            aria-label="Cerrar formulario"
             className="p-2 rounded-xl text-[var(--sb-text-muted)] hover:text-slate-600 transition-colors hover:opacity-80"
           >
             <X size={20} />

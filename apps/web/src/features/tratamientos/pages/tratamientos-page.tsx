@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   Activity,
   Clock,
@@ -8,9 +9,10 @@ import {
   ChevronRight,
   Stethoscope,
   TrendingUp,
-  Printer
+  Printer,
+  Loader2
 } from 'lucide-react';
-import { useTratamientos } from '../hooks/use-tratamientos';
+import { useTratamientos, useTratamientoUnico } from '../hooks/use-tratamientos';
 import { PremiumCard } from '@/components/ui/premium-card';
 import { cn } from '@/lib/utils';
 import { PlanTratamiento } from '../types';
@@ -18,9 +20,13 @@ import { TratamientoProgreso } from '../components/TratamientoProgreso';
 import { printPlanTratamiento } from '../../finanzas/components/PresupuestoPrint';
 
 export const TratamientosPage: React.FC = () => {
-  const { planes, isLoading, updateItemEstado } = useTratamientos(); // Global view (backend needs to support findAll or similar, for now we will adapt)
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { planes, isLoading, updateItemEstado } = useTratamientos();
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
+  const selectedPlanId = id || null;
+
+  const { data: fullSelectedPlan, isLoading: isLoadingDetail } = useTratamientoUnico(selectedPlanId || undefined);
 
   const activePlanes = planes.filter((p: PlanTratamiento) => p.estado !== 'cancelado');
 
@@ -37,9 +43,7 @@ export const TratamientosPage: React.FC = () => {
     });
   }, [activePlanes, searchTerm]);
 
-  const selectedPlan = planes.find((p: PlanTratamiento) => p.id === selectedPlanId)
-    ?? filteredPlanes.find((p: PlanTratamiento) => p.id === selectedPlanId);
-
+  // We still use selectedPlanId to track selection
   const calculateProgress = (plan: PlanTratamiento) => {
     if (!plan.items || plan.items.length === 0) return 0;
     const completed = plan.items.filter(item => item.estado === 'realizado').length;
@@ -81,7 +85,7 @@ export const TratamientosPage: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* List — se oculta en cualquier tamaño cuando hay detalle abierto */}
+        {/* List */}
         <div className={cn(
           "lg:col-span-5 transition-all",
           selectedPlanId ? "hidden lg:block" : "col-span-1 lg:col-span-12"
@@ -119,7 +123,7 @@ export const TratamientosPage: React.FC = () => {
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, scale: 0.95 }}
-                        onClick={() => setSelectedPlanId(plan.id)}
+                        onClick={() => navigate(`/tratamientos/${plan.id}`)}
                         className={cn(
                           "group p-6 cursor-pointer border-b border-slate-100/30 dark:border-slate-800/30 transition-all hover:bg-blue-50/30 dark:hover:bg-blue-500/5",
                           selectedPlanId === plan.id && "bg-blue-50/50 dark:bg-blue-500/10 border-l-4 border-l-blue-500"
@@ -131,7 +135,7 @@ export const TratamientosPage: React.FC = () => {
                               {plan.nombre}
                             </h3>
                             <p className="text-xs font-bold text-[var(--sb-text-muted)]">
-                              🛒 {plan.paciente?.nombre} {plan.paciente?.apellido}
+                               👤 {plan.paciente?.nombre} {plan.paciente?.apellido}
                             </p>
                             <p className="text-[11px] font-medium text-[var(--sb-text-muted)] flex items-center gap-1.5 pt-1">
                               <Stethoscope size={12} className="text-slate-300" />
@@ -181,80 +185,97 @@ export const TratamientosPage: React.FC = () => {
           </PremiumCard>
         </div>
 
-        {/* Detail panel — visible en cualquier tamaño cuando hay selección */}
-        {selectedPlan ? (
-          <motion.div
-            key={selectedPlan.id}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
-            className="col-span-1 lg:col-span-7"
-          >
-            <PremiumCard className="h-full flex flex-col p-0 border-none shadow-medical">
-              <div className="p-8 border-b border-[var(--sb-border)]">
-                <div className="flex justify-between items-start mb-6">
-                  <div>
-                    <button
-                      onClick={() => setSelectedPlanId(null)}
-                      className="text-blue-500 font-bold text-sm mb-4 flex items-center gap-1"
-                    >
-                      <ChevronRight size={16} className="rotate-180" /> Volver a la lista
-                    </button>
-                    <h2 className="text-2xl font-bold text-[var(--sb-text)] uppercase tracking-tight">{selectedPlan.nombre}</h2>
-                    <div className="flex items-center gap-4 mt-2">
-                      <span className="text-sm font-medium text-[var(--sb-text-muted)] flex items-center gap-1.5">
-                        <Activity size={14} className="text-blue-500" />
-                        {selectedPlan.items.length} Procedimientos
-                      </span>
-                      <span className="text-sm font-medium text-[var(--sb-text-muted)] flex items-center gap-1.5">
-                        <TrendingUp size={14} className="text-emerald-500" />
-                        {calculateProgress(selectedPlan)}% Completado
-                      </span>
+        {/* Detail panel */}
+        <div className="col-span-1 lg:col-span-7">
+          <AnimatePresence mode="wait">
+            {selectedPlanId ? (
+              isLoadingDetail || !fullSelectedPlan ? (
+                <motion.div
+                  key="loading"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="h-full flex flex-col items-center justify-center py-40 gap-4"
+                >
+                  <Loader2 className="h-10 w-10 animate-spin text-blue-500" />
+                  <p className="text-xs font-bold uppercase tracking-widest text-[var(--sb-text-muted)]">Cargando Plan Clínico...</p>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key={fullSelectedPlan.id}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  className="h-full"
+                >
+                  <PremiumCard className="h-full flex flex-col p-0 border-none shadow-medical">
+                    <div className="p-8 border-b border-[var(--sb-border)]">
+                      <div className="flex justify-between items-start mb-6">
+                        <div>
+                          <button
+                            onClick={() => navigate('/tratamientos')}
+                            className="text-blue-500 font-bold text-sm mb-4 flex items-center gap-1"
+                          >
+                            <ChevronRight size={16} className="rotate-180" /> Volver a la lista
+                          </button>
+                          <h2 className="text-2xl font-bold text-[var(--sb-text)] uppercase tracking-tight">{fullSelectedPlan.nombre}</h2>
+                          <div className="flex items-center gap-4 mt-2">
+                            <span className="text-sm font-medium text-[var(--sb-text-muted)] flex items-center gap-1.5">
+                              <Activity size={14} className="text-blue-500" />
+                              {fullSelectedPlan.items?.length || 0} Procedimientos
+                            </span>
+                            <span className="text-sm font-medium text-[var(--sb-text-muted)] flex items-center gap-1.5">
+                              <TrendingUp size={14} className="text-emerald-500" />
+                              {calculateProgress(fullSelectedPlan)}% Completado
+                            </span>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => printPlanTratamiento(fullSelectedPlan)}
+                          title="Imprimir / Guardar PDF"
+                          className="flex items-center gap-2 border border-[var(--sb-border)] hover:border-slate-400 px-3 py-2 rounded-xl text-xs font-bold transition-all hover:text-slate-600 shrink-0"
+                          style={{ background: 'var(--sb-active-bg)', color: 'var(--sb-text-muted)' }}
+                        >
+                          <Printer size={14} />
+                          Imprimir
+                        </button>
+                      </div>
+
+                      <div className="overflow-hidden h-3 rounded-full" style={{ background: 'var(--sb-active-bg)' }}>
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${calculateProgress(fullSelectedPlan)}%` }}
+                          transition={{ duration: 0.8, ease: "circOut" }}
+                          className="h-full bg-gradient-to-r from-blue-600 to-indigo-500"
+                        />
+                      </div>
                     </div>
+
+                    <div className="flex-1 p-8 overflow-y-auto max-h-[calc(100vh-450px)] custom-scrollbar">
+                      <h4 className="text-xs font-bold uppercase tracking-widest text-[var(--sb-text-muted)] mb-6 py-2 border-b border-slate-50 dark:border-slate-800">
+                        Hoja de Ruta Clínica
+                      </h4>
+                      <TratamientoProgreso
+                        plan={fullSelectedPlan}
+                        onUpdateEstado={(itemId: string, estado: string) => updateItemEstado({ itemId, estado })}
+                      />
+                    </div>
+                  </PremiumCard>
+                </motion.div>
+              )
+            ) : (
+              filteredPlanes.length > 0 && (
+                <div className="hidden lg:flex flex-col items-center justify-center py-20 text-center h-full">
+                  <div className="h-24 w-24 rounded-full bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center mx-auto mb-6 text-blue-500">
+                    <Stethoscope size={40} />
                   </div>
-                  <button
-                    onClick={() => printPlanTratamiento(selectedPlan)}
-                    title="Imprimir / Guardar PDF"
-                    className="flex items-center gap-2 border border-[var(--sb-border)] hover:border-slate-400 px-3 py-2 rounded-xl text-xs font-bold transition-all hover:text-slate-600 shrink-0"
-                    style={{ background: 'var(--sb-active-bg)', color: 'var(--sb-text-muted)' }}
-                  >
-                    <Printer size={14} />
-                    Imprimir
-                  </button>
+                  <h3 className="text-xl font-bold text-[var(--sb-text)] uppercase tracking-tight">Detalle del Tratamiento</h3>
+                  <p className="text-slate-500 mt-2">Seleccioná un plan de la lista para ver el desglose clínico.</p>
                 </div>
-
-                <div className="overflow-hidden h-3 rounded-full" style={{ background: 'var(--sb-active-bg)' }}>
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: `${calculateProgress(selectedPlan)}%` }}
-                    transition={{ duration: 0.8, ease: "circOut" }}
-                    className="h-full bg-gradient-to-r from-blue-600 to-indigo-500"
-                  />
-                </div>
-              </div>
-
-              <div className="flex-1 p-8 overflow-y-auto max-h-[calc(100vh-450px)] custom-scrollbar">
-                <h4 className="text-xs font-bold uppercase tracking-widest text-[var(--sb-text-muted)] mb-6 py-2 border-b border-slate-50 dark:border-slate-800">
-                  Hoja de Ruta Clínica
-                </h4>
-                <TratamientoProgreso
-                  plan={selectedPlan}
-                  onUpdateEstado={(itemId: string, estado: string) => updateItemEstado({ itemId, estado })}
-                />
-              </div>
-            </PremiumCard>
-          </motion.div>
-        ) : (
-          filteredPlanes.length > 0 && (
-            <div className="hidden lg:flex lg:col-span-7 flex-col items-center justify-center py-20 text-center">
-              <div className="h-24 w-24 rounded-full bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center mx-auto mb-6 text-blue-500">
-                <Stethoscope size={40} />
-              </div>
-              <h3 className="text-xl font-bold text-[var(--sb-text)] uppercase tracking-tight">Detalle del Tratamiento</h3>
-              <p className="text-slate-500 mt-2">Seleccioná un plan de la lista para ver el desglose clínico.</p>
-            </div>
-          )
-        )}
+              )
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );

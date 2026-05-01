@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../../../context/auth-context';
 import { useDashboard, useHistoricalDashboard } from '../hooks/use-dashboard';
 import { DashboardChart } from '../components/dashboard-chart';
+import { WelcomeDashboard } from '../components/welcome-dashboard';
 import { PremiumCard } from '../../../components/ui/premium-card';
 import { 
   Users, 
@@ -138,6 +139,10 @@ export const DashboardPage: React.FC = () => {
 
   const formatCurrency = (value: number) =>
     new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(value);
+
+  if (dashboardData && (dashboardData.totalConsultorios === 0 || dashboardData.totalProfesionales === 0 || dashboardData.totalPacientes === 0)) {
+    return <WelcomeDashboard stats={dashboardData} />;
+  }
 
   const containerVariants = {
     hidden: { opacity: 0 },

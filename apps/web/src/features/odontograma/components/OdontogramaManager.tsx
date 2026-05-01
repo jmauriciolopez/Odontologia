@@ -211,13 +211,19 @@ export const OdontogramaManager: React.FC<OdontogramaManagerProps> = ({ fichaId,
                   {['vestibular', 'lingual', 'oclusal', 'distal', 'mesial'].map(cara => (
                     <div key={cara} className="flex flex-col gap-1.5">
                       <div className="flex justify-between items-center px-1">
-                        <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--sb-text-muted)]">{cara}</label>
+                        <label 
+                          htmlFor={`cara-${cara}`}
+                          className="text-[10px] font-bold uppercase tracking-wider text-[var(--sb-text-muted)]"
+                        >
+                          {cara}
+                        </label>
                         <div className={cn(
                           "h-1.5 w-1.5 rounded-full",
                           states.find(s => s.id === (selectedPieza.caras as any)?.[cara])?.bg || 'bg-slate-200'
                         )} />
                       </div>
                       <select
+                        id={`cara-${cara}`}
                         disabled={isReadOnly || updatePieza.isPending}
                         className="input-clinical py-2.5 text-xs font-bold border-[var(--sb-border)] hover:border-primary/30 focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all outline-none"
                         value={(selectedPieza.caras as any)?.[cara] ?? 'sano'}

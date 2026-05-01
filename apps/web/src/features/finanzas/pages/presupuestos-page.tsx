@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { usePresupuestos, useFinanzasMutations } from '../hooks/use-presupuestos';
+import { useNavigate, useParams } from 'react-router-dom';
+import { usePresupuestos, useFinanzasMutations, usePresupuestoDetalle } from '../hooks/use-presupuestos';
 import { PresupuestoList } from '../components/presupuesto-list';
 import { PresupuestoForm } from '../components/presupuesto-form';
 import { PagoModal } from '../components/pago-modal';
@@ -18,9 +19,9 @@ import {
 } from '@phosphor-icons/react';
 
 export const PresupuestosPage: React.FC = () => {
+  const navigate = useNavigate();
+  const { id: selectedId } = useParams<{ id: string }>();
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [selectedPresupuesto, setSelectedPresupuesto] = useState<Presupuesto | null>(null);
-  const [showPagoModal, setShowPagoModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
   const { data: presupuestosData, isLoading } = usePresupuestos();
@@ -49,8 +50,7 @@ export const PresupuestosPage: React.FC = () => {
   const handleRegisterPago = async (data: any) => {
     try {
       await registerPago.mutateAsync(data);
-      setShowPagoModal(false);
-      setSelectedPresupuesto(null);
+      navigate('/presupuestos');
     } catch (e) {
       console.error(e);
     }
@@ -204,10 +204,7 @@ export const PresupuestosPage: React.FC = () => {
           <PresupuestoList
             presupuestos={filteredPresupuestos}
             isLoading={isLoading}
-            onSelect={(p) => {
-              setSelectedPresupuesto(p);
-              setShowPagoModal(true);
-            }}
+            onSelect={(p) => navigate(`/presupuestos/${p.id}`)}
           />
         ) : !isLoading && (
           <div className="medical-card p-20 text-center border-dashed border-[var(--sb-border)]">
@@ -228,13 +225,10 @@ export const PresupuestosPage: React.FC = () => {
           />
         )}
 
-        {showPagoModal && selectedPresupuesto && (
+        {selectedId && (
           <PagoModal
-            presupuesto={selectedPresupuesto}
-            onClose={() => {
-              setShowPagoModal(false);
-              setSelectedPresupuesto(null);
-            }}
+            presupuestoId={selectedId}
+            onClose={() => navigate('/presupuestos')}
             onSubmit={handleRegisterPago}
             loading={registerPago.isPending}
           />

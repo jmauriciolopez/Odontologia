@@ -18,6 +18,7 @@ import {
 } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
+import { TrialStatus } from './trial-status';
 
 const menuItems = [
   { name: 'Dashboard',     path: '/',                       icon: SquaresFour },
@@ -40,6 +41,7 @@ export const Sidebar: React.FC = () => {
 
   return (
     <aside
+      aria-label="Menú lateral"
       className="hidden lg:flex w-72 flex-col shrink-0 h-full transition-all duration-300"
       style={{
         background:    'var(--sb-bg)',
@@ -57,9 +59,9 @@ export const Sidebar: React.FC = () => {
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/20 text-white">
           <Stethoscope size={24} weight="bold" />
         </div>
-        <h1 className="font-heading text-xl font-bold tracking-tighter" style={{ color: 'var(--sb-text)' }}>
+        <div className="font-heading text-xl font-bold tracking-tighter" style={{ color: 'var(--sb-text)' }}>
           OdontoSaaS
-        </h1>
+        </div>
       </div>
 
       {/* Nav */}
@@ -69,40 +71,41 @@ export const Sidebar: React.FC = () => {
              style={{ color: 'var(--sb-text-muted)' }}>
             Menú Principal
           </p>
-          <nav className="space-y-1">
+          <nav className="space-y-1" aria-label="Navegación principal">
             {menuItems.map((item) => {
               const isActive = location.pathname === item.path;
               return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 relative no-underline text-sm font-semibold"
-                  style={{
-                    background: isActive ? 'var(--sb-active-bg)' : 'transparent',
-                    color:      isActive ? 'var(--sb-active-text)' : 'var(--sb-text-muted)',
-                  }}
-                  onMouseEnter={e => {
-                    if (!isActive) {
-                      (e.currentTarget as HTMLElement).style.background = 'var(--sb-active-bg)';
-                      (e.currentTarget as HTMLElement).style.opacity = '0.7';
-                    }
-                  }}
-                  onMouseLeave={e => {
-                    if (!isActive) {
-                      (e.currentTarget as HTMLElement).style.background = 'transparent';
-                      (e.currentTarget as HTMLElement).style.opacity = '1';
-                    }
-                  }}
-                >
-                  <item.icon size={20} weight={isActive ? "fill" : "bold"} className="transition-transform group-hover:scale-110 shrink-0" />
-                  <span className="tracking-tight">{item.name}</span>
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeNav"
-                      className="absolute right-2 h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--primary)]"
-                    />
-                  )}
-                </Link>
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    aria-current={isActive ? 'page' : undefined}
+                    className="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 relative no-underline text-sm font-semibold focus-visible:ring-2 focus-visible:ring-primary outline-none"
+                    style={{
+                      background: isActive ? 'var(--sb-active-bg)' : 'transparent',
+                      color:      isActive ? 'var(--sb-active-text)' : 'var(--sb-text-muted)',
+                    }}
+                    onMouseEnter={e => {
+                      if (!isActive) {
+                        (e.currentTarget as HTMLElement).style.background = 'var(--sb-active-bg)';
+                        (e.currentTarget as HTMLElement).style.opacity = '0.7';
+                      }
+                    }}
+                    onMouseLeave={e => {
+                      if (!isActive) {
+                        (e.currentTarget as HTMLElement).style.background = 'transparent';
+                        (e.currentTarget as HTMLElement).style.opacity = '1';
+                      }
+                    }}
+                  >
+                    <item.icon size={20} weight={isActive ? "fill" : "bold"} className="transition-transform group-hover:scale-110 shrink-0" />
+                    <span className="tracking-tight">{item.name}</span>
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeNav"
+                        className="absolute right-2 h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--primary)]"
+                      />
+                    )}
+                  </Link>
               );
             })}
           </nav>
@@ -113,19 +116,23 @@ export const Sidebar: React.FC = () => {
              style={{ color: 'var(--sb-text-muted)' }}>
             Configuración
           </p>
-          <Link
-            to="/ajustes"
-            className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 no-underline text-sm font-semibold"
-            style={{
-              background: location.pathname === '/ajustes' ? 'var(--sb-active-bg)' : 'transparent',
-              color:      location.pathname === '/ajustes' ? 'var(--sb-active-text)' : 'var(--sb-text-muted)',
-            }}
-          >
-            <Gear size={20} weight={location.pathname === '/ajustes' ? "fill" : "bold"} />
-            <span>Ajustes</span>
-          </Link>
+          <nav className="space-y-1" aria-label="Navegación de ajustes">
+            <Link
+              to="/ajustes"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 no-underline text-sm font-semibold"
+              style={{
+                background: location.pathname === '/ajustes' ? 'var(--sb-active-bg)' : 'transparent',
+                color:      location.pathname === '/ajustes' ? 'var(--sb-active-text)' : 'var(--sb-text-muted)',
+              }}
+            >
+              <Gear size={20} weight={location.pathname === '/ajustes' ? "fill" : "bold"} />
+              <span>Ajustes</span>
+            </Link>
+          </nav>
         </div>
       </div>
+
+      <TrialStatus />
 
       {/* User footer */}
       <div className="p-4 shrink-0" style={{ borderTop: '1px solid var(--sb-border)' }}>
@@ -152,6 +159,7 @@ export const Sidebar: React.FC = () => {
             className="p-2 rounded-lg transition-colors hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10"
             style={{ color: 'var(--sb-text-muted)' }}
             title="Cerrar Sesión"
+            aria-label="Cerrar Sesión"
           >
             <SignOut size={18} weight="bold" />
           </button>

@@ -7,11 +7,13 @@ import { PresupuestosService } from './presupuestos.service';
 import { PresupuestosController } from './presupuestos.controller';
 
 import { ReportsModule } from '../reports/reports.module';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Presupuesto, PresupuestoItem, Pago]),
     ReportsModule,
+    NotificationsModule,
   ],
   controllers: [PresupuestosController],
   providers: [PresupuestosService],

@@ -29,7 +29,7 @@ export class UsuariosService {
 
   private async ensureProfesional(usuarioId: string): Promise<void> {
     const exists = await this.profesionalesRepository.findOne(
-      TenantHelper.withTenant(this.cls, { where: { usuarioId } })
+      TenantHelper.withTenantOne<Profesional>(this.cls, { where: { usuarioId } })
     );
     if (!exists) {
       await this.profesionalesRepository.save(
@@ -43,7 +43,7 @@ export class UsuariosService {
     const hasOdontologo = roles.some(r => r.nombre.toUpperCase() === ODONTOLOGO_ROLE);
     if (!hasOdontologo) {
       const profesional = await this.profesionalesRepository.findOne(
-        TenantHelper.withTenant(this.cls, { where: { usuarioId } })
+        TenantHelper.withTenantOne<Profesional>(this.cls, { where: { usuarioId } })
       );
       if (profesional) await this.profesionalesRepository.remove(profesional);
     }
@@ -94,6 +94,7 @@ export class UsuariosService {
       .addSelect('usuario.passwordHash')
       .leftJoinAndSelect('usuario.usuarioRoles', 'usuarioRoles')
       .leftJoinAndSelect('usuarioRoles.rol', 'rol')
+      .leftJoinAndSelect('usuario.clinica', 'clinica')
       .where('usuario.email = :email', { email });
 
     TenantHelper.applyFilter(qb, this.cls, 'usuario');
@@ -103,7 +104,7 @@ export class UsuariosService {
 
   async findOne(id: string): Promise<Usuario> {
     const usuario = await this.usuariosRepository.findOne(
-      TenantHelper.withTenant(this.cls, {
+      TenantHelper.withTenantOne<Usuario>(this.cls, {
         where: { id },
         relations: ['usuarioRoles', 'usuarioRoles.rol'],
       })
@@ -118,7 +119,7 @@ export class UsuariosService {
 
   async findAll(): Promise<Usuario[]> {
     return await this.usuariosRepository.find(
-      TenantHelper.withTenant(this.cls, {
+      TenantHelper.withTenant<Usuario>(this.cls, {
         relations: ['usuarioRoles', 'usuarioRoles.rol'],
       })
     );

@@ -8,11 +8,13 @@ import { Turno } from '../turnos/entities/turno.entity';
 import { Presupuesto } from '../presupuestos/entities/presupuesto.entity';
 import { Pago } from '../presupuestos/entities/pago.entity';
 import { PlanTratamientoItem } from '../planes-tratamiento/entities/plan-tratamiento-item.entity';
+import { Profesional } from '../profesionales/entities/profesional.entity';
+import { Consultorio } from '../consultorios/entities/consultorio.entity';
 import { ReportsModule } from '../reports/reports.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Paciente, Turno, Presupuesto, Pago, PlanTratamientoItem]),
+    TypeOrmModule.forFeature([Paciente, Turno, Presupuesto, Pago, PlanTratamientoItem, Profesional, Consultorio]),
     ReportsModule,
     CacheModule.register({
       ttl: 600, // 10 minutes by default

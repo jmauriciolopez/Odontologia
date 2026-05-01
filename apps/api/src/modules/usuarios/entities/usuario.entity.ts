@@ -1,6 +1,7 @@
-import { Entity, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity';
 import { UsuarioRol } from './usuario-rol.entity';
+import { Clinica } from '../../clinicas/entities/clinica.entity';
 
 @Entity('usuarios')
 export class Usuario extends BaseEntity {
@@ -21,4 +22,8 @@ export class Usuario extends BaseEntity {
 
   @OneToMany(() => UsuarioRol, (usuarioRol) => usuarioRol.usuario)
   usuarioRoles!: UsuarioRol[];
+  
+  @ManyToOne(() => Clinica, (clinica) => clinica.usuarios)
+  @JoinColumn({ name: 'clinica_id' })
+  clinica!: Clinica;
 }

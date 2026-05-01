@@ -1,7 +1,8 @@
-import { Injectable, Logger, Inject } from '@nestjs/common';
+import { Injectable, Logger, Inject, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Archivo, ArchivoCategoria } from './entities/archivo.entity';
+import { Paciente } from '../pacientes/entities/paciente.entity';
 import { IStorageService, StorageFile } from './storage/storage.interface';
 import { TenantHelper } from '../../common/utils/tenant-helper';
 import { ClsService } from 'nestjs-cls';
@@ -13,16 +14,28 @@ export class ArchivosService {
   constructor(
     @InjectRepository(Archivo)
     private readonly archivoRepository: Repository<Archivo>,
+    @InjectRepository(Paciente)
+    private readonly pacienteRepository: Repository<Paciente>,
     @Inject('STORAGE_SERVICE')
     private readonly storageService: IStorageService,
     private readonly cls: ClsService,
   ) {}
+
+  private async checkPatientOwnership(pacienteId: string): Promise<void> {
+    const paciente = await this.pacienteRepository.findOne(
+      TenantHelper.withTenantOne(this.cls, { where: { id: pacienteId } })
+    );
+    if (!paciente) {
+      throw new NotFoundException(`Paciente con ID ${pacienteId} no encontrado en su clínica`);
+    }
+  }
 
   async saveDocumento(
     file: StorageFile,
     pacienteId: string,
     uploadedById: string,
   ): Promise<Archivo> {
+    await this.checkPatientOwnership(pacienteId);
     const filePath = await this.storageService.save(file, `pacientes/${pacienteId}/docs`);
 
     const archivo = this.archivoRepository.create({
@@ -45,6 +58,7 @@ export class ArchivosService {
     fechaToma?: string,
     uploadedById?: string,
   ): Promise<Archivo> {
+    await this.checkPatientOwnership(pacienteId);
     const filePath = await this.storageService.save(file, `pacientes/${pacienteId}/rayos`);
 
     const archivo = this.archivoRepository.create({
@@ -66,9 +80,9 @@ export class ArchivosService {
 
   async findByPaciente(pacienteId: string) {
     const archivos = await this.archivoRepository.find(
-      TenantHelper.withTenant(this.cls, {
+      TenantHelper.withTenant<Archivo>(this.cls, {
         where: { pacienteId },
-        order: { createdAt: 'DESC' },
+        order: { createdAt: 'DESC' } as any,
       })
     );
 

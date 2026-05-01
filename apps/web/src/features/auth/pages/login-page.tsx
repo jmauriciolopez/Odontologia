@@ -11,6 +11,7 @@ import {
   Stethoscope 
 } from '@phosphor-icons/react';
 import { useLogin } from '../hooks/use-login';
+import { Link } from 'react-router-dom';
 
 const FEATURES = [
   { icon: Stethoscope, label: 'Fichas clínicas digitales' },
@@ -245,6 +246,15 @@ export const LoginPage: React.FC = () => {
           <div className="mt-6 flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[var(--sb-text-muted)]">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
             Sistema operativo · Todos los servicios activos
+          </div>
+
+          <div className="mt-8 text-center">
+            <p className="text-xs font-medium text-slate-500">
+              ¿No tienes una cuenta?{' '}
+              <Link to="/register" className="font-bold text-blue-400 hover:text-blue-300">
+                Registrar mi clínica
+              </Link>
+            </p>
           </div>
         </motion.div>
       </div>

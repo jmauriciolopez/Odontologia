@@ -12,6 +12,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { usePacientes } from '../../features/pacientes/hooks/use-pacientes';
 import { cn } from '@/lib/utils';
+import { useFocusTrap } from '../../hooks/use-focus-trap';
 
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -30,17 +31,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
     { id: 'finances', label: 'Ver Finanzas', icon: <CreditCard size={16}/>, path: '/presupuestos', color: 'amber' },
   ];
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        isOpen ? onClose() : null; // This is handled by parent, but good to know
-      }
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen]);
+  const modalRef = React.useRef<HTMLDivElement>(null);
+  useFocusTrap(modalRef, isOpen, onClose);
 
   const handleSelect = (path: string) => {
     navigate(path);
@@ -61,9 +53,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
           />
 
           <motion.div
+            ref={modalRef}
             initial={{ opacity: 0, scale: 0.95, y: -20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Buscador global"
             className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl border border-[var(--sb-border)] overflow-hidden relative z-10"
           >
             {/* Search Input */}
@@ -79,7 +75,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
                  value={query}
                  onChange={(e) => setQuery(e.target.value)}
                />
-               <button onClick={onClose} className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-800 rounded-lg h-6">Esc</button>
+                <button 
+                  onClick={onClose} 
+                  aria-label="Cerrar buscador"
+                  className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-800 rounded-lg h-6 hover:bg-slate-100 transition-colors"
+                >
+                  Esc
+                </button>
             </div>
 
             {/* Content Scroll Area */}
@@ -114,12 +116,14 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
                   <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4 mb-3">
                     {query ? 'Resultados de la búsqueda' : 'Pacientes Recientes'}
                   </h4>
-                  <div className="space-y-1">
+                  <div className="space-y-1" role="listbox">
                      {pacientes.slice(0, 8).map((p: any) => (
                        <button
                          key={p.id}
+                         role="option"
+                         aria-selected="false"
                          onClick={() => handleSelect(`/pacientes/${p.id}`)}
-                         className="w-full flex items-center justify-between p-3 rounded-2xl hover:opacity-800/50 transition-all group"
+                         className="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all group"
                        >
                           <div className="flex items-center gap-4">
                              <div className="h-10 w-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 font-bold group-hover:bg-blue-100 group-hover:text-blue-600 transition-colors">

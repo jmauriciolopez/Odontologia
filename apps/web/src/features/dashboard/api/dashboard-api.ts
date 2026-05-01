@@ -6,6 +6,8 @@ export interface DashboardStats {
   facturacionProyectada: number;
   facturacionReal: number;
   proximosTurnos: any[];
+  totalProfesionales: number;
+  totalConsultorios: number;
 }
 
 export interface HistoricalStat {

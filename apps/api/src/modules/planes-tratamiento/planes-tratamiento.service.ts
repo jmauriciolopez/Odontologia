@@ -19,9 +19,9 @@ export class PlanesTratamientoService {
 
   async findAll(): Promise<PlanTratamiento[]> {
     return await this.planRepository.find(
-      TenantHelper.withTenant(this.cls, {
+      TenantHelper.withTenant<PlanTratamiento>(this.cls, {
         relations: ['items', 'profesional', 'profesional.usuario', 'paciente'],
-        order: { createdAt: 'DESC' }
+        order: { createdAt: 'DESC' } as any
       })
     );
   }
@@ -44,17 +44,17 @@ export class PlanesTratamientoService {
 
   async findByPaciente(pacienteId: string): Promise<PlanTratamiento[]> {
     return await this.planRepository.find(
-      TenantHelper.withTenant(this.cls, {
+      TenantHelper.withTenant<PlanTratamiento>(this.cls, {
         where: { pacienteId },
         relations: ['items', 'profesional', 'profesional.usuario', 'paciente'],
-        order: { createdAt: 'DESC' }
+        order: { createdAt: 'DESC' } as any
       })
     );
   }
 
   async findOne(id: string): Promise<PlanTratamiento> {
     const plan = await this.planRepository.findOne(
-      TenantHelper.withTenant(this.cls, {
+      TenantHelper.withTenantOne<PlanTratamiento>(this.cls, {
         where: { id },
         relations: ['items', 'profesional', 'profesional.usuario', 'paciente'],
       })
@@ -75,7 +75,7 @@ export class PlanesTratamientoService {
 
   async updateItemEstado(itemId: string, estado: string): Promise<PlanTratamientoItem> {
     const item = await this.itemRepository.findOne(
-      TenantHelper.withTenant(this.cls, { where: { id: itemId } })
+      TenantHelper.withTenantOne<PlanTratamientoItem>(this.cls, { where: { id: itemId } })
     );
     if (!item) {
       throw new NotFoundException(`Item de tratamiento ${itemId} no encontrado`);

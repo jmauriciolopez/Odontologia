@@ -147,16 +147,20 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
   return (
     <div
       className="flex flex-col rounded-2xl overflow-hidden border"
+      role="grid"
+      aria-label="Agenda de turnos"
       style={{ background: 'var(--card-bg)', borderColor: 'var(--sb-border)', minHeight: 600 }}
     >
-      <div className="flex border-b" style={{ borderColor: 'var(--sb-border)' }}>
-        <div className="w-16 shrink-0" />
+      <div className="flex border-b" style={{ borderColor: 'var(--sb-border)' }} role="row">
+        <div className="w-16 shrink-0" role="presentation" />
         {days.map(day => {
           const isToday = isSameDay(day, new Date());
           return (
             <div
               key={day.toISOString()}
               className="flex-1 text-center py-3 text-xs font-bold uppercase tracking-wider"
+              role="columnheader"
+              aria-sort="none"
               style={{ color: isToday ? 'var(--brand-500, #6d7bff)' : 'var(--sb-text-muted)' }}
             >
               <div>{format(day, 'EEE', { locale: es })}</div>
@@ -173,9 +177,9 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
         })}
       </div>
 
-      <div className="flex-1 overflow-y-auto">
-        <div className="flex" style={{ height: totalHeight }}>
-          <div className="w-16 shrink-0 relative">
+      <div className="flex-1 overflow-y-auto" role="presentation">
+        <div className="flex" style={{ height: totalHeight }} role="row">
+          <div className="w-16 shrink-0 relative" role="presentation">
             {hours.map(h => (
               <div
                 key={h}
@@ -197,16 +201,28 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
               <div
                 key={day.toISOString()}
                 className="flex-1 relative border-l"
+                role="gridcell"
                 style={{ borderColor: 'var(--sb-border)' }}
               >
                 {hours.map(h => (
                   <div
                     key={h}
-                    className="absolute w-full border-t cursor-pointer hover:bg-blue-500/5 transition-colors"
+                    tabIndex={0}
+                    role="button"
+                    aria-label={`Programar turno para ${format(day, 'EEEE d', { locale: es })} a las ${h}:00`}
+                    className="absolute w-full border-t cursor-pointer hover:bg-blue-500/5 transition-colors focus-visible:bg-blue-500/10 focus-visible:outline-none"
                     style={{
                       top: (h - hourStart) * SLOT_HEIGHT,
                       height: SLOT_HEIGHT,
                       borderColor: 'var(--sb-border)',
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const d = new Date(day);
+                        d.setHours(h, 0, 0, 0);
+                        onTimeSlotClick(d);
+                      }
                     }}
                     onClick={() => {
                       const d = new Date(day);
@@ -222,11 +238,20 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
                   return (
                     <div
                       key={turno.id}
+                      tabIndex={0}
+                      role="button"
+                      aria-label={`Turno de ${turno.paciente.nombre} ${turno.paciente.apellido}, estado ${turno.estado}`}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          onTurnoClick(turno);
+                        }
+                      }}
                       onClick={(e) => { e.stopPropagation(); onTurnoClick(turno); }}
                       className={cn(
                         'absolute rounded-lg border-l-2 px-1.5 py-1 cursor-pointer',
                         'hover:brightness-110 transition-all overflow-hidden z-10',
-                        'min-w-0',
+                        'min-w-0 focus-visible:ring-2 focus-visible:ring-primary outline-none',
                         ESTADO_COLORS[turno.estado]
                       )}
                       style={{

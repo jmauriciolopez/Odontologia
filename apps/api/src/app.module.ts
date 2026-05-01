@@ -18,11 +18,15 @@ import { RemindersModule } from './modules/reminders/reminders.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { ConfiguracionModule } from './modules/configuracion/configuracion.module';
 import { ObrasSocialesModule } from './modules/obras-sociales/obras-sociales.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
+import { ClinicasModule } from './modules/clinicas/clinicas.module';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ClsModule } from 'nestjs-cls';
 import { TenantInterceptor } from './common/interceptors/tenant.interceptor';
 import { TenantSubscriber } from './common/subscribers/tenant.subscriber';
+import { SubscriptionGuard } from './common/guards/subscription.guard';
+import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -55,12 +59,22 @@ import { TenantSubscriber } from './common/subscribers/tenant.subscriber';
     DashboardModule,
     ConfiguracionModule,
     ObrasSocialesModule,
+    NotificationsModule,
+    ClinicasModule,
   ],
   controllers: [],
   providers: [
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: SubscriptionGuard,
     },
     {
       provide: APP_INTERCEPTOR,

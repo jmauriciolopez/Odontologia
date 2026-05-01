@@ -16,6 +16,19 @@
         ]
       },
       {
+        "id": "apps/api/src/common/filters/global-exception.filter.ts::GlobalExceptionFilter.catch#method",
+        "name": "catch",
+        "kind": "method",
+        "file": "apps/api/src/common/filters/global-exception.filter.ts",
+        "line": 9,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
         "id": "apps/api/src/common/filters/http-exception.filter.ts::HttpExceptionFilter.catch#method",
         "name": "catch",
         "kind": "method",
@@ -68,11 +81,102 @@
         ]
       },
       {
+        "id": "apps/api/src/common/guards/subscription.guard.ts::SubscriptionGuard.constructor#method",
+        "name": "constructor",
+        "kind": "method",
+        "file": "apps/api/src/common/guards/subscription.guard.ts",
+        "line": 14,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/common/guards/subscription.guard.ts::SubscriptionGuard.canActivate#method",
+        "name": "canActivate",
+        "kind": "method",
+        "file": "apps/api/src/common/guards/subscription.guard.ts",
+        "line": 20,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/common/interceptors/tenant.interceptor.ts::TenantInterceptor.constructor#method",
+        "name": "constructor",
+        "kind": "method",
+        "file": "apps/api/src/common/interceptors/tenant.interceptor.ts",
+        "line": 12,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/common/interceptors/tenant.interceptor.ts::TenantInterceptor.intercept#method",
+        "name": "intercept",
+        "kind": "method",
+        "file": "apps/api/src/common/interceptors/tenant.interceptor.ts",
+        "line": 14,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
         "id": "apps/api/src/common/interceptors/transform-response.interceptor.ts::TransformResponseInterceptor.intercept#method",
         "name": "intercept",
         "kind": "method",
         "file": "apps/api/src/common/interceptors/transform-response.interceptor.ts",
         "line": 18,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/common/subscribers/tenant.subscriber.ts::TenantSubscriber.constructor#method",
+        "name": "constructor",
+        "kind": "method",
+        "file": "apps/api/src/common/subscribers/tenant.subscriber.ts",
+        "line": 13,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/common/subscribers/tenant.subscriber.ts::TenantSubscriber.listenTo#method",
+        "name": "listenTo",
+        "kind": "method",
+        "file": "apps/api/src/common/subscribers/tenant.subscriber.ts",
+        "line": 15,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/common/subscribers/tenant.subscriber.ts::TenantSubscriber.beforeInsert#method",
+        "name": "beforeInsert",
+        "kind": "method",
+        "file": "apps/api/src/common/subscribers/tenant.subscriber.ts",
+        "line": 19,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -124,7 +228,7 @@
         "name": "bootstrap",
         "kind": "function",
         "file": "apps/api/src/main.ts",
-        "line": 8,
+        "line": 11,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -176,7 +280,7 @@
         "name": "listByPaciente",
         "kind": "method",
         "file": "apps/api/src/modules/archivos/archivos.controller.ts",
-        "line": 50,
+        "line": 51,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -189,7 +293,7 @@
         "name": "deleteDocumento",
         "kind": "method",
         "file": "apps/api/src/modules/archivos/archivos.controller.ts",
-        "line": 56,
+        "line": 57,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -202,7 +306,7 @@
         "name": "constructor",
         "kind": "method",
         "file": "apps/api/src/modules/archivos/archivos.service.ts",
-        "line": 12,
+        "line": 13,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -228,7 +332,7 @@
         "name": "saveRadiografia",
         "kind": "method",
         "file": "apps/api/src/modules/archivos/archivos.service.ts",
-        "line": 40,
+        "line": 41,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -241,7 +345,7 @@
         "name": "findByPaciente",
         "kind": "method",
         "file": "apps/api/src/modules/archivos/archivos.service.ts",
-        "line": 59,
+        "line": 67,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -254,7 +358,7 @@
         "name": "deleteDocumento",
         "kind": "method",
         "file": "apps/api/src/modules/archivos/archivos.service.ts",
-        "line": 69,
+        "line": 88,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -371,7 +475,7 @@
         "name": "constructor",
         "kind": "method",
         "file": "apps/api/src/modules/auth/auth.controller.ts",
-        "line": 7,
+        "line": 8,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -384,7 +488,20 @@
         "name": "login",
         "kind": "method",
         "file": "apps/api/src/modules/auth/auth.controller.ts",
-        "line": 11,
+        "line": 12,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/auth/auth.controller.ts::AuthController.register#method",
+        "name": "register",
+        "kind": "method",
+        "file": "apps/api/src/modules/auth/auth.controller.ts",
+        "line": 17,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -397,7 +514,7 @@
         "name": "constructor",
         "kind": "method",
         "file": "apps/api/src/modules/auth/auth.service.ts",
-        "line": 10,
+        "line": 17,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -410,7 +527,20 @@
         "name": "login",
         "kind": "method",
         "file": "apps/api/src/modules/auth/auth.service.ts",
-        "line": 15,
+        "line": 29,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/auth/auth.service.ts::AuthService.register#method",
+        "name": "register",
+        "kind": "method",
+        "file": "apps/api/src/modules/auth/auth.service.ts",
+        "line": 63,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -437,6 +567,58 @@
         "kind": "method",
         "file": "apps/api/src/modules/auth/strategies/jwt.strategy.ts",
         "line": 18,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/clinicas/clinicas.service.ts::ClinicasService.constructor#method",
+        "name": "constructor",
+        "kind": "method",
+        "file": "apps/api/src/modules/clinicas/clinicas.service.ts",
+        "line": 9,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/clinicas/clinicas.service.ts::ClinicasService.create#method",
+        "name": "create",
+        "kind": "method",
+        "file": "apps/api/src/modules/clinicas/clinicas.service.ts",
+        "line": 14,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/clinicas/clinicas.service.ts::ClinicasService.saveClinica#method",
+        "name": "saveClinica",
+        "kind": "method",
+        "file": "apps/api/src/modules/clinicas/clinicas.service.ts",
+        "line": 32,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/clinicas/clinicas.service.ts::ClinicasService.findById#method",
+        "name": "findById",
+        "kind": "method",
+        "file": "apps/api/src/modules/clinicas/clinicas.service.ts",
+        "line": 43,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -683,7 +865,7 @@
         "name": "constructor",
         "kind": "method",
         "file": "apps/api/src/modules/consultorios/consultorios.service.ts",
-        "line": 10,
+        "line": 12,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -696,7 +878,7 @@
         "name": "create",
         "kind": "method",
         "file": "apps/api/src/modules/consultorios/consultorios.service.ts",
-        "line": 15,
+        "line": 18,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -709,7 +891,7 @@
         "name": "findAll",
         "kind": "method",
         "file": "apps/api/src/modules/consultorios/consultorios.service.ts",
-        "line": 20,
+        "line": 23,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -722,7 +904,7 @@
         "name": "findOne",
         "kind": "method",
         "file": "apps/api/src/modules/consultorios/consultorios.service.ts",
-        "line": 24,
+        "line": 27,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -735,7 +917,7 @@
         "name": "update",
         "kind": "method",
         "file": "apps/api/src/modules/consultorios/consultorios.service.ts",
-        "line": 32,
+        "line": 37,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -748,7 +930,46 @@
         "name": "remove",
         "kind": "method",
         "file": "apps/api/src/modules/consultorios/consultorios.service.ts",
-        "line": 38,
+        "line": 43,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/consultorios/consultorios.service.ts::ConsultoriosService.validarDisponibilidadHoraria#method",
+        "name": "validarDisponibilidadHoraria",
+        "kind": "method",
+        "file": "apps/api/src/modules/consultorios/consultorios.service.ts",
+        "line": 48,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/consultorios/consultorios.service.ts::validarDisponibilidadHoraria.normalize#method",
+        "name": "normalize",
+        "kind": "method",
+        "file": "apps/api/src/modules/consultorios/consultorios.service.ts",
+        "line": 63,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/consultorios/consultorios.service.ts::validarDisponibilidadHoraria.toMin#method",
+        "name": "toMin",
+        "kind": "method",
+        "file": "apps/api/src/modules/consultorios/consultorios.service.ts",
+        "line": 73,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -761,7 +982,72 @@
         "name": "constructor",
         "kind": "method",
         "file": "apps/api/src/modules/dashboard/dashboard.controller.ts",
-        "line": 11,
+        "line": 14,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/dashboard/dashboard.controller.ts::DashboardController.getStats#method",
+        "name": "getStats",
+        "kind": "method",
+        "file": "apps/api/src/modules/dashboard/dashboard.controller.ts",
+        "line": 23,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/dashboard/dashboard.controller.ts::DashboardController.getHistoricalStats#method",
+        "name": "getHistoricalStats",
+        "kind": "method",
+        "file": "apps/api/src/modules/dashboard/dashboard.controller.ts",
+        "line": 31,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/dashboard/dashboard.controller.ts::DashboardController.exportHistoricalPdf#method",
+        "name": "exportHistoricalPdf",
+        "kind": "method",
+        "file": "apps/api/src/modules/dashboard/dashboard.controller.ts",
+        "line": 40,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/dashboard/dashboard.controller.ts::DashboardController.exportCobranzaPdf#method",
+        "name": "exportCobranzaPdf",
+        "kind": "method",
+        "file": "apps/api/src/modules/dashboard/dashboard.controller.ts",
+        "line": 59,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/dashboard/dashboard.controller.ts::DashboardController.exportPacientesNuevosPdf#method",
+        "name": "exportPacientesNuevosPdf",
+        "kind": "method",
+        "file": "apps/api/src/modules/dashboard/dashboard.controller.ts",
+        "line": 78,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -774,7 +1060,20 @@
         "name": "constructor",
         "kind": "method",
         "file": "apps/api/src/modules/dashboard/dashboard.service.ts",
-        "line": 11,
+        "line": 14,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/dashboard/dashboard.service.ts::DashboardService.getHistoricalStats#method",
+        "name": "getHistoricalStats",
+        "kind": "method",
+        "file": "apps/api/src/modules/dashboard/dashboard.service.ts",
+        "line": 31,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -787,7 +1086,33 @@
         "name": "getStats",
         "kind": "method",
         "file": "apps/api/src/modules/dashboard/dashboard.service.ts",
-        "line": 22,
+        "line": 63,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/dashboard/dashboard.service.ts::DashboardService.getCobranzaReport#method",
+        "name": "getCobranzaReport",
+        "kind": "method",
+        "file": "apps/api/src/modules/dashboard/dashboard.service.ts",
+        "line": 120,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/dashboard/dashboard.service.ts::DashboardService.getNuevosPacientesReport#method",
+        "name": "getNuevosPacientesReport",
+        "kind": "method",
+        "file": "apps/api/src/modules/dashboard/dashboard.service.ts",
+        "line": 133,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -878,7 +1203,7 @@
         "name": "constructor",
         "kind": "method",
         "file": "apps/api/src/modules/fichas-clinicas/fichas-clinicas.service.ts",
-        "line": 15,
+        "line": 17,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -891,7 +1216,7 @@
         "name": "createFicha",
         "kind": "method",
         "file": "apps/api/src/modules/fichas-clinicas/fichas-clinicas.service.ts",
-        "line": 28,
+        "line": 31,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -904,7 +1229,7 @@
         "name": "findByPaciente",
         "kind": "method",
         "file": "apps/api/src/modules/fichas-clinicas/fichas-clinicas.service.ts",
-        "line": 33,
+        "line": 36,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -917,7 +1242,7 @@
         "name": "addAntecedente",
         "kind": "method",
         "file": "apps/api/src/modules/fichas-clinicas/fichas-clinicas.service.ts",
-        "line": 46,
+        "line": 51,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -930,7 +1255,7 @@
         "name": "addEvolucion",
         "kind": "method",
         "file": "apps/api/src/modules/fichas-clinicas/fichas-clinicas.service.ts",
-        "line": 51,
+        "line": 56,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -943,7 +1268,124 @@
         "name": "upsertMedicion",
         "kind": "method",
         "file": "apps/api/src/modules/fichas-clinicas/fichas-clinicas.service.ts",
-        "line": 62,
+        "line": 69,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/notifications/notifications.gateway.ts::NotificationsGateway.constructor#method",
+        "name": "constructor",
+        "kind": "method",
+        "file": "apps/api/src/modules/notifications/notifications.gateway.ts",
+        "line": 26,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/notifications/notifications.gateway.ts::NotificationsGateway.handleConnection#method",
+        "name": "handleConnection",
+        "kind": "method",
+        "file": "apps/api/src/modules/notifications/notifications.gateway.ts",
+        "line": 28,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/notifications/notifications.gateway.ts::NotificationsGateway.handleDisconnect#method",
+        "name": "handleDisconnect",
+        "kind": "method",
+        "file": "apps/api/src/modules/notifications/notifications.gateway.ts",
+        "line": 56,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/notifications/notifications.gateway.ts::NotificationsGateway.sendToClinica#method",
+        "name": "sendToClinica",
+        "kind": "method",
+        "file": "apps/api/src/modules/notifications/notifications.gateway.ts",
+        "line": 63,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/notifications/notifications.gateway.ts::NotificationsGateway.handlePing#method",
+        "name": "handlePing",
+        "kind": "method",
+        "file": "apps/api/src/modules/notifications/notifications.gateway.ts",
+        "line": 68,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/notifications/notifications.service.ts::NotificationsService.constructor#method",
+        "name": "constructor",
+        "kind": "method",
+        "file": "apps/api/src/modules/notifications/notifications.service.ts",
+        "line": 6,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/notifications/notifications.service.ts::NotificationsService.notifyClinica#method",
+        "name": "notifyClinica",
+        "kind": "method",
+        "file": "apps/api/src/modules/notifications/notifications.service.ts",
+        "line": 11,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/notifications/notifications.service.ts::NotificationsService.notifyTurnoActualizado#method",
+        "name": "notifyTurnoActualizado",
+        "kind": "method",
+        "file": "apps/api/src/modules/notifications/notifications.service.ts",
+        "line": 18,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/notifications/notifications.service.ts::NotificationsService.notifyFinanzasActualizado#method",
+        "name": "notifyFinanzasActualizado",
+        "kind": "method",
+        "file": "apps/api/src/modules/notifications/notifications.service.ts",
+        "line": 29,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1398,7 +1840,7 @@
         "name": "constructor",
         "kind": "method",
         "file": "apps/api/src/modules/pacientes/pacientes.service.ts",
-        "line": 12,
+        "line": 16,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1411,7 +1853,7 @@
         "name": "create",
         "kind": "method",
         "file": "apps/api/src/modules/pacientes/pacientes.service.ts",
-        "line": 19,
+        "line": 23,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1424,7 +1866,7 @@
         "name": "findAll",
         "kind": "method",
         "file": "apps/api/src/modules/pacientes/pacientes.service.ts",
-        "line": 33,
+        "line": 39,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1437,7 +1879,7 @@
         "name": "findOne",
         "kind": "method",
         "file": "apps/api/src/modules/pacientes/pacientes.service.ts",
-        "line": 47,
+        "line": 67,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1450,7 +1892,7 @@
         "name": "update",
         "kind": "method",
         "file": "apps/api/src/modules/pacientes/pacientes.service.ts",
-        "line": 77,
+        "line": 98,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1463,7 +1905,20 @@
         "name": "remove",
         "kind": "method",
         "file": "apps/api/src/modules/pacientes/pacientes.service.ts",
-        "line": 97,
+        "line": 110,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/pacientes/pacientes.service.ts::PacientesService.countAll#method",
+        "name": "countAll",
+        "kind": "method",
+        "file": "apps/api/src/modules/pacientes/pacientes.service.ts",
+        "line": 115,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1554,7 +2009,7 @@
         "name": "constructor",
         "kind": "method",
         "file": "apps/api/src/modules/planes-tratamiento/planes-tratamiento.service.ts",
-        "line": 10,
+        "line": 12,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1567,7 +2022,7 @@
         "name": "findAll",
         "kind": "method",
         "file": "apps/api/src/modules/planes-tratamiento/planes-tratamiento.service.ts",
-        "line": 17,
+        "line": 20,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1580,7 +2035,7 @@
         "name": "create",
         "kind": "method",
         "file": "apps/api/src/modules/planes-tratamiento/planes-tratamiento.service.ts",
-        "line": 24,
+        "line": 29,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1593,7 +2048,7 @@
         "name": "findByPaciente",
         "kind": "method",
         "file": "apps/api/src/modules/planes-tratamiento/planes-tratamiento.service.ts",
-        "line": 40,
+        "line": 45,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1606,7 +2061,7 @@
         "name": "findOne",
         "kind": "method",
         "file": "apps/api/src/modules/planes-tratamiento/planes-tratamiento.service.ts",
-        "line": 48,
+        "line": 55,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1619,7 +2074,7 @@
         "name": "updateEstado",
         "kind": "method",
         "file": "apps/api/src/modules/planes-tratamiento/planes-tratamiento.service.ts",
-        "line": 61,
+        "line": 70,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1632,7 +2087,7 @@
         "name": "updateItemEstado",
         "kind": "method",
         "file": "apps/api/src/modules/planes-tratamiento/planes-tratamiento.service.ts",
-        "line": 67,
+        "line": 76,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1645,7 +2100,7 @@
         "name": "constructor",
         "kind": "method",
         "file": "apps/api/src/modules/presupuestos/presupuestos.controller.ts",
-        "line": 12,
+        "line": 15,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1658,7 +2113,20 @@
         "name": "create",
         "kind": "method",
         "file": "apps/api/src/modules/presupuestos/presupuestos.controller.ts",
-        "line": 16,
+        "line": 22,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/presupuestos/presupuestos.controller.ts::PresupuestosController.findAll#method",
+        "name": "findAll",
+        "kind": "method",
+        "file": "apps/api/src/modules/presupuestos/presupuestos.controller.ts",
+        "line": 28,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1671,7 +2139,7 @@
         "name": "findByPaciente",
         "kind": "method",
         "file": "apps/api/src/modules/presupuestos/presupuestos.controller.ts",
-        "line": 28,
+        "line": 34,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1684,7 +2152,7 @@
         "name": "findOne",
         "kind": "method",
         "file": "apps/api/src/modules/presupuestos/presupuestos.controller.ts",
-        "line": 34,
+        "line": 40,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1697,7 +2165,7 @@
         "name": "registerPago",
         "kind": "method",
         "file": "apps/api/src/modules/presupuestos/presupuestos.controller.ts",
-        "line": 40,
+        "line": 46,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1710,7 +2178,7 @@
         "name": "getPagos",
         "kind": "method",
         "file": "apps/api/src/modules/presupuestos/presupuestos.controller.ts",
-        "line": 46,
+        "line": 52,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1723,7 +2191,20 @@
         "name": "iniciar",
         "kind": "method",
         "file": "apps/api/src/modules/presupuestos/presupuestos.controller.ts",
-        "line": 52,
+        "line": 58,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/presupuestos/presupuestos.controller.ts::PresupuestosController.exportPdf#method",
+        "name": "exportPdf",
+        "kind": "method",
+        "file": "apps/api/src/modules/presupuestos/presupuestos.controller.ts",
+        "line": 64,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1736,7 +2217,7 @@
         "name": "constructor",
         "kind": "method",
         "file": "apps/api/src/modules/presupuestos/presupuestos.service.ts",
-        "line": 11,
+        "line": 15,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1749,7 +2230,7 @@
         "name": "create",
         "kind": "method",
         "file": "apps/api/src/modules/presupuestos/presupuestos.service.ts",
-        "line": 21,
+        "line": 26,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1762,7 +2243,7 @@
         "name": "findAll",
         "kind": "method",
         "file": "apps/api/src/modules/presupuestos/presupuestos.service.ts",
-        "line": 50,
+        "line": 55,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1775,7 +2256,7 @@
         "name": "findByPaciente",
         "kind": "method",
         "file": "apps/api/src/modules/presupuestos/presupuestos.service.ts",
-        "line": 57,
+        "line": 77,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1788,7 +2269,7 @@
         "name": "findOne",
         "kind": "method",
         "file": "apps/api/src/modules/presupuestos/presupuestos.service.ts",
-        "line": 65,
+        "line": 87,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1801,7 +2282,7 @@
         "name": "registerPago",
         "kind": "method",
         "file": "apps/api/src/modules/presupuestos/presupuestos.service.ts",
-        "line": 78,
+        "line": 102,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1814,7 +2295,7 @@
         "name": "iniciarTratamiento",
         "kind": "method",
         "file": "apps/api/src/modules/presupuestos/presupuestos.service.ts",
-        "line": 125,
+        "line": 154,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1827,7 +2308,7 @@
         "name": "findPagosByPresupuesto",
         "kind": "method",
         "file": "apps/api/src/modules/presupuestos/presupuestos.service.ts",
-        "line": 136,
+        "line": 165,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1905,7 +2386,7 @@
         "name": "constructor",
         "kind": "method",
         "file": "apps/api/src/modules/profesionales/profesionales.service.ts",
-        "line": 10,
+        "line": 12,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1918,7 +2399,7 @@
         "name": "create",
         "kind": "method",
         "file": "apps/api/src/modules/profesionales/profesionales.service.ts",
-        "line": 15,
+        "line": 18,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1931,7 +2412,7 @@
         "name": "findAll",
         "kind": "method",
         "file": "apps/api/src/modules/profesionales/profesionales.service.ts",
-        "line": 27,
+        "line": 32,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1944,7 +2425,7 @@
         "name": "findOne",
         "kind": "method",
         "file": "apps/api/src/modules/profesionales/profesionales.service.ts",
-        "line": 31,
+        "line": 38,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1957,7 +2438,7 @@
         "name": "update",
         "kind": "method",
         "file": "apps/api/src/modules/profesionales/profesionales.service.ts",
-        "line": 44,
+        "line": 53,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -1970,7 +2451,7 @@
         "name": "remove",
         "kind": "method",
         "file": "apps/api/src/modules/profesionales/profesionales.service.ts",
-        "line": 50,
+        "line": 59,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2022,7 +2503,7 @@
         "name": "constructor",
         "kind": "method",
         "file": "apps/api/src/modules/reminders/reminders.service.ts",
-        "line": 13,
+        "line": 14,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2035,7 +2516,7 @@
         "name": "handleCron",
         "kind": "method",
         "file": "apps/api/src/modules/reminders/reminders.service.ts",
-        "line": 21,
+        "line": 23,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2048,7 +2529,20 @@
         "name": "sendAndSaveReminder",
         "kind": "method",
         "file": "apps/api/src/modules/reminders/reminders.service.ts",
-        "line": 44,
+        "line": 46,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/reminders/reminders.service.ts::RemindersService.generateMessage#method",
+        "name": "generateMessage",
+        "kind": "method",
+        "file": "apps/api/src/modules/reminders/reminders.service.ts",
+        "line": 68,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2061,7 +2555,7 @@
         "name": "findAll",
         "kind": "method",
         "file": "apps/api/src/modules/reminders/reminders.service.ts",
-        "line": 61,
+        "line": 76,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2074,7 +2568,7 @@
         "name": "createManual",
         "kind": "method",
         "file": "apps/api/src/modules/reminders/reminders.service.ts",
-        "line": 69,
+        "line": 84,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2087,7 +2581,124 @@
         "name": "enviarManual",
         "kind": "method",
         "file": "apps/api/src/modules/reminders/reminders.service.ts",
-        "line": 80,
+        "line": 95,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/reminders/whatsapp.service.ts::WhatsAppService.constructor#method",
+        "name": "constructor",
+        "kind": "method",
+        "file": "apps/api/src/modules/reminders/whatsapp.service.ts",
+        "line": 10,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/reminders/whatsapp.service.ts::WhatsAppService.sendMessage#method",
+        "name": "sendMessage",
+        "kind": "method",
+        "file": "apps/api/src/modules/reminders/whatsapp.service.ts",
+        "line": 12,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/reminders/whatsapp.service.ts::WhatsAppService.formatPhone#method",
+        "name": "formatPhone",
+        "kind": "method",
+        "file": "apps/api/src/modules/reminders/whatsapp.service.ts",
+        "line": 44,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/reports/pdf.service.ts::PdfService.drawHeader#method",
+        "name": "drawHeader",
+        "kind": "method",
+        "file": "apps/api/src/modules/reports/pdf.service.ts",
+        "line": 9,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/reports/pdf.service.ts::PdfService.drawFooter#method",
+        "name": "drawFooter",
+        "kind": "method",
+        "file": "apps/api/src/modules/reports/pdf.service.ts",
+        "line": 43,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/reports/pdf.service.ts::PdfService.generateDashboardReport#method",
+        "name": "generateDashboardReport",
+        "kind": "method",
+        "file": "apps/api/src/modules/reports/pdf.service.ts",
+        "line": 56,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/reports/pdf.service.ts::PdfService.generateCobranzaReport#method",
+        "name": "generateCobranzaReport",
+        "kind": "method",
+        "file": "apps/api/src/modules/reports/pdf.service.ts",
+        "line": 99,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/reports/pdf.service.ts::PdfService.generateNuevosPacientesReport#method",
+        "name": "generateNuevosPacientesReport",
+        "kind": "method",
+        "file": "apps/api/src/modules/reports/pdf.service.ts",
+        "line": 153,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/modules/reports/pdf.service.ts::PdfService.generatePresupuestoPdf#method",
+        "name": "generatePresupuestoPdf",
+        "kind": "method",
+        "file": "apps/api/src/modules/reports/pdf.service.ts",
+        "line": 201,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2204,7 +2815,7 @@
         "name": "constructor",
         "kind": "method",
         "file": "apps/api/src/modules/turnos/turnos.service.ts",
-        "line": 29,
+        "line": 23,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2217,33 +2828,7 @@
         "name": "checkHorarioConsultorio",
         "kind": "method",
         "file": "apps/api/src/modules/turnos/turnos.service.ts",
-        "line": 40,
-        "confidence": 1.0,
-        "signals": [
-          "unreachable_file",
-          "no_callers",
-          "not_barrel_exported"
-        ]
-      },
-      {
-        "id": "apps/api/src/modules/turnos/turnos.service.ts::checkHorarioConsultorio.normalize#method",
-        "name": "normalize",
-        "kind": "method",
-        "file": "apps/api/src/modules/turnos/turnos.service.ts",
-        "line": 48,
-        "confidence": 1.0,
-        "signals": [
-          "unreachable_file",
-          "no_callers",
-          "not_barrel_exported"
-        ]
-      },
-      {
-        "id": "apps/api/src/modules/turnos/turnos.service.ts::checkHorarioConsultorio.toMin#method",
-        "name": "toMin",
-        "kind": "method",
-        "file": "apps/api/src/modules/turnos/turnos.service.ts",
-        "line": 59,
+        "line": 35,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2256,7 +2841,7 @@
         "name": "checkConflict",
         "kind": "method",
         "file": "apps/api/src/modules/turnos/turnos.service.ts",
-        "line": 84,
+        "line": 39,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2269,7 +2854,7 @@
         "name": "create",
         "kind": "method",
         "file": "apps/api/src/modules/turnos/turnos.service.ts",
-        "line": 120,
+        "line": 77,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2282,7 +2867,7 @@
         "name": "toLocalYmd",
         "kind": "method",
         "file": "apps/api/src/modules/turnos/turnos.service.ts",
-        "line": 142,
+        "line": 106,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2295,7 +2880,7 @@
         "name": "nextOccurrence",
         "kind": "method",
         "file": "apps/api/src/modules/turnos/turnos.service.ts",
-        "line": 149,
+        "line": 113,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2308,7 +2893,7 @@
         "name": "createRecurrentes",
         "kind": "method",
         "file": "apps/api/src/modules/turnos/turnos.service.ts",
-        "line": 169,
+        "line": 133,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2321,7 +2906,7 @@
         "name": "findAll",
         "kind": "method",
         "file": "apps/api/src/modules/turnos/turnos.service.ts",
-        "line": 242,
+        "line": 206,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2334,7 +2919,7 @@
         "name": "findOne",
         "kind": "method",
         "file": "apps/api/src/modules/turnos/turnos.service.ts",
-        "line": 281,
+        "line": 259,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2347,7 +2932,7 @@
         "name": "update",
         "kind": "method",
         "file": "apps/api/src/modules/turnos/turnos.service.ts",
-        "line": 294,
+        "line": 274,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2360,7 +2945,7 @@
         "name": "remove",
         "kind": "method",
         "file": "apps/api/src/modules/turnos/turnos.service.ts",
-        "line": 316,
+        "line": 303,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2373,7 +2958,7 @@
         "name": "checkDisponibilidad",
         "kind": "method",
         "file": "apps/api/src/modules/turnos/turnos.service.ts",
-        "line": 321,
+        "line": 313,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2451,7 +3036,7 @@
         "name": "constructor",
         "kind": "method",
         "file": "apps/api/src/modules/usuarios/usuarios.service.ts",
-        "line": 16,
+        "line": 18,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2464,7 +3049,7 @@
         "name": "ensureProfesional",
         "kind": "method",
         "file": "apps/api/src/modules/usuarios/usuarios.service.ts",
-        "line": 27,
+        "line": 30,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2477,7 +3062,7 @@
         "name": "removeProfesionalIfNeeded",
         "kind": "method",
         "file": "apps/api/src/modules/usuarios/usuarios.service.ts",
-        "line": 36,
+        "line": 41,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2490,7 +3075,7 @@
         "name": "findAllRoles",
         "kind": "method",
         "file": "apps/api/src/modules/usuarios/usuarios.service.ts",
-        "line": 45,
+        "line": 52,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2503,7 +3088,7 @@
         "name": "create",
         "kind": "method",
         "file": "apps/api/src/modules/usuarios/usuarios.service.ts",
-        "line": 49,
+        "line": 56,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2516,7 +3101,7 @@
         "name": "findByEmail",
         "kind": "method",
         "file": "apps/api/src/modules/usuarios/usuarios.service.ts",
-        "line": 84,
+        "line": 91,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2529,7 +3114,7 @@
         "name": "findOne",
         "kind": "method",
         "file": "apps/api/src/modules/usuarios/usuarios.service.ts",
-        "line": 94,
+        "line": 105,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2542,7 +3127,7 @@
         "name": "findAll",
         "kind": "method",
         "file": "apps/api/src/modules/usuarios/usuarios.service.ts",
-        "line": 107,
+        "line": 120,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2555,7 +3140,7 @@
         "name": "changePassword",
         "kind": "method",
         "file": "apps/api/src/modules/usuarios/usuarios.service.ts",
-        "line": 113,
+        "line": 128,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2568,7 +3153,7 @@
         "name": "update",
         "kind": "method",
         "file": "apps/api/src/modules/usuarios/usuarios.service.ts",
-        "line": 119,
+        "line": 134,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2776,7 +3361,7 @@
         "name": "App",
         "kind": "function",
         "file": "apps/web/src/App.tsx",
-        "line": 11,
+        "line": 12,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2789,20 +3374,7 @@
         "name": "CommandPalette",
         "kind": "function",
         "file": "apps/web/src/components/layout/CommandPalette.tsx",
-        "line": 25,
-        "confidence": 1.0,
-        "signals": [
-          "unreachable_file",
-          "no_callers",
-          "not_barrel_exported"
-        ]
-      },
-      {
-        "id": "apps/web/src/components/layout/CommandPalette.tsx::handleKeyDown#function",
-        "name": "handleKeyDown",
-        "kind": "function",
-        "file": "apps/web/src/components/layout/CommandPalette.tsx",
-        "line": 37,
+        "line": 22,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2815,7 +3387,7 @@
         "name": "handleSelect",
         "kind": "function",
         "file": "apps/web/src/components/layout/CommandPalette.tsx",
-        "line": 48,
+        "line": 37,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2867,7 +3439,7 @@
         "name": "AppLayout",
         "kind": "function",
         "file": "apps/web/src/components/layout/app-layout.tsx",
-        "line": 8,
+        "line": 9,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2880,7 +3452,7 @@
         "name": "handleKeyDown",
         "kind": "function",
         "file": "apps/web/src/components/layout/app-layout.tsx",
-        "line": 14,
+        "line": 19,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2893,7 +3465,7 @@
         "name": "Header",
         "kind": "function",
         "file": "apps/web/src/components/layout/header.tsx",
-        "line": 12,
+        "line": 13,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2906,7 +3478,20 @@
         "name": "Sidebar",
         "kind": "function",
         "file": "apps/web/src/components/layout/sidebar.tsx",
-        "line": 25,
+        "line": 37,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/web/src/components/layout/trial-status.tsx::TrialStatus#function",
+        "name": "TrialStatus",
+        "kind": "function",
+        "file": "apps/web/src/components/layout/trial-status.tsx",
+        "line": 8,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2920,6 +3505,19 @@
         "kind": "function",
         "file": "apps/web/src/components/ui/premium-card.tsx",
         "line": 12,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/web/src/components/ui/skeleton.tsx::Skeleton#function",
+        "name": "Skeleton",
+        "kind": "function",
+        "file": "apps/web/src/components/ui/skeleton.tsx",
+        "line": 5,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2954,6 +3552,19 @@
         ]
       },
       {
+        "id": "apps/web/src/context/notification-context.tsx::NotificationProvider#function",
+        "name": "NotificationProvider",
+        "kind": "function",
+        "file": "apps/web/src/context/notification-context.tsx",
+        "line": 16,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
         "id": "apps/web/src/context/theme-context.tsx::getInitialTheme#function",
         "name": "getInitialTheme",
         "kind": "function",
@@ -2971,7 +3582,7 @@
         "name": "applyTheme",
         "kind": "function",
         "file": "apps/web/src/context/theme-context.tsx",
-        "line": 21,
+        "line": 23,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2984,7 +3595,7 @@
         "name": "ThemeProvider",
         "kind": "function",
         "file": "apps/web/src/context/theme-context.tsx",
-        "line": 31,
+        "line": 33,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -2997,7 +3608,7 @@
         "name": "toggleTheme",
         "kind": "function",
         "file": "apps/web/src/context/theme-context.tsx",
-        "line": 39,
+        "line": 41,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3058,37 +3669,11 @@
         ]
       },
       {
-        "id": "apps/web/src/features/agenda/components/agenda-list.tsx::AgendaList#function",
-        "name": "AgendaList",
-        "kind": "function",
-        "file": "apps/web/src/features/agenda/components/agenda-list.tsx",
-        "line": 9,
-        "confidence": 1.0,
-        "signals": [
-          "unreachable_file",
-          "no_callers",
-          "not_barrel_exported"
-        ]
-      },
-      {
-        "id": "apps/web/src/features/agenda/components/agenda-list.tsx::getStatusColor#function",
-        "name": "getStatusColor",
-        "kind": "function",
-        "file": "apps/web/src/features/agenda/components/agenda-list.tsx",
-        "line": 12,
-        "confidence": 1.0,
-        "signals": [
-          "unreachable_file",
-          "no_callers",
-          "not_barrel_exported"
-        ]
-      },
-      {
         "id": "apps/web/src/features/agenda/components/turno-form-modal.tsx::TurnoFormModal#function",
         "name": "TurnoFormModal",
         "kind": "function",
         "file": "apps/web/src/features/agenda/components/turno-form-modal.tsx",
-        "line": 31,
+        "line": 32,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3101,7 +3686,7 @@
         "name": "cerrar",
         "kind": "function",
         "file": "apps/web/src/features/agenda/components/turno-form-modal.tsx",
-        "line": 85,
+        "line": 91,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3114,7 +3699,7 @@
         "name": "seleccionarPaciente",
         "kind": "function",
         "file": "apps/web/src/features/agenda/components/turno-form-modal.tsx",
-        "line": 112,
+        "line": 119,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3127,7 +3712,7 @@
         "name": "limpiarPaciente",
         "kind": "function",
         "file": "apps/web/src/features/agenda/components/turno-form-modal.tsx",
-        "line": 119,
+        "line": 126,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3140,7 +3725,7 @@
         "name": "set",
         "kind": "function",
         "file": "apps/web/src/features/agenda/components/turno-form-modal.tsx",
-        "line": 134,
+        "line": 141,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3153,7 +3738,7 @@
         "name": "handleFechaInicioChange",
         "kind": "function",
         "file": "apps/web/src/features/agenda/components/turno-form-modal.tsx",
-        "line": 139,
+        "line": 146,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3166,7 +3751,7 @@
         "name": "handleSubmit",
         "kind": "function",
         "file": "apps/web/src/features/agenda/components/turno-form-modal.tsx",
-        "line": 157,
+        "line": 164,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3179,7 +3764,7 @@
         "name": "handleDelete",
         "kind": "function",
         "file": "apps/web/src/features/agenda/components/turno-form-modal.tsx",
-        "line": 191,
+        "line": 198,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3218,7 +3803,7 @@
         "name": "LoginPage",
         "kind": "function",
         "file": "apps/web/src/features/auth/pages/login-page.tsx",
-        "line": 12,
+        "line": 22,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3231,7 +3816,72 @@
         "name": "handleSubmit",
         "kind": "function",
         "file": "apps/web/src/features/auth/pages/login-page.tsx",
-        "line": 18,
+        "line": 28,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/web/src/features/auth/pages/register-page.tsx::RegisterPage#function",
+        "name": "RegisterPage",
+        "kind": "function",
+        "file": "apps/web/src/features/auth/pages/register-page.tsx",
+        "line": 24,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/web/src/features/auth/pages/register-page.tsx::handleSubmit#function",
+        "name": "handleSubmit",
+        "kind": "function",
+        "file": "apps/web/src/features/auth/pages/register-page.tsx",
+        "line": 33,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/web/src/features/dashboard/components/dashboard-chart.tsx::DashboardChart#function",
+        "name": "DashboardChart",
+        "kind": "function",
+        "file": "apps/web/src/features/dashboard/components/dashboard-chart.tsx",
+        "line": 21,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/web/src/features/dashboard/components/dashboard-chart.tsx::formatMonth#function",
+        "name": "formatMonth",
+        "kind": "function",
+        "file": "apps/web/src/features/dashboard/components/dashboard-chart.tsx",
+        "line": 29,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/web/src/features/dashboard/components/welcome-dashboard.tsx::WelcomeDashboard#function",
+        "name": "WelcomeDashboard",
+        "kind": "function",
+        "file": "apps/web/src/features/dashboard/components/welcome-dashboard.tsx",
+        "line": 23,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3244,7 +3894,46 @@
         "name": "DashboardPage",
         "kind": "function",
         "file": "apps/web/src/features/dashboard/pages/dashboard-page.tsx",
-        "line": 10,
+        "line": 26,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/web/src/features/dashboard/pages/dashboard-page.tsx::handleExportPdf#function",
+        "name": "handleExportPdf",
+        "kind": "function",
+        "file": "apps/web/src/features/dashboard/pages/dashboard-page.tsx",
+        "line": 42,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/web/src/features/dashboard/pages/dashboard-page.tsx::handleExportCobranza#function",
+        "name": "handleExportCobranza",
+        "kind": "function",
+        "file": "apps/web/src/features/dashboard/pages/dashboard-page.tsx",
+        "line": 59,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/web/src/features/dashboard/pages/dashboard-page.tsx::handleExportPacientes#function",
+        "name": "handleExportPacientes",
+        "kind": "function",
+        "file": "apps/web/src/features/dashboard/pages/dashboard-page.tsx",
+        "line": 79,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3257,7 +3946,7 @@
         "name": "formatCurrency",
         "kind": "function",
         "file": "apps/web/src/features/dashboard/pages/dashboard-page.tsx",
-        "line": 29,
+        "line": 140,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3361,7 +4050,7 @@
         "name": "handleSubmit",
         "kind": "function",
         "file": "apps/web/src/features/finanzas/components/pago-modal.tsx",
-        "line": 23,
+        "line": 31,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3452,7 +4141,7 @@
         "name": "PresupuestoList",
         "kind": "function",
         "file": "apps/web/src/features/finanzas/components/presupuesto-list.tsx",
-        "line": 16,
+        "line": 29,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3465,20 +4154,7 @@
         "name": "getStatusConfig",
         "kind": "function",
         "file": "apps/web/src/features/finanzas/components/presupuesto-list.tsx",
-        "line": 27,
-        "confidence": 1.0,
-        "signals": [
-          "unreachable_file",
-          "no_callers",
-          "not_barrel_exported"
-        ]
-      },
-      {
-        "id": "apps/web/src/features/finanzas/hooks/use-presupuestos.ts::usePresupuestoDetalle#function",
-        "name": "usePresupuestoDetalle",
-        "kind": "function",
-        "file": "apps/web/src/features/finanzas/hooks/use-presupuestos.ts",
-        "line": 12,
+        "line": 69,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3491,7 +4167,7 @@
         "name": "PresupuestosPage",
         "kind": "function",
         "file": "apps/web/src/features/finanzas/pages/presupuestos-page.tsx",
-        "line": 12,
+        "line": 21,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3504,7 +4180,7 @@
         "name": "handleCreate",
         "kind": "function",
         "file": "apps/web/src/features/finanzas/pages/presupuestos-page.tsx",
-        "line": 31,
+        "line": 41,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3517,7 +4193,7 @@
         "name": "handleRegisterPago",
         "kind": "function",
         "file": "apps/web/src/features/finanzas/pages/presupuestos-page.tsx",
-        "line": 40,
+        "line": 50,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3530,7 +4206,7 @@
         "name": "formatCurrency",
         "kind": "function",
         "file": "apps/web/src/features/finanzas/pages/presupuestos-page.tsx",
-        "line": 50,
+        "line": 59,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3881,7 +4557,7 @@
         "name": "safeDate",
         "kind": "function",
         "file": "apps/web/src/features/pacientes/components/EvolucionClinicaTimeline.tsx",
-        "line": 52,
+        "line": 50,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3894,7 +4570,7 @@
         "name": "formatDate",
         "kind": "function",
         "file": "apps/web/src/features/pacientes/components/EvolucionClinicaTimeline.tsx",
-        "line": 62,
+        "line": 60,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3907,7 +4583,7 @@
         "name": "formatTime",
         "kind": "function",
         "file": "apps/web/src/features/pacientes/components/EvolucionClinicaTimeline.tsx",
-        "line": 68,
+        "line": 66,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3920,7 +4596,7 @@
         "name": "EvolucionClinicaTimeline",
         "kind": "function",
         "file": "apps/web/src/features/pacientes/components/EvolucionClinicaTimeline.tsx",
-        "line": 74,
+        "line": 72,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3933,7 +4609,7 @@
         "name": "handleSubmit",
         "kind": "function",
         "file": "apps/web/src/features/pacientes/components/EvolucionClinicaTimeline.tsx",
-        "line": 80,
+        "line": 78,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3946,7 +4622,7 @@
         "name": "applyTemplate",
         "kind": "function",
         "file": "apps/web/src/features/pacientes/components/EvolucionClinicaTimeline.tsx",
-        "line": 89,
+        "line": 87,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -3959,7 +4635,7 @@
         "name": "getCategoryColor",
         "kind": "function",
         "file": "apps/web/src/features/pacientes/components/EvolucionClinicaTimeline.tsx",
-        "line": 95,
+        "line": 93,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4072,63 +4748,11 @@
         ]
       },
       {
-        "id": "apps/web/src/features/pacientes/components/antecedentes-list.tsx::AntecedentesList#function",
-        "name": "AntecedentesList",
-        "kind": "function",
-        "file": "apps/web/src/features/pacientes/components/antecedentes-list.tsx",
-        "line": 14,
-        "confidence": 1.0,
-        "signals": [
-          "unreachable_file",
-          "no_callers",
-          "not_barrel_exported"
-        ]
-      },
-      {
-        "id": "apps/web/src/features/pacientes/components/evolucion-clinica-list.tsx::EvolucionClinicaList#function",
-        "name": "EvolucionClinicaList",
-        "kind": "function",
-        "file": "apps/web/src/features/pacientes/components/evolucion-clinica-list.tsx",
-        "line": 10,
-        "confidence": 1.0,
-        "signals": [
-          "unreachable_file",
-          "no_callers",
-          "not_barrel_exported"
-        ]
-      },
-      {
-        "id": "apps/web/src/features/pacientes/components/evolucion-clinica-list.tsx::handleSubmit#function",
-        "name": "handleSubmit",
-        "kind": "function",
-        "file": "apps/web/src/features/pacientes/components/evolucion-clinica-list.tsx",
-        "line": 13,
-        "confidence": 1.0,
-        "signals": [
-          "unreachable_file",
-          "no_callers",
-          "not_barrel_exported"
-        ]
-      },
-      {
-        "id": "apps/web/src/features/pacientes/components/ficha-clinica-card.tsx::FichaClinicaCard#function",
-        "name": "FichaClinicaCard",
-        "kind": "function",
-        "file": "apps/web/src/features/pacientes/components/ficha-clinica-card.tsx",
-        "line": 8,
-        "confidence": 1.0,
-        "signals": [
-          "unreachable_file",
-          "no_callers",
-          "not_barrel_exported"
-        ]
-      },
-      {
         "id": "apps/web/src/features/pacientes/components/paciente-form.tsx::Field#function",
         "name": "Field",
         "kind": "function",
         "file": "apps/web/src/features/pacientes/components/paciente-form.tsx",
-        "line": 32,
+        "line": 33,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4141,7 +4765,7 @@
         "name": "PacienteForm",
         "kind": "function",
         "file": "apps/web/src/features/pacientes/components/paciente-form.tsx",
-        "line": 49,
+        "line": 50,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4154,7 +4778,7 @@
         "name": "handleFormSubmit",
         "kind": "function",
         "file": "apps/web/src/features/pacientes/components/paciente-form.tsx",
-        "line": 73,
+        "line": 77,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4167,20 +4791,7 @@
         "name": "PacientesTable",
         "kind": "function",
         "file": "apps/web/src/features/pacientes/components/pacientes-table.tsx",
-        "line": 13,
-        "confidence": 1.0,
-        "signals": [
-          "unreachable_file",
-          "no_callers",
-          "not_barrel_exported"
-        ]
-      },
-      {
-        "id": "apps/web/src/features/pacientes/components/upcoming-appointments.tsx::UpcomingAppointments#function",
-        "name": "UpcomingAppointments",
-        "kind": "function",
-        "file": "apps/web/src/features/pacientes/components/upcoming-appointments.tsx",
-        "line": 11,
+        "line": 20,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4193,7 +4804,7 @@
         "name": "PacienteDetallePage",
         "kind": "function",
         "file": "apps/web/src/features/pacientes/pages/paciente-detalle-page.tsx",
-        "line": 52,
+        "line": 49,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4206,7 +4817,7 @@
         "name": "handler",
         "kind": "function",
         "file": "apps/web/src/features/pacientes/pages/paciente-detalle-page.tsx",
-        "line": 72,
+        "line": 71,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4219,7 +4830,7 @@
         "name": "handleAddEvolucion",
         "kind": "function",
         "file": "apps/web/src/features/pacientes/pages/paciente-detalle-page.tsx",
-        "line": 95,
+        "line": 94,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4232,7 +4843,7 @@
         "name": "calculateAge",
         "kind": "function",
         "file": "apps/web/src/features/pacientes/pages/paciente-detalle-page.tsx",
-        "line": 113,
+        "line": 112,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4245,7 +4856,7 @@
         "name": "PacientesPage",
         "kind": "function",
         "file": "apps/web/src/features/pacientes/pages/pacientes-page.tsx",
-        "line": 10,
+        "line": 14,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4258,20 +4869,7 @@
         "name": "handleCreate",
         "kind": "function",
         "file": "apps/web/src/features/pacientes/pages/pacientes-page.tsx",
-        "line": 17,
-        "confidence": 1.0,
-        "signals": [
-          "unreachable_file",
-          "no_callers",
-          "not_barrel_exported"
-        ]
-      },
-      {
-        "id": "apps/web/src/features/reminders/hooks/use-reminders.ts::useReminderMutations#function",
-        "name": "useReminderMutations",
-        "kind": "function",
-        "file": "apps/web/src/features/reminders/hooks/use-reminders.ts",
-        "line": 12,
+        "line": 23,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4284,7 +4882,7 @@
         "name": "RemindersPage",
         "kind": "function",
         "file": "apps/web/src/features/reminders/pages/reminders-page.tsx",
-        "line": 19,
+        "line": 17,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4297,7 +4895,7 @@
         "name": "getStatusColor",
         "kind": "function",
         "file": "apps/web/src/features/reminders/pages/reminders-page.tsx",
-        "line": 25,
+        "line": 23,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4310,7 +4908,7 @@
         "name": "getStatusIcon",
         "kind": "function",
         "file": "apps/web/src/features/reminders/pages/reminders-page.tsx",
-        "line": 35,
+        "line": 33,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4410,24 +5008,11 @@
         ]
       },
       {
-        "id": "apps/web/src/features/tratamientos/hooks/use-tratamientos.ts::useTratamientoUnico#function",
-        "name": "useTratamientoUnico",
-        "kind": "function",
-        "file": "apps/web/src/features/tratamientos/hooks/use-tratamientos.ts",
-        "line": 52,
-        "confidence": 1.0,
-        "signals": [
-          "unreachable_file",
-          "no_callers",
-          "not_barrel_exported"
-        ]
-      },
-      {
         "id": "apps/web/src/features/tratamientos/pages/tratamientos-page.tsx::TratamientosPage#function",
         "name": "TratamientosPage",
         "kind": "function",
         "file": "apps/web/src/features/tratamientos/pages/tratamientos-page.tsx",
-        "line": 21,
+        "line": 22,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4440,7 +5025,7 @@
         "name": "calculateProgress",
         "kind": "function",
         "file": "apps/web/src/features/tratamientos/pages/tratamientos-page.tsx",
-        "line": 44,
+        "line": 47,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4687,7 +5272,7 @@
         "name": "ProfesionalesPage",
         "kind": "function",
         "file": "apps/web/src/features/usuarios/pages/profesionales-page.tsx",
-        "line": 23,
+        "line": 19,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4700,7 +5285,7 @@
         "name": "handleOpenEdit",
         "kind": "function",
         "file": "apps/web/src/features/usuarios/pages/profesionales-page.tsx",
-        "line": 43,
+        "line": 39,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4713,7 +5298,7 @@
         "name": "handleCloseModal",
         "kind": "function",
         "file": "apps/web/src/features/usuarios/pages/profesionales-page.tsx",
-        "line": 48,
+        "line": 44,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4726,7 +5311,7 @@
         "name": "EditProfesionalModal",
         "kind": "function",
         "file": "apps/web/src/features/usuarios/pages/profesionales-page.tsx",
-        "line": 175,
+        "line": 171,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4739,7 +5324,7 @@
         "name": "handleSubmit",
         "kind": "function",
         "file": "apps/web/src/features/usuarios/pages/profesionales-page.tsx",
-        "line": 190,
+        "line": 186,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4831,6 +5416,19 @@
         "kind": "function",
         "file": "apps/web/src/features/usuarios/pages/usuarios-page.tsx",
         "line": 46,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/web/src/hooks/use-focus-trap.ts::handleKeyDown#function",
+        "name": "handleKeyDown",
+        "kind": "function",
+        "file": "apps/web/src/hooks/use-focus-trap.ts",
+        "line": 15,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4943,11 +5541,24 @@
         ]
       },
       {
+        "id": "apps/web/src/router.tsx::PageLoader#function",
+        "name": "PageLoader",
+        "kind": "function",
+        "file": "apps/web/src/router.tsx",
+        "line": 26,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
         "id": "apps/web/src/router.tsx::ProtectedRoute#function",
         "name": "ProtectedRoute",
         "kind": "function",
         "file": "apps/web/src/router.tsx",
-        "line": 21,
+        "line": 32,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4960,7 +5571,7 @@
         "name": "PublicRoute",
         "kind": "function",
         "file": "apps/web/src/router.tsx",
-        "line": 32,
+        "line": 43,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4973,7 +5584,7 @@
         "name": "@keyframes fade-in-up",
         "kind": "function",
         "file": "apps/web/src/styles.css",
-        "line": 428,
+        "line": 453,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4986,7 +5597,20 @@
         "name": "@keyframes scale-in",
         "kind": "function",
         "file": "apps/web/src/styles.css",
-        "line": 432,
+        "line": 457,
+        "confidence": 1.0,
+        "signals": [
+          "unreachable_file",
+          "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/web/src/styles.css::@keyframes pulse-subtle#function",
+        "name": "@keyframes pulse-subtle",
+        "kind": "function",
+        "file": "apps/web/src/styles.css",
+        "line": 461,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -4999,7 +5623,7 @@
         "name": "@keyframes mesh-gradient",
         "kind": "function",
         "file": "apps/web/src/styles.css",
-        "line": 436,
+        "line": 465,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
@@ -5012,11 +5636,47 @@
         "name": "@keyframes shiver",
         "kind": "function",
         "file": "apps/web/src/styles.css",
-        "line": 441,
+        "line": 470,
         "confidence": 1.0,
         "signals": [
           "unreachable_file",
           "no_callers",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/common/utils/tenant-helper.ts::TenantHelper.applyFilter#method",
+        "name": "applyFilter",
+        "kind": "method",
+        "file": "apps/api/src/common/utils/tenant-helper.ts",
+        "line": 5,
+        "confidence": 0.67,
+        "signals": [
+          "unreachable_file",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/common/utils/tenant-helper.ts::TenantHelper.withTenant#method",
+        "name": "withTenant",
+        "kind": "method",
+        "file": "apps/api/src/common/utils/tenant-helper.ts",
+        "line": 14,
+        "confidence": 0.67,
+        "signals": [
+          "unreachable_file",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/api/src/common/utils/tenant-helper.ts::TenantHelper.withTenantOne#method",
+        "name": "withTenantOne",
+        "kind": "method",
+        "file": "apps/api/src/common/utils/tenant-helper.ts",
+        "line": 32,
+        "confidence": 0.67,
+        "signals": [
+          "unreachable_file",
           "not_barrel_exported"
         ]
       },
@@ -5081,11 +5741,23 @@
         ]
       },
       {
+        "id": "apps/web/src/context/notification-context.tsx::useNotifications#function",
+        "name": "useNotifications",
+        "kind": "function",
+        "file": "apps/web/src/context/notification-context.tsx",
+        "line": 85,
+        "confidence": 0.67,
+        "signals": [
+          "unreachable_file",
+          "not_barrel_exported"
+        ]
+      },
+      {
         "id": "apps/web/src/context/theme-context.tsx::useTheme#function",
         "name": "useTheme",
         "kind": "function",
         "file": "apps/web/src/context/theme-context.tsx",
-        "line": 54,
+        "line": 56,
         "confidence": 0.67,
         "signals": [
           "unreachable_file",
@@ -5177,11 +5849,59 @@
         ]
       },
       {
+        "id": "apps/web/src/features/auth/hooks/use-register.ts::useRegister#function",
+        "name": "useRegister",
+        "kind": "function",
+        "file": "apps/web/src/features/auth/hooks/use-register.ts",
+        "line": 19,
+        "confidence": 0.67,
+        "signals": [
+          "unreachable_file",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/web/src/features/auth/hooks/use-register.ts::submit#function",
+        "name": "submit",
+        "kind": "function",
+        "file": "apps/web/src/features/auth/hooks/use-register.ts",
+        "line": 25,
+        "confidence": 0.67,
+        "signals": [
+          "unreachable_file",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/web/src/features/dashboard/components/dashboard-chart.tsx::formatCurrency#function",
+        "name": "formatCurrency",
+        "kind": "function",
+        "file": "apps/web/src/features/dashboard/components/dashboard-chart.tsx",
+        "line": 22,
+        "confidence": 0.67,
+        "signals": [
+          "unreachable_file",
+          "not_barrel_exported"
+        ]
+      },
+      {
         "id": "apps/web/src/features/dashboard/hooks/use-dashboard.ts::useDashboard#function",
         "name": "useDashboard",
         "kind": "function",
         "file": "apps/web/src/features/dashboard/hooks/use-dashboard.ts",
         "line": 4,
+        "confidence": 0.67,
+        "signals": [
+          "unreachable_file",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/web/src/features/dashboard/hooks/use-dashboard.ts::useHistoricalDashboard#function",
+        "name": "useHistoricalDashboard",
+        "kind": "function",
+        "file": "apps/web/src/features/dashboard/hooks/use-dashboard.ts",
+        "line": 11,
         "confidence": 0.67,
         "signals": [
           "unreachable_file",
@@ -5217,7 +5937,7 @@
         "name": "formatCurrency",
         "kind": "function",
         "file": "apps/web/src/features/finanzas/components/presupuesto-list.tsx",
-        "line": 72,
+        "line": 114,
         "confidence": 0.67,
         "signals": [
           "unreachable_file",
@@ -5230,6 +5950,18 @@
         "kind": "function",
         "file": "apps/web/src/features/finanzas/hooks/use-presupuestos.ts",
         "line": 5,
+        "confidence": 0.67,
+        "signals": [
+          "unreachable_file",
+          "not_barrel_exported"
+        ]
+      },
+      {
+        "id": "apps/web/src/features/finanzas/hooks/use-presupuestos.ts::usePresupuestoDetalle#function",
+        "name": "usePresupuestoDetalle",
+        "kind": "function",
+        "file": "apps/web/src/features/finanzas/hooks/use-presupuestos.ts",
+        "line": 12,
         "confidence": 0.67,
         "signals": [
           "unreachable_file",
@@ -5465,6 +6197,18 @@
         ]
       },
       {
+        "id": "apps/web/src/features/tratamientos/hooks/use-tratamientos.ts::useTratamientoUnico#function",
+        "name": "useTratamientoUnico",
+        "kind": "function",
+        "file": "apps/web/src/features/tratamientos/hooks/use-tratamientos.ts",
+        "line": 52,
+        "confidence": 0.67,
+        "signals": [
+          "unreachable_file",
+          "not_barrel_exported"
+        ]
+      },
+      {
         "id": "apps/web/src/features/usuarios/hooks/use-admin.ts::useConsultorios#function",
         "name": "useConsultorios",
         "kind": "function",
@@ -5525,6 +6269,18 @@
         ]
       },
       {
+        "id": "apps/web/src/hooks/use-focus-trap.ts::useFocusTrap#function",
+        "name": "useFocusTrap",
+        "kind": "function",
+        "file": "apps/web/src/hooks/use-focus-trap.ts",
+        "line": 7,
+        "confidence": 0.67,
+        "signals": [
+          "unreachable_file",
+          "not_barrel_exported"
+        ]
+      },
+      {
         "id": "apps/web/src/lib/Httpclient.ts::HttpClient.get#method",
         "name": "get",
         "kind": "method",
@@ -5561,6 +6317,18 @@
         ]
       },
       {
+        "id": "apps/web/src/lib/Httpclient.ts::HttpClient.downloadFile#method",
+        "name": "downloadFile",
+        "kind": "method",
+        "file": "apps/web/src/lib/Httpclient.ts",
+        "line": 124,
+        "confidence": 0.67,
+        "signals": [
+          "unreachable_file",
+          "not_barrel_exported"
+        ]
+      },
+      {
         "id": "apps/web/src/lib/utils.ts::cn#function",
         "name": "cn",
         "kind": "function",
@@ -5573,10 +6341,10 @@
         ]
       }
     ],
-    "total_analysed": 443,
+    "total_analysed": 501,
     "min_confidence": 0.5,
     "_meta": {
-      "timing_ms": 15.0,
+      "timing_ms": 31.0,
       "methodology": "multi_signal",
       "confidence_level": "medium"
     },

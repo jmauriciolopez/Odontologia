@@ -14,6 +14,7 @@ import { PaginatedResponse } from '../../common/interfaces/paginated-response.in
 
 import { TenantHelper } from '../../common/utils/tenant-helper';
 import { ClsService } from 'nestjs-cls';
+import { NotificationsService } from '../notifications/notifications.service';
 
 const MAX_RECURRENCIAS = 104;
 
@@ -28,6 +29,7 @@ export class TurnosService {
     private readonly configRepository: Repository<ConfiguracionClinica>,
     private readonly consultoriosService: ConsultoriosService,
     private readonly cls: ClsService,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   private async checkHorarioConsultorio(consultorioId: string, inicio: Date, fin: Date): Promise<void> {
@@ -91,7 +93,14 @@ export class TurnosService {
       fechaFin: fin,
     });
 
-    return await this.turnosRepository.save(turno);
+    const saved = await this.turnosRepository.save(turno);
+    
+    const clinicaId = this.cls.get('clinicaId');
+    if (clinicaId) {
+      this.notificationsService.notifyTurnoActualizado(clinicaId, saved.id, 'creado');
+    }
+
+    return saved;
   }
 
   private toLocalYmd(d: Date): string {
@@ -281,12 +290,24 @@ export class TurnosService {
     }
 
     this.turnosRepository.merge(turno, updateTurnoDto);
-    return await this.turnosRepository.save(turno);
+    const updated = await this.turnosRepository.save(turno);
+
+    const clinicaId = this.cls.get('clinicaId');
+    if (clinicaId) {
+      this.notificationsService.notifyTurnoActualizado(clinicaId, id, 'actualizado');
+    }
+
+    return updated;
   }
 
   async remove(id: string): Promise<void> {
     const turno = await this.findOne(id);
     await this.turnosRepository.remove(turno);
+
+    const clinicaId = this.cls.get('clinicaId');
+    if (clinicaId) {
+      this.notificationsService.notifyTurnoActualizado(clinicaId, id, 'eliminado');
+    }
   }
 
   async checkDisponibilidad(query: DisponibilidadQueryDto): Promise<{

@@ -111,4 +111,10 @@ export class PacientesService {
     const paciente = await this.findOne(id);
     await this.pacientesRepository.softRemove(paciente);
   }
+
+  async countAll(): Promise<number> {
+    return await this.pacientesRepository.count(
+      TenantHelper.withTenantOne(this.cls, {})
+    );
+  }
 }

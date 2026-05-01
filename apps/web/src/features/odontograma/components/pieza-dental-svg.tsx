@@ -49,6 +49,15 @@ export const PiezaDentalSvg: React.FC<PiezaDentalSvgProps> = ({
   return (
     <div
       onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (onClick) onClick();
+        }
+      }}
+      tabIndex={0}
+      role="button"
+      aria-label={`Pieza dental ${etiquetaPieza(posicion, sistemaDental)}${selected ? ', seleccionada' : ''}`}
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -64,6 +73,7 @@ export const PiezaDentalSvg: React.FC<PiezaDentalSvgProps> = ({
       }}
     >
       <span
+        aria-hidden="true"
         style={{
           fontSize: etiquetaPieza(posicion, sistemaDental).length > 2 ? '0.5rem' : '0.6rem',
           fontWeight: 700,
@@ -76,7 +86,13 @@ export const PiezaDentalSvg: React.FC<PiezaDentalSvgProps> = ({
         {etiquetaPieza(posicion, sistemaDental)}
       </span>
 
-      <svg width="46" height="46" viewBox="0 0 60 60">
+      <svg 
+        width="46" 
+        height="46" 
+        viewBox="0 0 60 60"
+        role="img"
+        aria-label={`Estado de caras de la pieza ${etiquetaPieza(posicion, sistemaDental)}`}
+      >
         {/* Border / Outer Shape */}
         <rect x="5" y="5" width="50" height="50" fill="none" stroke="#ddd" strokeWidth="1" />
 
@@ -87,35 +103,50 @@ export const PiezaDentalSvg: React.FC<PiezaDentalSvgProps> = ({
           fill={getColor(c.vestibular)}
           stroke="#666" strokeWidth="0.5"
           onClick={(e) => handleCaraClick(e, 'vestibular')}
-        />
+          className="cursor-pointer hover:brightness-90 transition-all"
+        >
+          <title>Cara Vestibular: {c.vestibular}</title>
+        </polygon>
         {/* Lingual (Abajo) */}
         <polygon
           points="15,45 45,45 55,55 5,55"
           fill={getColor(c.lingual)}
           stroke="#666" strokeWidth="0.5"
           onClick={(e) => handleCaraClick(e, 'lingual')}
-        />
+          className="cursor-pointer hover:brightness-90 transition-all"
+        >
+          <title>Cara Lingual: {c.lingual}</title>
+        </polygon>
         {/* Distal */}
         <polygon
           points="5,5 15,15 15,45 5,55"
           fill={getColor(c.distal)}
           stroke="#666" strokeWidth="0.5"
           onClick={(e) => handleCaraClick(e, 'distal')}
-        />
+          className="cursor-pointer hover:brightness-90 transition-all"
+        >
+          <title>Cara Distal: {c.distal}</title>
+        </polygon>
         {/* Mesial */}
         <polygon
           points="45,15 55,5 55,55 45,45"
           fill={getColor(c.mesial)}
           stroke="#666" strokeWidth="0.5"
           onClick={(e) => handleCaraClick(e, 'mesial')}
-        />
+          className="cursor-pointer hover:brightness-90 transition-all"
+        >
+          <title>Cara Mesial: {c.mesial}</title>
+        </polygon>
         {/* Oclusal (Centro) */}
         <rect
           x="15" y="15" width="30" height="30"
           fill={getColor(c.oclusal)}
           stroke="#666" strokeWidth="0.5"
           onClick={(e) => handleCaraClick(e, 'oclusal')}
-        />
+          className="cursor-pointer hover:brightness-90 transition-all"
+        >
+          <title>Cara Oclusal: {c.oclusal}</title>
+        </rect>
       </svg>
     </div>
   );

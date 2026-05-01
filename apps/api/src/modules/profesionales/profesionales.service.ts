@@ -19,7 +19,7 @@ export class ProfesionalesService {
     const { usuarioId } = createProfesionalDto;
 
     const existing = await this.profesionalesRepository.findOne(
-      TenantHelper.withTenant(this.cls, { where: { usuarioId } })
+      TenantHelper.withTenantOne<Profesional>(this.cls, { where: { usuarioId } })
     );
     if (existing) {
       throw new ConflictException('Este usuario ya tiene un perfil profesional');
@@ -31,13 +31,13 @@ export class ProfesionalesService {
 
   async findAll(): Promise<Profesional[]> {
     return await this.profesionalesRepository.find(
-      TenantHelper.withTenant(this.cls, { relations: ['usuario'] })
+      TenantHelper.withTenant<Profesional>(this.cls, { relations: ['usuario'] })
     );
   }
 
   async findOne(id: string): Promise<Profesional> {
     const profesional = await this.profesionalesRepository.findOne(
-      TenantHelper.withTenant(this.cls, {
+      TenantHelper.withTenantOne<Profesional>(this.cls, {
         where: { id },
         relations: ['usuario'],
       })
