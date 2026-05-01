@@ -19,10 +19,17 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { ConfiguracionModule } from './modules/configuracion/configuracion.module';
 import { ObrasSocialesModule } from './modules/obras-sociales/obras-sociales.module';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { ClsModule } from 'nestjs-cls';
+import { TenantInterceptor } from './common/interceptors/tenant.interceptor';
+import { TenantSubscriber } from './common/subscribers/tenant.subscriber';
 
 @Module({
   imports: [
+    ClsModule.forRoot({
+      global: true,
+      middleware: { mount: true },
+    }),
     TypeOrmModule.forRoot(typeOrmConfig),
     ThrottlerModule.forRoot([{
       ttl: 60000,
@@ -55,6 +62,11 @@ import { APP_GUARD } from '@nestjs/core';
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TenantInterceptor,
+    },
+    TenantSubscriber,
   ],
 })
 export class AppModule {}

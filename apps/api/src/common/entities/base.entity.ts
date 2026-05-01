@@ -3,11 +3,15 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  Column,
 } from 'typeorm';
 
 export abstract class BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
+
+  @Column({ type: 'uuid', nullable: true, name: 'clinica_id' })
+  clinicaId?: string;
 
   @CreateDateColumn({ type: 'timestamp with time zone', name: 'created_at' })
   createdAt!: Date;

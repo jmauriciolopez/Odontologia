@@ -9,6 +9,8 @@ import { CreateFichaClinicaDto } from './dto/create-ficha-clinica.dto';
 import { CreateAntecedenteDto } from './dto/create-antecedente.dto';
 import { CreateEvolucionClinicaDto } from './dto/create-evolucion-clinica.dto';
 import { Profesional } from '../profesionales/entities/profesional.entity';
+import { TenantHelper } from '../../common/utils/tenant-helper';
+import { ClsService } from 'nestjs-cls';
 
 @Injectable()
 export class FichasClinicasService {
@@ -23,6 +25,7 @@ export class FichasClinicasService {
     private readonly medicionRepository: Repository<MedicionPeriodontal>,
     @InjectRepository(Profesional)
     private readonly profesionalRepository: Repository<Profesional>,
+    private readonly cls: ClsService,
   ) {}
 
   async createFicha(dto: CreateFichaClinicaDto): Promise<FichaClinica> {
@@ -31,10 +34,12 @@ export class FichasClinicasService {
   }
 
   async findByPaciente(pacienteId: string): Promise<FichaClinica> {
-    const ficha = await this.fichaRepository.findOne({
-      where: { pacienteId },
-      relations: ['antecedentes', 'evoluciones', 'medicionesPeriodontales'],
-    });
+    const ficha = await this.fichaRepository.findOne(
+      TenantHelper.withTenant(this.cls, {
+        where: { pacienteId },
+        relations: ['antecedentes', 'evoluciones', 'medicionesPeriodontales'],
+      })
+    );
 
     if (!ficha) {
       throw new NotFoundException(`Ficha clínica para paciente ${pacienteId} no encontrada`);
@@ -52,7 +57,9 @@ export class FichasClinicasService {
     // Resolve profesionalId from the logged-in user if not explicitly provided
     let profesionalId = dto.profesionalId ?? null;
     if (!profesionalId) {
-      const profesional = await this.profesionalRepository.findOne({ where: { usuarioId: userId } });
+      const profesional = await this.profesionalRepository.findOne(
+        TenantHelper.withTenant(this.cls, { where: { usuarioId: userId } })
+      );
       if (profesional) profesionalId = profesional.id;
     }
     const evolucion = this.evolucionRepository.create({ ...dto, profesionalId });
@@ -60,9 +67,11 @@ export class FichasClinicasService {
   }
 
   async upsertMedicion(fichaId: string, diente: number, data: Partial<MedicionPeriodontal>): Promise<MedicionPeriodontal> {
-    let medicion = await this.medicionRepository.findOne({
-      where: { fichaId, posicionDiente: diente }
-    });
+    let medicion = await this.medicionRepository.findOne(
+      TenantHelper.withTenant(this.cls, {
+        where: { fichaId, posicionDiente: diente }
+      })
+    );
 
     if (medicion) {
       Object.assign(medicion, data);

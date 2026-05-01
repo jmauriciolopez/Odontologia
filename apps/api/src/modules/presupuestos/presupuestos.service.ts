@@ -7,6 +7,8 @@ import { Pago } from './entities/pago.entity';
 import { CreatePresupuestoDto, RegisterPagoDto } from './dto/presupuesto.dto';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 import { PaginatedResponse } from '../../common/interfaces/paginated-response.interface';
+import { TenantHelper } from '../../common/utils/tenant-helper';
+import { ClsService } from 'nestjs-cls';
 
 @Injectable()
 export class PresupuestosService {
@@ -18,6 +20,7 @@ export class PresupuestosService {
     @InjectRepository(Pago)
     private readonly pagoRepository: Repository<Pago>,
     private readonly dataSource: DataSource,
+    private readonly cls: ClsService,
   ) {}
 
   async create(dto: CreatePresupuestoDto): Promise<Presupuesto> {
@@ -51,12 +54,14 @@ export class PresupuestosService {
 
   async findAll(pagination: PaginationDto = {}): Promise<PaginatedResponse<Presupuesto>> {
     const { page = 1, limit = 10 } = pagination;
-    const [data, total] = await this.presupuestoRepository.findAndCount({
-      relations: ['paciente', 'items'],
-      order: { createdAt: 'DESC' },
-      skip: (page - 1) * limit,
-      take: limit,
-    });
+    const [data, total] = await this.presupuestoRepository.findAndCount(
+      TenantHelper.withTenant(this.cls, {
+        relations: ['paciente', 'items'],
+        order: { createdAt: 'DESC' },
+        skip: (page - 1) * limit,
+        take: limit,
+      })
+    );
 
     return {
       data,
@@ -70,18 +75,22 @@ export class PresupuestosService {
   }
 
   async findByPaciente(pacienteId: string): Promise<Presupuesto[]> {
-    return await this.presupuestoRepository.find({
-      where: { pacienteId },
-      relations: ['paciente', 'items', 'pagos'],
-      order: { createdAt: 'DESC' }
-    });
+    return await this.presupuestoRepository.find(
+      TenantHelper.withTenant(this.cls, {
+        where: { pacienteId },
+        relations: ['paciente', 'items', 'pagos'],
+        order: { createdAt: 'DESC' }
+      })
+    );
   }
 
   async findOne(id: string): Promise<Presupuesto> {
-    const presupuesto = await this.presupuestoRepository.findOne({
-      where: { id },
-      relations: ['items', 'pagos', 'paciente'],
-    });
+    const presupuesto = await this.presupuestoRepository.findOne(
+      TenantHelper.withTenant(this.cls, {
+        where: { id },
+        relations: ['items', 'pagos', 'paciente'],
+      })
+    );
 
     if (!presupuesto) {
       throw new NotFoundException(`Presupuesto ${id} no encontrado`);
@@ -92,19 +101,23 @@ export class PresupuestosService {
 
   async registerPago(dto: RegisterPagoDto): Promise<Pago> {
     return await this.dataSource.transaction(async (manager) => {
-      const presupuesto = await manager.findOne(Presupuesto, {
-        where: { id: dto.presupuestoId },
-      });
+      const presupuesto = await manager.findOne(Presupuesto, 
+        TenantHelper.withTenant(this.cls, {
+          where: { id: dto.presupuestoId },
+        })
+      );
       if (!presupuesto) {
         throw new NotFoundException(`Presupuesto ${dto.presupuestoId} no encontrado`);
       }
 
       // Calcular desde pagos reales dentro de la transacción
-      const { sum } = await manager
-        .createQueryBuilder(Pago, 'p')
+      const qb = manager.createQueryBuilder(Pago, 'p')
         .select('COALESCE(SUM(p.monto), 0)', 'sum')
-        .where('p.presupuesto_id = :id', { id: dto.presupuestoId })
-        .getRawOne();
+        .where('p.presupuesto_id = :id', { id: dto.presupuestoId });
+      
+      TenantHelper.applyFilter(qb, this.cls, 'p');
+
+      const { sum } = await qb.getRawOne();
 
       const totalYaPagado = Number(sum);
       const nuevoTotalPagado = totalYaPagado + Number(dto.monto);
@@ -124,6 +137,7 @@ export class PresupuestosService {
           monto: Number(dto.monto),
           metodoPago: dto.metodoPago,
           notas: dto.notas ?? undefined,
+          clinicaId: this.cls.get('clinicaId'), // Explicitly set if needed, although Subscriber should handle it
         })
         .returning('*')
         .execute();
@@ -149,9 +163,11 @@ export class PresupuestosService {
   }
 
   async findPagosByPresupuesto(presupuestoId: string): Promise<Pago[]> {
-    return await this.pagoRepository.find({
-      where: { presupuestoId },
-      order: { fechaPago: 'DESC' }
-    });
+    return await this.pagoRepository.find(
+      TenantHelper.withTenant(this.cls, {
+        where: { presupuestoId },
+        order: { fechaPago: 'DESC' }
+      })
+    );
   }
 }

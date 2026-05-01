@@ -24,6 +24,7 @@ export class AuthService {
       sub: user.id,
       email: user.email,
       roles: user.usuarioRoles.map((ur) => ur.rol.nombre),
+      clinicaId: user.clinicaId,
     };
 
     return {

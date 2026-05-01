@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DocumentoAdjunto } from './entities/documento-adjunto.entity';
-import { Radiografia } from './entities/radiografia.entity';
+import { Archivo } from './entities/archivo.entity';
 import { ArchivosService } from './archivos.service';
 import { ArchivosController } from './archivos.controller';
 import { LocalStorageService } from './storage/local-storage.service';
@@ -13,7 +12,7 @@ const StorageProvider = {
 };
 
 @Module({
-  imports: [TypeOrmModule.forFeature([DocumentoAdjunto, Radiografia])],
+  imports: [TypeOrmModule.forFeature([Archivo])],
   controllers: [ArchivosController],
   providers: [ArchivosService, StorageProvider],
   exports: [ArchivosService],

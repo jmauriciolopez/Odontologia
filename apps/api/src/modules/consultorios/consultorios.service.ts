@@ -4,12 +4,15 @@ import { Repository } from 'typeorm';
 import { Consultorio } from './entities/consultorio.entity';
 import { CreateConsultorioDto } from './dto/create-consultorio.dto';
 import { UpdateConsultorioDto } from './dto/update-consultorio.dto';
+import { TenantHelper } from '../../common/utils/tenant-helper';
+import { ClsService } from 'nestjs-cls';
 
 @Injectable()
 export class ConsultoriosService {
   constructor(
     @InjectRepository(Consultorio)
     private readonly consultoriosRepository: Repository<Consultorio>,
+    private readonly cls: ClsService,
   ) {}
 
   async create(createConsultorioDto: CreateConsultorioDto): Promise<Consultorio> {
@@ -18,11 +21,13 @@ export class ConsultoriosService {
   }
 
   async findAll(): Promise<Consultorio[]> {
-    return await this.consultoriosRepository.find();
+    return await this.consultoriosRepository.find(TenantHelper.withTenant(this.cls));
   }
 
   async findOne(id: string): Promise<Consultorio> {
-    const consultorio = await this.consultoriosRepository.findOneBy({ id });
+    const consultorio = await this.consultoriosRepository.findOne(
+      TenantHelper.withTenant(this.cls, { where: { id } })
+    );
     if (!consultorio) {
       throw new NotFoundException(`Consultorio con ID ${id} no encontrado`);
     }

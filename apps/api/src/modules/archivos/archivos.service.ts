@@ -1,40 +1,41 @@
 import { Injectable, Logger, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { DocumentoAdjunto } from './entities/documento-adjunto.entity';
-import { Radiografia } from './entities/radiografia.entity';
+import { Archivo, ArchivoCategoria } from './entities/archivo.entity';
 import { IStorageService, StorageFile } from './storage/storage.interface';
+import { TenantHelper } from '../../common/utils/tenant-helper';
+import { ClsService } from 'nestjs-cls';
 
 @Injectable()
 export class ArchivosService {
   private readonly logger = new Logger(ArchivosService.name);
 
   constructor(
-    @InjectRepository(DocumentoAdjunto)
-    private readonly documentoRepository: Repository<DocumentoAdjunto>,
-    @InjectRepository(Radiografia)
-    private readonly radiografiaRepository: Repository<Radiografia>,
+    @InjectRepository(Archivo)
+    private readonly archivoRepository: Repository<Archivo>,
     @Inject('STORAGE_SERVICE')
     private readonly storageService: IStorageService,
+    private readonly cls: ClsService,
   ) {}
 
   async saveDocumento(
     file: StorageFile,
     pacienteId: string,
     uploadedById: string,
-  ): Promise<DocumentoAdjunto> {
+  ): Promise<Archivo> {
     const filePath = await this.storageService.save(file, `pacientes/${pacienteId}/docs`);
 
-    const documento = this.documentoRepository.create({
+    const archivo = this.archivoRepository.create({
       pacienteId,
-      nombreArchivo: file.originalname,
+      nombre: file.originalname,
       mimeType: file.mimetype,
       sizeBytes: file.size,
       path: filePath,
       uploadedById,
+      categoria: ArchivoCategoria.DOCUMENTO,
     });
 
-    return await this.documentoRepository.save(documento);
+    return await this.archivoRepository.save(archivo);
   }
 
   async saveRadiografia(
@@ -42,35 +43,55 @@ export class ArchivosService {
     pacienteId: string,
     tipo: string,
     fechaToma?: string,
-  ): Promise<Radiografia> {
+    uploadedById?: string,
+  ): Promise<Archivo> {
     const filePath = await this.storageService.save(file, `pacientes/${pacienteId}/rayos`);
 
-    const radiografia = this.radiografiaRepository.create({
+    const archivo = this.archivoRepository.create({
       pacienteId,
-      nombreArchivo: file.originalname,
+      nombre: file.originalname,
+      mimeType: file.mimetype,
+      sizeBytes: file.size,
       path: filePath,
-      tipo,
-      fechaToma: fechaToma ? new Date(fechaToma) : new Date(),
+      categoria: ArchivoCategoria.RADIOGRAFIA,
+      uploadedById,
+      metadata: {
+        tipo,
+        fechaToma: fechaToma ? new Date(fechaToma) : new Date(),
+      },
     });
 
-    return await this.radiografiaRepository.save(radiografia);
+    return await this.archivoRepository.save(archivo);
   }
 
   async findByPaciente(pacienteId: string) {
-    const documentos = await this.documentoRepository.find({ where: { pacienteId } });
-    const radiografias = await this.radiografiaRepository.find({ where: { pacienteId } });
+    const archivos = await this.archivoRepository.find(
+      TenantHelper.withTenant(this.cls, {
+        where: { pacienteId },
+        order: { createdAt: 'DESC' },
+      })
+    );
 
+    // Separamos por categoría para mantener compatibilidad con el frontend actual si es necesario
+    // aunque lo ideal sería devolver una lista unificada
     return {
-      documentos: documentos.map((d) => ({ ...d, url: this.storageService.getUrl(d.path) })),
-      radiografias: radiografias.map((r) => ({ ...r, url: this.storageService.getUrl(r.path) })),
+      documentos: archivos
+        .filter((a) => a.categoria !== ArchivoCategoria.RADIOGRAFIA)
+        .map((a) => ({ ...a, url: this.storageService.getUrl(a.path) })),
+      radiografias: archivos
+        .filter((a) => a.categoria === ArchivoCategoria.RADIOGRAFIA)
+        .map((a) => ({ ...a, url: this.storageService.getUrl(a.path) })),
+      todos: archivos.map((a) => ({ ...a, url: this.storageService.getUrl(a.path) })),
     };
   }
 
   async deleteDocumento(id: string): Promise<void> {
-    const doc = await this.documentoRepository.findOne({ where: { id } });
-    if (doc) {
-      await this.storageService.delete(doc.path);
-      await this.documentoRepository.remove(doc);
+    const archivo = await this.archivoRepository.findOne(
+      TenantHelper.withTenantOne(this.cls, { where: { id } })
+    );
+    if (archivo) {
+      await this.storageService.delete(archivo.path);
+      await this.archivoRepository.remove(archivo);
     }
   }
 }

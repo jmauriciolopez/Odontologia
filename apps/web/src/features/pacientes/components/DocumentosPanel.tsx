@@ -44,7 +44,7 @@ export const DocumentosPanel: React.FC<DocumentosPanelProps> = ({ pacienteId }) 
 
   const filteredFiles = allFiles.filter(f => {
     const matchesFilter = filter === 'todos' || (filter === 'documentos' && f.type === 'documento') || (filter === 'radiografias' && f.type === 'radiografia');
-    const matchesSearch = f.nombreArchivo.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = f.nombre.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
@@ -149,7 +149,7 @@ export const DocumentosPanel: React.FC<DocumentosPanelProps> = ({ pacienteId }) 
                   style={{ background: 'var(--sb-active-bg)' }}>
                     {file.type === 'radiografia' ? (
                        <div className="relative w-full h-full">
-                          <img src={file.url} alt={file.nombreArchivo} className="w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-500" />
+                           <img src={file.url} alt={file.nombre} className="w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-500" />
                           <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-slate-900/0 transition-all" />
                        </div>
                     ) : (
@@ -180,8 +180,8 @@ export const DocumentosPanel: React.FC<DocumentosPanelProps> = ({ pacienteId }) 
                 </div>
 
                 <div className="space-y-1">
-                    <h4 className="font-bold text-xs text-[var(--sb-text)] truncate pr-4" title={file.nombreArchivo}>
-                        {file.nombreArchivo}
+                    <h4 className="font-bold text-xs text-[var(--sb-text)] truncate pr-4" title={file.nombre}>
+                        {file.nombre}
                     </h4>
                     <div className="flex items-center justify-between">
                         <span className="text-[10px] font-bold text-[var(--sb-text-muted)] uppercase tracking-widest">

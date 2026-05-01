@@ -3,8 +3,15 @@ import { BaseEntity } from '../../../common/entities/base.entity';
 import { Paciente } from '../../pacientes/entities/paciente.entity';
 import { Usuario } from '../../usuarios/entities/usuario.entity';
 
-@Entity('documentos_adjuntos')
-export class DocumentoAdjunto extends BaseEntity {
+export enum ArchivoCategoria {
+  DOCUMENTO = 'DOCUMENTO',
+  RADIOGRAFIA = 'RADIOGRAFIA',
+  ESTUDIO = 'ESTUDIO',
+  OTROS = 'OTROS',
+}
+
+@Entity('archivos')
+export class Archivo extends BaseEntity {
   @Column({ name: 'paciente_id' })
   pacienteId!: string;
 
@@ -12,8 +19,8 @@ export class DocumentoAdjunto extends BaseEntity {
   @JoinColumn({ name: 'paciente_id' })
   paciente!: Paciente;
 
-  @Column({ name: 'nombre_archivo' })
-  nombreArchivo!: string;
+  @Column()
+  nombre!: string;
 
   @Column({ name: 'mime_type', nullable: true })
   mimeType?: string;
@@ -23,6 +30,16 @@ export class DocumentoAdjunto extends BaseEntity {
 
   @Column({ type: 'text' })
   path!: string;
+
+  @Column({
+    type: 'enum',
+    enum: ArchivoCategoria,
+    default: ArchivoCategoria.DOCUMENTO,
+  })
+  categoria!: ArchivoCategoria;
+
+  @Column({ type: 'jsonb', nullable: true })
+  metadata?: any;
 
   @Column({ name: 'uploaded_by', nullable: true })
   uploadedById?: string;

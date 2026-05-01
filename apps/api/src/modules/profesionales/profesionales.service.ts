@@ -4,18 +4,23 @@ import { Repository } from 'typeorm';
 import { Profesional } from './entities/profesional.entity';
 import { CreateProfesionalDto } from './dto/create-profesional.dto';
 import { UpdateProfesionalDto } from './dto/update-profesional.dto';
+import { TenantHelper } from '../../common/utils/tenant-helper';
+import { ClsService } from 'nestjs-cls';
 
 @Injectable()
 export class ProfesionalesService {
   constructor(
     @InjectRepository(Profesional)
     private readonly profesionalesRepository: Repository<Profesional>,
+    private readonly cls: ClsService,
   ) {}
 
   async create(createProfesionalDto: CreateProfesionalDto): Promise<Profesional> {
     const { usuarioId } = createProfesionalDto;
 
-    const existing = await this.profesionalesRepository.findOne({ where: { usuarioId } });
+    const existing = await this.profesionalesRepository.findOne(
+      TenantHelper.withTenant(this.cls, { where: { usuarioId } })
+    );
     if (existing) {
       throw new ConflictException('Este usuario ya tiene un perfil profesional');
     }
@@ -25,14 +30,18 @@ export class ProfesionalesService {
   }
 
   async findAll(): Promise<Profesional[]> {
-    return await this.profesionalesRepository.find({ relations: ['usuario'] });
+    return await this.profesionalesRepository.find(
+      TenantHelper.withTenant(this.cls, { relations: ['usuario'] })
+    );
   }
 
   async findOne(id: string): Promise<Profesional> {
-    const profesional = await this.profesionalesRepository.findOne({
-      where: { id },
-      relations: ['usuario'],
-    });
+    const profesional = await this.profesionalesRepository.findOne(
+      TenantHelper.withTenant(this.cls, {
+        where: { id },
+        relations: ['usuario'],
+      })
+    );
 
     if (!profesional) {
       throw new NotFoundException(`Profesional con ID ${id} no encontrado`);

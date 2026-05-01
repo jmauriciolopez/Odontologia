@@ -1,0 +1,6 @@
+# .graphifyignore
+vendor/
+apps/api/node_modules/
+apps/web/node_modules/
+apps/web/dist/
+*.generated.py

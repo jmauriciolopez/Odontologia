@@ -1,24 +1,29 @@
 import { httpClient } from '../../../lib/Httpclient';
 
-export interface PatientFile {
+export enum ArchivoCategoria {
+  DOCUMENTO = 'DOCUMENTO',
+  RADIOGRAFIA = 'RADIOGRAFIA',
+  RECETA = 'RECETA',
+  ESTUDIO = 'ESTUDIO',
+}
+
+export interface Archivo {
   id: string;
   pacienteId: string;
-  nombreArchivo: string;
+  nombre: string;
   mimeType: string;
   sizeBytes: number;
   path: string;
   url: string;
+  categoria: ArchivoCategoria;
+  metadata?: Record<string, any>;
   createdAt: string;
 }
 
-export interface Radiografia extends PatientFile {
-  tipo: string;
-  fechaToma: string;
-}
-
 export interface ArchivosResponse {
-  documentos: PatientFile[];
-  radiografias: Radiografia[];
+  documentos: Archivo[];
+  radiografias: Archivo[];
+  todos: Archivo[];
 }
 
 export const archivosApi = {
@@ -26,13 +31,13 @@ export const archivosApi = {
     return httpClient.get(`archivos/paciente/${pacienteId}`);
   },
 
-  uploadDocumento: async (pacienteId: string, file: File): Promise<PatientFile> => {
+  uploadDocumento: async (pacienteId: string, file: File): Promise<Archivo> => {
     const formData = new FormData();
     formData.append('file', file);
     return httpClient.post(`archivos/paciente/${pacienteId}/documento`, formData);
   },
 
-  uploadRadiografia: async (pacienteId: string, file: File, tipo: string, fechaToma?: string): Promise<Radiografia> => {
+  uploadRadiografia: async (pacienteId: string, file: File, tipo: string, fechaToma?: string): Promise<Archivo> => {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('tipo', tipo);

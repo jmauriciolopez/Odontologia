@@ -12,6 +12,9 @@ import { ConfiguracionClinica } from '../configuracion/entities/configuracion-cl
 import { ConsultoriosService } from '../consultorios/consultorios.service';
 import { PaginatedResponse } from '../../common/interfaces/paginated-response.interface';
 
+import { TenantHelper } from '../../common/utils/tenant-helper';
+import { ClsService } from 'nestjs-cls';
+
 const MAX_RECURRENCIAS = 104;
 
 @Injectable()
@@ -24,6 +27,7 @@ export class TurnosService {
     @InjectRepository(ConfiguracionClinica)
     private readonly configRepository: Repository<ConfiguracionClinica>,
     private readonly consultoriosService: ConsultoriosService,
+    private readonly cls: ClsService,
   ) {}
 
   private async checkHorarioConsultorio(consultorioId: string, inicio: Date, fin: Date): Promise<void> {
@@ -39,22 +43,24 @@ export class TurnosService {
     repo?: Repository<Turno>,
   ): Promise<void> {
     const turnoRepo = repo ?? this.turnosRepository;
-    const query = turnoRepo.createQueryBuilder('turno')
-      .where('turno.estado NOT IN (:...estadosIgnorar)', { estadosIgnorar: ['cancelado'] })
+    const qb = turnoRepo.createQueryBuilder('turno');
+    TenantHelper.applyFilter(qb, this.cls);
+
+    qb.where('turno.estado NOT IN (:...estadosIgnorar)', { estadosIgnorar: ['cancelado'] })
       .andWhere(
-        '((turno.fecha_inicio < :fin AND turno.fecha_fin > :inicio))',
+        '((turno.fechaInicio < :fin AND turno.fechaFin > :inicio))',
         { inicio, fin }
       )
       .andWhere(
-        '(turno.profesional_id = :profesionalId OR turno.consultorio_id = :consultorioId)',
+        '(turno.profesionalId = :profesionalId OR turno.consultorioId = :consultorioId)',
         { profesionalId, consultorioId }
       );
 
     if (excludeTurnoId) {
-      query.andWhere('turno.id != :excludeTurnoId', { excludeTurnoId });
+      qb.andWhere('turno.id != :excludeTurnoId', { excludeTurnoId });
     }
 
-    const conflicto = await query.getOne();
+    const conflicto = await qb.getOne();
 
     if (conflicto) {
       if (conflicto.profesionalId === profesionalId) {
@@ -193,39 +199,40 @@ export class TurnosService {
     const qb = this.turnosRepository.createQueryBuilder('turno')
       .leftJoinAndSelect('turno.paciente', 'paciente')
       .leftJoinAndSelect('turno.profesional', 'profesional')
-      // Removed leftJoinAndSelect for profesional.usuario to reduce over-fetching unless strictly necessary
       .leftJoinAndSelect('turno.consultorio', 'consultorio');
 
+    TenantHelper.applyFilter(qb, this.cls);
+
     if (fecha) {
-      qb.andWhere('CAST(turno.fecha_inicio AS date) = CAST(:fecha AS date)', { fecha });
+      qb.andWhere('CAST(turno.fechaInicio AS date) = CAST(:fecha AS date)', { fecha });
     }
     if (desde && hasta) {
       const d = typeof desde === 'string' ? desde.split('T')[0] : desde;
       const h = typeof hasta === 'string' ? hasta.split('T')[0] : hasta;
-      qb.andWhere('CAST(turno.fecha_inicio AS date) >= CAST(:desde AS date)', { desde: d });
-      qb.andWhere('CAST(turno.fecha_inicio AS date) <= CAST(:hasta AS date)', { hasta: h });
+      qb.andWhere('CAST(turno.fechaInicio AS date) >= CAST(:desde AS date)', { desde: d });
+      qb.andWhere('CAST(turno.fechaInicio AS date) <= CAST(:hasta AS date)', { hasta: h });
     } else if (desde) {
       const d = typeof desde === 'string' ? desde.split('T')[0] : desde;
-      qb.andWhere('CAST(turno.fecha_inicio AS date) >= CAST(:desde AS date)', { desde: d });
+      qb.andWhere('CAST(turno.fechaInicio AS date) >= CAST(:desde AS date)', { desde: d });
     } else if (hasta) {
       const h = typeof hasta === 'string' ? hasta.split('T')[0] : hasta;
-      qb.andWhere('CAST(turno.fecha_inicio AS date) <= CAST(:hasta AS date)', { hasta: h });
+      qb.andWhere('CAST(turno.fechaInicio AS date) <= CAST(:hasta AS date)', { hasta: h });
     }
     if (profesionalId) {
-      qb.andWhere('turno.profesional_id = :profesionalId', { profesionalId });
+      qb.andWhere('turno.profesionalId = :profesionalId', { profesionalId });
     }
     if (consultorioId) {
-      qb.andWhere('turno.consultorio_id = :consultorioId', { consultorioId });
+      qb.andWhere('turno.consultorioId = :consultorioId', { consultorioId });
     }
     if (pacienteId) {
-      qb.andWhere('turno.paciente_id = :pacienteId', { pacienteId });
+      qb.andWhere('turno.pacienteId = :pacienteId', { pacienteId });
     }
     if (estado) {
       qb.andWhere('turno.estado = :estado', { estado });
     }
 
     qb.skip((page - 1) * limit).take(limit);
-    qb.orderBy('turno.fecha_inicio', 'ASC');
+    qb.orderBy('turno.fechaInicio', 'ASC');
 
     const [data, total] = await qb.getManyAndCount();
 
@@ -241,10 +248,12 @@ export class TurnosService {
   }
 
   async findOne(id: string): Promise<Turno> {
-    const turno = await this.turnosRepository.findOne({
-      where: { id },
-      relations: ['paciente', 'profesional', 'profesional.usuario', 'consultorio'],
-    });
+    const turno = await this.turnosRepository.findOne(
+      TenantHelper.withTenantOne(this.cls, {
+        where: { id },
+        relations: ['paciente', 'profesional', 'profesional.usuario', 'consultorio'],
+      })
+    );
 
     if (!turno) {
       throw new NotFoundException(`Turno con ID ${id} no encontrado`);
@@ -287,11 +296,13 @@ export class TurnosService {
     const inicio = new Date(query.fechaInicio);
     const fin = new Date(query.fechaFin);
 
-    const qb = this.turnosRepository.createQueryBuilder('turno')
-      .where('turno.estado NOT IN (:...estadosIgnorar)', { estadosIgnorar: ['cancelado'] })
-      .andWhere('turno.fecha_inicio < :fin AND turno.fecha_fin > :inicio', { inicio, fin })
+    const qb = this.turnosRepository.createQueryBuilder('turno');
+    TenantHelper.applyFilter(qb, this.cls);
+
+    qb.where('turno.estado NOT IN (:...estadosIgnorar)', { estadosIgnorar: ['cancelado'] })
+      .andWhere('turno.fechaInicio < :fin AND turno.fechaFin > :inicio', { inicio, fin })
       .andWhere(
-        '(turno.profesional_id = :profesionalId OR turno.consultorio_id = :consultorioId)',
+        '(turno.profesionalId = :profesionalId OR turno.consultorioId = :consultorioId)',
         { profesionalId: query.profesionalId, consultorioId: query.consultorioId }
       );
 

@@ -8,19 +8,25 @@ import { UpdatePacienteDto } from './dto/update-paciente.dto';
 import { PacienteFiltrosDto } from './dto/paciente-filtros.dto';
 import { PaginatedResponse } from '../../common/interfaces/paginated-response.interface';
 
+import { TenantHelper } from '../../common/utils/tenant-helper';
+import { ClsService } from 'nestjs-cls';
+
 @Injectable()
 export class PacientesService {
   constructor(
     @InjectRepository(Paciente)
     private readonly pacientesRepository: Repository<Paciente>,
     private readonly fichasClinicasService: FichasClinicasService,
+    private readonly cls: ClsService,
   ) {}
 
   async create(createPacienteDto: CreatePacienteDto): Promise<Paciente> {
     const { documento } = createPacienteDto;
 
     if (documento) {
-      const existingPatient = await this.pacientesRepository.findOne({ where: { documento } });
+      const existingPatient = await this.pacientesRepository.findOne(
+        TenantHelper.withTenantOne(this.cls, { where: { documento } })
+      );
       if (existingPatient) {
         throw new ConflictException('El paciente con este documento ya existe');
       }
@@ -33,10 +39,11 @@ export class PacientesService {
   async findAll(filtros: PacienteFiltrosDto): Promise<PaginatedResponse<Paciente>> {
     const { query, page = 1, limit = 10 } = filtros;
     const qb = this.pacientesRepository.createQueryBuilder('paciente');
+    TenantHelper.applyFilter(qb, this.cls);
 
     if (query) {
-      qb.where(
-        'paciente.nombre ILIKE :query OR paciente.apellido ILIKE :query OR paciente.documento ILIKE :query OR paciente.telefono ILIKE :query',
+      qb.andWhere(
+        '(paciente.nombre ILIKE :query OR paciente.apellido ILIKE :query OR paciente.documento ILIKE :query OR paciente.telefono ILIKE :query)',
         { query: `%${query}%` },
       );
     }
@@ -58,10 +65,12 @@ export class PacientesService {
   }
 
   async findOne(id: string): Promise<Paciente> {
-    const paciente = await this.pacientesRepository.findOne({
-      where: { id },
-      relations: ['ficha', 'ficha.antecedentes', 'ficha.evoluciones', 'obraSocialData', 'obraSocialData.prestaciones', 'obraSocialData.prestaciones.prestacion'],
-    });
+    const paciente = await this.pacientesRepository.findOne(
+      TenantHelper.withTenantOne(this.cls, {
+        where: { id },
+        relations: ['ficha', 'ficha.antecedentes', 'ficha.evoluciones', 'obraSocialData', 'obraSocialData.prestaciones', 'obraSocialData.prestaciones.prestacion'],
+      })
+    );
 
     if (!paciente) {
       throw new NotFoundException(`Paciente con ID ${id} no encontrado`);

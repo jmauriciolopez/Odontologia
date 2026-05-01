@@ -5,7 +5,7 @@ build
 .expo
 .next
 out
-
+graphify-out
 # Environment
 .env
 .env.local
@@ -34,3 +34,6 @@ yarn-error.log
 npm-debug.log
 logs
 *.log
+.agents/rules/graphify.md
+.agents/workflows/graphify.md
+scratch/run_extraction.py
